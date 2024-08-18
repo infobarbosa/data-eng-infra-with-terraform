@@ -75,7 +75,7 @@ resource "aws_security_group" "dataeng-modulo-2-sg" {
 }
 ```
 
-### Entender o uso de variáveis no Terraform
+### Variáveis no Terraform
 Variáveis permitem parametrizar a configuração do Terraform, tornando-a mais flexível e reutilizável.
 
 Exemplo de definição e uso de variáveis:
