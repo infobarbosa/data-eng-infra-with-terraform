@@ -7,20 +7,15 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 ## Atenção aos custos!
 A gestão dos custos gerados pelos recursos criados durante os laboratórios é de responsabilidade do aluno. Certifique-se de destruir todos os recursos após a conclusão dos exercícios.
 
-## Teoria
-
-### Introdução a Módulos
-Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles permitem que você agrupe recursos relacionados e os reutilize em diferentes partes da sua infraestrutura.
-
-### O que é o State do Terraform?
+## State do Terraform
 O state é um arquivo que mapeia os recursos criados pelo Terraform com a configuração definida nos arquivos `.tf`. Ele é essencial para o funcionamento do Terraform, permitindo que ele saiba quais recursos já foram criados e quais precisam ser atualizados ou destruídos.
 
 ### Backend Remoto para State
 O backend remoto permite que o state do Terraform seja armazenado em um local centralizado, como um bucket S3, facilitando o trabalho em equipe e a recuperação do state em caso de falhas.
 
-## Laboratório
+### Laboratório
 
-### Exercício Simples: Configurar Backend Remoto no S3
+#### Exercício 1: Configurar Backend Remoto no S3
 
 1. Crie um bucket no S3 via Console com nome `dataeng-modulo-3-backend-terraform-<sufixo-aleatorio>`.
 2. Crie uma tabela no DynamoDB via Console AWS com nome `dataeng-modulo-3-backend-terraform-lock`.
@@ -41,7 +36,12 @@ O backend remoto permite que o state do Terraform seja armazenado em um local ce
     terraform init
     ```
 
-### Exercício Avançado: Criar e utilizar Módulos para Glue Database e Glue Table
+## Módulos do Terraform
+Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles permitem que você agrupe recursos relacionados e os reutilize em diferentes partes da sua infraestrutura.
+
+### Laboratório
+
+#### Exercício 2: Criar e utilizar Módulos para Glue Database e Glue Table
 
 1. Crie a estrutura de pastas para o módulo Glue Database:
     ```
