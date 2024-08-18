@@ -78,12 +78,25 @@ Para instalar o Terraform, siga os passos abaixo:
 
     resource "aws_s3_bucket" "dataeng-modulo-1-bucket" {
       bucket = "dataeng-modulo-1-${random_string.suffix.result}"
-      acl    = "private"
 
       tags = {
         Name        = "dataeng-modulo-1-bucket"
         Environment = "Dev"
       }
+    }
+
+    resource "aws_s3_bucket_ownership_controls" "dataeng-modulo-1-bucket-ownership-controls" {
+        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        rule {
+            object_ownership = "BucketOwnerPreferred"
+        }
+    }
+
+    resource "aws_s3_bucket_acl" "dataeng-modulo-1-bucket-acl" {
+        depends_on = [aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls]
+
+        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        acl    = "private"
     }
 
     resource "random_string" "suffix" {
