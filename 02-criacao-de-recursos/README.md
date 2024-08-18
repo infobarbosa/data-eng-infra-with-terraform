@@ -298,6 +298,3 @@ Para evitar custos desnecessários, destrua os recursos criados: <br>
 terraform destroy
 ```
 
-```sh
-terraform apply
-```
