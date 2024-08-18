@@ -178,7 +178,7 @@ output "vpc_id" {
 
 ## Laboratório
 
-### Exercício Simples: Criar um VPC e Subnet
+### Exercício 1: Criar um VPC e Subnet
 
 1. **Crie um diretório de trabalho**:
     ```sh
@@ -229,7 +229,7 @@ output "vpc_id" {
     terraform apply
     ```
 
-### Exercício Avançado: Configurar Security Groups e Internet Gateway
+### Exercício 2: Configurar Security Groups e Internet Gateway
 
 1. **Edite o arquivo `main.tf`** para incluir a configuração de Security Groups e Internet Gateway:
     ```hcl
