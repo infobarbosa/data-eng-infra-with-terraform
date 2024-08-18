@@ -1,9 +1,8 @@
 provider "aws" {
-  shared_credentials_file = "~/.aws/credentials"
   region     = "us-east-1"
 }
 
-resource "aws_s3_bucket" "dataeng-modulo-3-tf-backend" {
+resource "aws_s3_bucket" "dataeng-modulo-3-teste" {
     bucket = "dataeng-modulo-3-tf-backend-${random_string.suffix.result}"
     acl = "private"
 
