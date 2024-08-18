@@ -12,7 +12,7 @@ Lembre-se de que a gestão dos custos dos recursos criados é de responsabilidad
 Terraform é uma ferramenta de código aberto para construção, alteração e versionamento seguro e eficiente da infraestrutura. Ele é capaz de gerenciar provedores de serviços existentes e populares, bem como soluções internas personalizadas.
 
 ### Infraestrutura como Código (IaC)
-Infraestrutura como Código (IaC) é a prática de gerenciar e provisionar data centers por meio de arquivos de definição legíveis por máquina, em vez de configuração física de hardware ou ferramentas de configuração interativas.
+Infraestrutura como Código (IaC) é a prática de gerenciar e provisionar recursos em data centers por meio de arquivos de definição legíveis por máquina, em vez de configuração física de hardware ou ferramentas de configuração interativas.
 
 ### Vantagens do uso de IaC (Infrastructure as Code)
 - **Automação**: Reduz a necessidade de intervenção manual.
@@ -31,12 +31,12 @@ Para instalar o Terraform, siga os passos abaixo:
 
 1. **Baixar o Terraform**:
     ```sh
-    wget https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip
+    wget https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_386.zip
     ```
 
 2. **Descompactar o arquivo**:
     ```sh
-    unzip terraform_1.0.0_linux_amd64.zip
+    unzip terraform_1.9.4_linux_386.zip
     ```
 
 3. **Mover o binário para o diretório de binários**:
