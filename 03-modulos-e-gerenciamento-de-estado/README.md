@@ -22,19 +22,21 @@ O backend remoto permite que o state do Terraform seja armazenado em um local ce
 
 ### Exercício Simples: Configurar Backend Remoto no S3
 
-1. Crie um arquivo `backend.tf` com o seguinte conteúdo:
+1. Crie um bucket no S3 via Console com nome `dataeng-modulo-3-backend-terraform-<sufixo-aleatorio>`.
+2. Crie uma tabela no DynamoDB via Console AWS com nome `dataeng-modulo-3-backend-terraform-lock`.
+3. Crie um arquivo `backend.tf` com o seguinte conteúdo:
     ```hcl
     terraform {
       backend "s3" {
-        bucket         = "dataeng-modulo-3-backend-<sufixo-aleatorio>"
+        bucket         = "dataeng-modulo-3-backend-terraform-<sufixo-aleatorio>"
         key            = "terraform/state"
         region         = "us-east-1"
-        dynamodb_table = "terraform-lock"
+        dynamodb_table = "dataeng-modulo-3-backend-terraform-lock"
       }
     }
     ```
 
-2. Inicialize o Terraform:
+4. Inicialize o Terraform:
     ```sh
     terraform init
     ```
