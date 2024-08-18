@@ -3,6 +3,10 @@ Author: Prof. Barbosa
 Contact: infobarbosa@gmail.com  
 Github: [infobarbosa](https://github.com/infobarbosa)
 
+## Ambiente de laboratório
+Este curso foi desenvolvido para execução principalmente em ambiente **Linux**.<br>
+Caso você não tenha um à disposição então recomendo utilizar o AWS Cloud9.<br>
+As instruções de criação estão [aqui](99-Cloud9-Environment).
 
 ## Módulo 1: Introdução ao Terraform
 ### Teoria
