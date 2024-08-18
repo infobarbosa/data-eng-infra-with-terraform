@@ -99,31 +99,31 @@ Ao ser criado, seu ambiente aparece no console do Cloud9
 ### 16. Clone do git deste laboratório:
 
 ```
-git clone https://github.com/infobarbosa/mariadb-aws.git
+git clone https://github.com/infobarbosa/data-engineering-infra-with-terraform.git
 ```
 
 O output será algo assim:
 ```
-voclabs:~/environment $ git clone https://github.com/infobarbosa/mariadb-aws.git
-Cloning into 'mariadb-aws'...
-remote: Enumerating objects: 166, done.
-remote: Counting objects: 100% (166/166), done.
-remote: Compressing objects: 100% (106/106), done.
-remote: Total 166 (delta 68), reused 137 (delta 39), pack-reused 0
-Receiving objects: 100% (166/166), 15.43 MiB | 17.21 MiB/s, done.
-Resolving deltas: 100% (68/68), done.
+~$ git clone https://github.com/infobarbosa/data-engineering-infra-with-terraform.git
+Cloning into 'data-engineering-infra-with-terraform'...
+remote: Enumerating objects: 104, done.
+remote: Counting objects: 100% (104/104), done.
+remote: Compressing objects: 100% (90/90), done.
+remote: Total 104 (delta 11), reused 98 (delta 8), pack-reused 0 (from 0)
+Receiving objects: 100% (104/104), 712.09 KiB | 8.79 MiB/s, done.
+Resolving deltas: 100% (11/11), done.
 ```
 
 
 ### 17. Navegue para o diretório raiz do projeto:
 
 ```
-cd mariadb-aws/
+cd data-engineering-infra-with-terraform
 ```
 
 ### 18. Execute o script `setup_cloud9_env.sh` conforme a seguir:
 ```
-sh scripts/setup_cloud9_env.sh
+sh assets/scripts/setup_cloud9_env.sh
 ```
 
 Esse script executa algumas tarefas administrativas importantes para esse laboratório.
@@ -135,8 +135,8 @@ Esse script executa algumas tarefas administrativas importantes para esse labora
 O output será algo assim:
 
 ```
-voclabs:~/environment $ cd mariadb-aws/
-voclabs:~/environment/mariadb-aws (main) $ sh scripts/setup_cloud9_env.sh
+voclabs:~/environment $ cd data-engineering-infra-with-terraform/
+voclabs:~/environment/data-engineering-infra-with-terraform (main) $ sh scripts/setup_cloud9_env.sh
 ### Atualizando o sistema ###
 Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
 Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]                                                                                                    
@@ -160,7 +160,7 @@ df -h
 Output:
 
 ```
-voclabs:~/environment/mariadb-aws (main) $ df -h
+voclabs:~/environment/data-engineering-infra-with-terraform (main) $ df -h
 Filesystem       Size  Used Avail Use% Mounted on
 /dev/root        146G  6.7G  139G   5% /
 tmpfs            3.9G     0  3.9G   0% /dev/shm
@@ -168,7 +168,7 @@ tmpfs            1.6G  876K  1.6G   1% /run
 tmpfs            5.0M     0  5.0M   0% /run/lock
 /dev/nvme0n1p15  105M  6.1M   99M   6% /boot/efi
 tmpfs            784M  4.0K  784M   1% /run/user/1000
-voclabs:~/environment/mariadb-aws (main) $  
+voclabs:~/environment/data-engineering-infra-with-terraform (main) $  
 ```
 
 Parabéns! Seu ambiente Cloud9 está pronto pra uso!
