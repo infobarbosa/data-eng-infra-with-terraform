@@ -89,6 +89,83 @@ provider "aws" {
 }
 ```
 
+### Exemplos de Tipos de Variáveis no Terraform
+
+No Terraform, as variáveis podem ser de diferentes tipos. Aqui estão alguns exemplos:
+
+#### String
+```hcl
+variable "region" {
+  description = "A região AWS onde os recursos serão criados"
+  type        = string
+  default     = "us-east-1"
+}
+```
+
+#### Number
+```hcl
+variable "instance_count" {
+  description = "Número de instâncias a serem criadas"
+  type        = number
+  default     = 2
+}
+```
+
+#### Boolean
+```hcl
+variable "enable_logging" {
+  description = "Habilitar ou desabilitar logging"
+  type        = bool
+  default     = true
+}
+```
+
+#### List
+```hcl
+variable "availability_zones" {
+  description = "Lista de zonas de disponibilidade"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
+}
+```
+
+#### Map
+```hcl
+variable "tags" {
+  description = "Tags para os recursos"
+  type        = map(string)
+  default     = {
+    Environment = "dev"
+    Project     = "dataeng"
+  }
+}
+```
+
+#### Object
+```hcl
+variable "instance_config" {
+  description = "Configuração da instância"
+  type = object({
+    instance_type = string
+    ami_id        = string
+  })
+  default = {
+    instance_type = "t2.micro"
+    ami_id        = "ami-0c55b159cbfafe1f0"
+  }
+}
+```
+
+#### Tuple
+```hcl
+variable "subnet_ids" {
+  description = "Lista de IDs de sub-rede"
+  type        = tuple([string, string, string])
+  default     = ["subnet-12345678", "subnet-23456789", "subnet-34567890"]
+}
+```
+
+
 ### Utilizar outputs para exibir informações
 Outputs permitem expor valores de configuração para uso posterior.
 
