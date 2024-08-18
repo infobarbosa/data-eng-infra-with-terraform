@@ -1,10 +1,10 @@
 # Curso de Terraform para Engenheiros de Dados
-
-## Módulo 1: Introdução ao Terraform
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
 Github: [infobarbosa](https://github.com/infobarbosa)
 
+
+## Módulo 1: Introdução ao Terraform
 ### Teoria
 - O que é Terraform?
 - Infraestrutura como Código (IaC)
@@ -17,10 +17,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício Avançado: Configuração inicial do Terraform com AWS Provider
 
 ## Módulo 2: Criação de Recursos Básicos na AWS
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Configuração do AWS Provider
 - Criando um VPC, Subnets e Internet Gateway
@@ -33,10 +29,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício Avançado: Configurar Security Groups e Internet Gateway
 
 ## Módulo 3: Módulos e Gerenciamento de Estado
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Introdução a Módulos
 - O que é o State do Terraform?
@@ -47,10 +39,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício Avançado: Criar e utilizar Módulos para Glue Database e Glue Table
 
 ## Módulo 4: Provisionamento de Recursos de Computação
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Criando Instâncias EC2
 - Configuração de AMIs e Key Pairs
@@ -61,10 +49,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício Avançado: Configurar Auto Scaling Group
 
 ## Módulo 5: Criação do Cluster AWS EMR
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Parâmetros essenciais
 - Criação do cluster EMR
@@ -76,10 +60,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Criação de EMR Steps
 
 ## Módulo 6: Criação de função AWS Lambda
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Visão geral de uma função lambda que seja ativada por um trigger do S3
 
@@ -87,10 +67,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício: implantação de função lambda
 
 ## Módulo 7: Integração e Deploy Contínuo
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Integração do Terraform com CI/CD (GitHub Actions)
 - Testes e validação de código Terraform
@@ -101,10 +77,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício Avançado: Implementar deploy contínuo de infraestrutura usando GitHub Actions
 
 ## Módulo 8: Provisionamento de Step Functions
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Parâmetros essenciais
 - Configuração de máquina de estado (AWS Step Functions)
@@ -114,10 +86,6 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 - Exercício: Configurar uma máquina de estados que crie o cluster AWS EMR e execute um job Spark
 
 ## Módulo 9: Provisionamento de RDS MySQL
-Author: Prof. Barbosa  
-Contact: infobarbosa@gmail.com  
-Github: [infobarbosa](https://github.com/infobarbosa)
-
 ### Teoria
 - Configuração de RDS (MySQL)
 - Políticas de IAM para acesso aos recursos
