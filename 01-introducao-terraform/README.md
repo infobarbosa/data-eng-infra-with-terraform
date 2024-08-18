@@ -102,6 +102,7 @@ Para instalar o Terraform, siga os passos abaixo:
     resource "random_string" "suffix" {
       length  = 6
       lower = true
+      min_lower = 6
       special = false
     }
     ```
