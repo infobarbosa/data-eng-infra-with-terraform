@@ -10,19 +10,40 @@ resource "aws_glue_catalog_table" "dataeng_modulo_3_tb_clientes" {
     classification = "csv"
   }
   storage_descriptor {
-    columns = jsondecode(file("${path.module}/tables/tb_raw_clientes.json"))
     location = "s3://path-to-your-bucket/tb_raw_clientes/"
     input_format = "org.apache.hadoop.mapred.TextInputFormat"
     output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
     compressed = false
     number_of_buckets = -1
-    serde_info {
+    ser_de_info {
       serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
       parameters = {
-        "field.delim" = ","
+        "field.delim" = ";"
       }
     }
+    columns {
+        name = "id"
+        type = "int"
+    }
+    columns {
+        name = "nome"
+        type = "string"
+    }
+    columns {
+        name = "data_nasc"
+        type = "date"
+    }
+    columns {
+        name = "cpf"
+        type = "string"
+    }
+    columns {
+        name = "email"
+        type = "string"
+    }  
   }
+
+
 }
 
 resource "aws_glue_catalog_table" "dataeng_modulo_3_tb_pedidos" {
@@ -33,17 +54,55 @@ resource "aws_glue_catalog_table" "dataeng_modulo_3_tb_pedidos" {
     classification = "csv"
   }
   storage_descriptor {
-    columns = jsondecode(file("${path.module}/tables/tb_raw_pedidos.json"))
     location = "s3://path-to-your-bucket/tb_raw_pedidos/"
     input_format = "org.apache.hadoop.mapred.TextInputFormat"
     output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
     compressed = false
     number_of_buckets = -1
-    serde_info {
+    ser_de_info {
       serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
       parameters = {
-        "field.delim" = ","
+        "field.delim" = ";"
       }
     }
+    columns {
+        name = "id_pedido"
+        type = "string"
+    }
+
+    columns {
+        name = "produto"
+        type = "string"
+    }
+
+    columns {
+        name = "valor_unitario"
+        type = "float"
+    }
+
+    columns {
+        name = "quantidade"
+        type = "bigint"
+    }
+
+    columns {
+        name = "data_criacao"
+        type = "timestamp"
+    }      
+
+    columns {
+        name = "uf"
+        type = "string"
+    }
+
+    columns {
+        name = "id_cliente"
+        type = "bigint"
+    }  
   }
+
+
+
+
+  
 }

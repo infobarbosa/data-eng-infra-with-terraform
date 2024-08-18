@@ -42,19 +42,31 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
 ### Laboratório
 
 #### Exercício 2: Criar e utilizar Módulos para Glue Database e Glue Table
-
-1. Crie a estrutura de pastas para o módulo Glue Database:
+1. Navegue para o diterório `03-modulos-e-gerenciamento-de-estado/modulos/`
+2. Crie a estrutura de pastas para o módulo Glue Database:
     ```
-    glue-database/
     ├── main.tf
-    ├── variables.tf
-    ├── outputs.tf
-    └── tables/
-        ├── tb_raw_clientes.json
-        └── tb_raw_pedidos.json
+    ├── modules
+    │   └── glue-catalog
+    │       ├── main.tf
+    │       ├── outputs.tf
+    │       └── variables.tf
+    ├── terraform.tfstate
+    └── terraform.tfstate.backup
     ```
+3. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+    ```hcl
+    provider "aws" {
+      region = "us-east-1"
+    }
 
-2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
+    module "glue-catalog" {
+      source  = "./modules/glue-catalog"
+
+      database_name = "dataeng-modulo-3-glue-database"
+    }
+    ```
+4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
     ```hcl
     resource "aws_glue_catalog_database" "dataeng_modulo_3_db" {
       name = var.database_name
@@ -68,18 +80,37 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
         classification = "csv"
       }
       storage_descriptor {
-        columns = jsondecode(file("${path.module}/tables/tb_raw_clientes.json"))
         location = "s3://path-to-your-bucket/tb_raw_clientes/"
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
         compressed = false
         number_of_buckets = -1
-        serde_info {
+        ser_de_info {
           serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
           parameters = {
-            "field.delim" = ","
+            "field.delim" = ";"
           }
         }
+        columns {
+            name = "id"
+            type = "int"
+        }
+        columns {
+            name = "nome"
+            type = "string"
+        }
+        columns {
+            name = "data_nasc"
+            type = "date"
+        }
+        columns {
+            name = "cpf"
+            type = "string"
+        }
+        columns {
+            name = "email"
+            type = "string"
+        }  
       }
     }
 
@@ -91,23 +122,56 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
         classification = "csv"
       }
       storage_descriptor {
-        columns = jsondecode(file("${path.module}/tables/tb_raw_pedidos.json"))
         location = "s3://path-to-your-bucket/tb_raw_pedidos/"
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
         compressed = false
         number_of_buckets = -1
-        serde_info {
+        ser_de_info {
           serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
           parameters = {
-            "field.delim" = ","
+            "field.delim" = ";"
           }
         }
-      }
+        columns {
+            name = "id_pedido"
+            type = "string"
+        }
+
+        columns {
+            name = "produto"
+            type = "string"
+        }
+
+        columns {
+            name = "valor_unitario"
+            type = "float"
+        }
+
+        columns {
+            name = "quantidade"
+            type = "bigint"
+        }
+
+        columns {
+            name = "data_criacao"
+            type = "timestamp"
+        }      
+
+        columns {
+            name = "uf"
+            type = "string"
+        }
+
+        columns {
+            name = "id_cliente"
+            type = "bigint"
+        }  
+      } 
     }
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `variables.tf`:
+5. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
     ```hcl
     variable "database_name" {
       description = "Nome do banco de dados Glue"
@@ -115,40 +179,19 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
     }
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
+6. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/outputs.tf`:
     ```hcl
     output "glue_database_name" {
       value = aws_glue_catalog_database.dataeng_modulo_3_db.name
     }
     ```
 
-5. Crie os arquivos JSON para as tabelas:
-    - `tb_raw_clientes.json`:
-        ```json
-        [
-          { "Name": "id", "Type": "int" },
-          { "Name": "nome", "Type": "string" },
-          { "Name": "data_nasc", "Type": "date" },
-          { "Name": "cpf", "Type": "string" },
-          { "Name": "email", "Type": "string" }
-        ]
-        ```
-    - `tb_raw_pedidos.json`:
-        ```json
-        [
-          { "Name": "id_pedido", "Type": "string" },
-          { "Name": "produto", "Type": "string" },
-          { "Name": "valor_unitario", "Type": "float" },
-          { "Name": "quantidade", "Type": "bigint" },
-          { "Name": "data_criacao", "Type": "timestamp" },
-          { "Name": "uf", "Type": "string" },
-          { "Name": "id_cliente", "Type": "bigint" }
-        ]
-        ```
-
-6. Execute o Terraform:
+7. Execute o Terraform no diretório raiz:
     ```sh
     terraform init
+    ```
+
+    ```sh
     terraform apply
     ```
 
