@@ -14,7 +14,7 @@ variable "key_name" {
   type        = string
 }
 
-variable "subnet_ids" {
-  description = "IDs das subnets para o Auto Scaling Group"
-  type        = list(string)
-}
+#variable "subnet_ids" {
+#  description = "IDs das subnets para o Auto Scaling Group"
+#  type        = list(string)
+#}
