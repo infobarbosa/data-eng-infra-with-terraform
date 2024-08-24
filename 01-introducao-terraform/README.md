@@ -112,7 +112,7 @@ Para instalar o Terraform, siga os passos abaixo:
     }
     ```
 
-    Se utilizou no `nano` então utilize `Control+O` para salvar e `Control+X` para fechar.
+    Se utilizou no `nano` então utilize `Control+O` (letra O) para salvar e `Control+X` para fechar.
 
 4. **Inicialize o Terraform**:
     ```sh
@@ -149,14 +149,13 @@ Para instalar o Terraform, siga os passos abaixo:
 ### Exercício 3: Incluindo um objeto no S3
 Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
-1. **Arquivo de exemplo**:
+1. **Arquivo de exemplo**:<br>
     Vamos criar o arquivo `pombo.txt`:
     ```sh
     echo "pruuuuu" > pombo.txt
     ```
 
 2. **Edite novamente o arquivo `main.tf`**:
-    Vamos 
     ```sh
     nano main.tf
     ```
