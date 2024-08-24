@@ -9,12 +9,23 @@ Lembre-se de que a gestão dos custos dos recursos criados é de responsabilidad
 ## Teoria
 
 ### Configuração do AWS Provider
-Para configurar o AWS Provider, você precisa definir a região e as credenciais de acesso. Exemplo:
+Para configurar o AWS Provider, você precisa definir a região e as credenciais de acesso.<br> 
+Exemplo:
 ```hcl
 provider "aws" {
   region = "us-east-1"
 }
 ```
+
+A configuração para o AWS Provider pode ser derivada de várias fontes, que são aplicadas na seguinte ordem:
+
+1. Parâmetros na configuração do provedor
+2. Variáveis ​​de ambiente
+3. Arquivos de credenciais compartilhadas
+4. Arquivos de configuração compartilhados
+5. Credenciais do contêiner
+6. Credenciais do perfil da instância e região
+
 
 ### Criando um VPC, Subnets e Internet Gateway
 - **VPC**: Virtual Private Cloud é uma rede virtual dedicada à sua conta AWS.
