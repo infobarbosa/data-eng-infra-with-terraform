@@ -1,0 +1,7 @@
+[
+  { "Name": "id", "Type": "int" },
+  { "Name": "nome", "Type": "string" },
+  { "Name": "data_nasc", "Type": "date" },
+  { "Name": "cpf", "Type": "string" },
+  { "Name": "email", "Type": "string" }
+]
