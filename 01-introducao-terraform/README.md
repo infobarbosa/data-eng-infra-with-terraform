@@ -81,8 +81,10 @@ Para instalar o Terraform, siga os passos abaixo:
       region = "us-east-1"
     }
 
+    data "aws_caller_identity" "current" {}
+
     resource "aws_s3_bucket" "dataeng-modulo-1-bucket" {
-      bucket = "dataeng-modulo-1-${random_string.suffix.result}"
+      bucket = "dataeng-modulo-1-${data.aws_caller_identity.current.account_id}-${random_string.suffix.result}"
 
       tags = {
         Name        = "dataeng-modulo-1-bucket"
