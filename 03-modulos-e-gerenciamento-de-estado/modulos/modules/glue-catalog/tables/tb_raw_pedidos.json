@@ -1,9 +1,0 @@
-[
-  { "Name": "id_pedido", "Type": "string" },
-  { "Name": "produto", "Type": "string" },
-  { "Name": "valor_unitario", "Type": "float" },
-  { "Name": "quantidade", "Type": "bigint" },
-  { "Name": "data_criacao", "Type": "timestamp" },
-  { "Name": "uf", "Type": "string" },
-  { "Name": "id_cliente", "Type": "bigint" }
-]
