@@ -51,13 +51,13 @@ Para instalar o Terraform, siga os passos abaixo:
 
 ## Laboratório
 
-### Exercício Simples: Instalação do Terraform no AWS Cloud9
+### Exercício 1: Instalação do Terraform no AWS Cloud9
 
 1. **Acesse o AWS Cloud9** e crie um novo ambiente de desenvolvimento com o sistema operacional Ubuntu.
 2. **Abra o terminal** no Cloud9 e execute os comandos de instalação do Terraform mencionados na seção de teoria.
 3. **Verifique a instalação** executando `terraform -v`.
 
-### Exercício Avançado: Configuração inicial do Terraform com AWS Provider
+### Exercício 2: Configuração inicial do Terraform com AWS Provider
 
 1. **Crie um diretório de trabalho**:
     ```sh
@@ -70,7 +70,12 @@ Para instalar o Terraform, siga os passos abaixo:
     touch main.tf
     ```
 
-3. **Edite o arquivo `main.tf`** com o seguinte conteúdo:
+3. **Edite o arquivo `main.tf`** :
+    ```sh
+    nano main.tf
+    ```
+
+    Inclua o seguinte conteúdo:
     ```hcl
     provider "aws" {
       region = "us-east-1"
@@ -107,6 +112,8 @@ Para instalar o Terraform, siga os passos abaixo:
     }
     ```
 
+    Se utilizou no `nano` então utilize `Control+O` para salvar e `Control+X` para fechar.
+
 4. **Inicialize o Terraform**:
     ```sh
     terraform init
@@ -121,6 +128,61 @@ Para instalar o Terraform, siga os passos abaixo:
     ```sh
     terraform apply
     ```
+
+    Output esperado:
+    ```
+    random_string.suffix: Creating...
+    random_string.suffix: Creation complete after 0s [id=bbkfru]
+    aws_s3_bucket.dataeng-modulo-1-bucket: Creating...
+    aws_s3_bucket.dataeng-modulo-1-bucket: Creation complete after 1s [id=dataeng-modulo-1-bbkfru]
+    aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls: Creating...
+    aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls: Creation complete after 0s [id=dataeng-modulo-1-bbkfru]
+    aws_s3_bucket_acl.dataeng-modulo-1-bucket-acl: Creating...
+    aws_s3_bucket_acl.dataeng-modulo-1-bucket-acl: Creation complete after 0s [id=dataeng-modulo-1-bbkfru,private]
+    ```
+
+    Perceba que o nome do bucket é informado na saída do comando.
+
+7. **Verifique**:
+    Acesse o console AWS S3 e verifique se o bucket foi criado como esperado.
+
+### Exercício 3: Incluindo um objeto no S3
+Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
+
+1. **Arquivo de exemplo**:
+    Vamos criar o arquivo `pombo.txt`:
+    ```sh
+    echo "pruuuuu" > pombo.txt
+    ```
+
+2. **Edite novamente o arquivo `main.tf`**:
+    Vamos 
+    ```sh
+    nano main.tf
+    ```
+
+    Copie o trecho a seguir e inclua ao final do arquivo `main.tf`:
+    ```hcl
+
+    resource "aws_s3_object" "object" {
+        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        key    = "pombo.txt"
+        source = "./pombo.txt"
+    }
+    ```
+
+3. **Crie um plano de execução**:
+    ```sh
+    terraform plan
+    ```
+
+4. **Aplique o plano**:
+    ```sh
+    terraform apply
+    ```
+5. **Verifique**
+    Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
+    Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
 ## Parabéns
 Parabéns pela conclusão do módulo 1! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
