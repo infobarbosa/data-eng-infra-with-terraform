@@ -190,7 +190,7 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
 1. **Faça o clone** do repositório a seguir:<br>
     ```sh
-    git clone https://github.com/infobarbosa/datasets-csv-pessoas
+    git clone https://github.com/infobarbosa/datasets-csv-clientes
     ```
 
 2. **Edite novamente o arquivo `main.tf`**:
@@ -203,8 +203,8 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
     resource "aws_s3_object" "object" {
         bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
-        key    = "raw/pessoas/pessoas.csv.gz"
-        source = "./datasets-csv-pessoas/pessoas.csv.gz"
+        key    = "raw/clientes/clientes.csv.gz"
+        source = "./datasets-csv-clientes/clientes.csv.gz"
     }
     ```
 
