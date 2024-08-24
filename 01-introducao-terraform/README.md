@@ -188,9 +188,13 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 ### Exercício 4: Incluindo um objeto **útil** no S3
 Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
-1. **Faça o clone** do repositório a seguir:<br>
+1. **Faça o clone** dos repositórios a seguir:<br>
     ```sh
     git clone https://github.com/infobarbosa/datasets-csv-clientes
+    ```
+
+    ```sh
+    git clone https://github.com/infobarbosa/datasets-csv-pedidos
     ```
 
 2. **Edite novamente o arquivo `main.tf`**:
@@ -206,6 +210,13 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
         key    = "raw/clientes/clientes.csv.gz"
         source = "./datasets-csv-clientes/clientes.csv.gz"
     }
+
+    resource "aws_s3_object" "object" {
+        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        key    = "raw/pedidos/pedidos-2024-01-01.csv.gz"
+        source = "./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz"
+    }
+
     ```
 
 3. **Crie um plano de execução**:
