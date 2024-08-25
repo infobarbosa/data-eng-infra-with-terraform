@@ -156,6 +156,7 @@ Referência: [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/
     variable "key_name" {
       description = "Nome da Key Pair para acessar a instância"
       type        = string
+      default     = "vockey"
     }
 
     variable "subnet_ids" {
