@@ -92,6 +92,10 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
 7. Verifique o resultado no painel AWS EC2.
 
+## Desafio 1
+Você deve ter percebido que a instância AWS EC2 foi criada na VPC default da conta.<br>
+Altere as configurações de forma que seja remanejada para a VPC e security group corretos.
+
 ### Exercício 2: Configurar Auto Scaling Group
 
 1. Crie a estrutura de pastas para o Auto Scaling Group:
