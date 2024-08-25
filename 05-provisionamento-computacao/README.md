@@ -110,12 +110,8 @@ Referência: [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/
 
 2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
     ```hcl
-    provider "aws" {
-      region = "us-east-1"
-    }
-
-    resource "aws_launch_configuration" "dataeng_lc" {
-      name          = "dataeng-lc"
+    resource "aws_launch_template" "dataeng_lt" {
+      name_prefix   = "dataeng-lt"
       image_id      = var.ami_id
       instance_type = var.instance_type
       key_name      = var.key_name
@@ -123,19 +119,42 @@ Referência: [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/
       lifecycle {
         create_before_destroy = true
       }
+
+      block_device_mappings {
+        device_name = "/dev/xvda"
+        ebs {
+          delete_on_termination = true
+          volume_size           = 8
+          volume_type           = "gp3"
+        }
+      }
+
+      tag_specifications {
+        resource_type = "instance"
+        tags = {
+          Name = "dataeng-lt"
+        }
+      }
     }
 
     resource "aws_autoscaling_group" "dataeng_asg" {
-      desired_capacity     = 1
-      max_size             = 2
+      desired_capacity     = 2
+      max_size             = 3
       min_size             = 1
-      launch_configuration = aws_launch_configuration.dataeng_lc.id
-      vpc_zone_identifier  = var.subnet_ids
+      vpc_zone_identifier  = [aws_subnet.dataeng-public-subnet.id]
+      launch_template {
+        id      = aws_launch_template.dataeng_lt.id
+        version = "$Latest"
+      }  
 
       tag {
         key                 = "Name"
         value               = "dataeng-ec2-instance"
         propagate_at_launch = true
+      }
+   
+      lifecycle {
+        create_before_destroy = true
       }
     }
     ```
