@@ -33,11 +33,11 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```
 
     ```sh
-    mkdir -p ./emr-cluster
-    mkdir -p ./emr-cluster/scripts
-    touch ./emr-cluster/main.tf
-    touch ./emr-cluster/variables.tf
-    touch ./emr-cluster/outputs.tf
+    mkdir -p ./modules/emr-cluster
+    mkdir -p ./modules/emr-cluster/scripts
+    touch ./modules/emr-cluster/main.tf
+    touch ./modules/emr-cluster/variables.tf
+    touch ./modules/emr-cluster/outputs.tf
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
@@ -114,15 +114,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/variables.tf`:
-    ```hcl
-    variable "subnet_id" {
-      description = "ID da subnet para o cluster EMR"
-      type        = string
-    }
-    ```
-
-4. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
     ```hcl
     output "emr_cluster_id" {
       value = aws_emr_cluster.dataeng_modulo_5_emr.id
