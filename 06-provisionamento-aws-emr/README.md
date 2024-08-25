@@ -44,6 +44,8 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   ```hcl
   module "emr-cluster" {
     source  = "./modules/emr-cluster"
+
+    subnet_id = aws_subnet.dataeng-public-subnet.id
   }
   ```
 3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/main.tf`:
@@ -57,7 +59,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       service_role  = <SUBSTITUIR_PELO_ARN_DE_EMR_DefaultRole>
       ec2_attributes {
         instance_profile = <SUBSTITUIR_PELO_ARN_DE_EMR_EC2_DefaultRole>
-        subnet_id        = aws_subnet.dataeng-public-subnet.id
+        subnet_id        = var.subnet_id
       }
       master_instance_group {
         instance_type = "m4.large"
@@ -111,8 +113,15 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       role = aws_iam_role.emr_service_role.name
     }
     ```
+5. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/variables.tf`:
+    ```hcl
+    variable "subnet_id" {
+      description = "Id da subnet"
+      type        = string
+    }
+    ```
 
-3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
+5. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
     ```hcl
     output "emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
