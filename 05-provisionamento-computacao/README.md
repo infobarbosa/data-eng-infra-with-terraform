@@ -1,4 +1,4 @@
-# Módulo 4: Provisionamento de Recursos de Computação
+# Módulo 5: Provisionamento de Recursos de Computação
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
@@ -36,12 +36,12 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       region = "us-east-1"
     }
 
-    resource "aws_instance" "dataeng_modulo_4_instance" {
+    resource "aws_instance" "dataeng_ec2_instance" {
       ami           = var.ami_id
       instance_type = var.instance_type
 
       tags = {
-        Name = "dataeng-modulo-4-instance"
+        Name = "dataeng-ec2-instance"
       }
     }
     ```
@@ -63,11 +63,11 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
     ```hcl
     output "instance_id" {
-      value = aws_instance.dataeng_modulo_4_instance.id
+      value = aws_instance.dataeng_ec2_instance.id
     }
 
     output "instance_public_ip" {
-      value = aws_instance.dataeng_modulo_4_instance.public_ip
+      value = aws_instance.dataeng_ec2_instance.public_ip
     }
     ```
 
@@ -93,8 +93,8 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       region = "us-east-1"
     }
 
-    resource "aws_launch_configuration" "dataeng_modulo_4_lc" {
-      name          = "dataeng-modulo-4-lc"
+    resource "aws_launch_configuration" "dataeng_lc" {
+      name          = "dataeng-lc"
       image_id      = var.ami_id
       instance_type = var.instance_type
       key_name      = var.key_name
@@ -104,16 +104,16 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       }
     }
 
-    resource "aws_autoscaling_group" "dataeng_modulo_4_asg" {
+    resource "aws_autoscaling_group" "dataeng_asg" {
       desired_capacity     = 1
       max_size             = 2
       min_size             = 1
-      launch_configuration = aws_launch_configuration.dataeng_modulo_4_lc.id
+      launch_configuration = aws_launch_configuration.dataeng_lc.id
       vpc_zone_identifier  = var.subnet_ids
 
       tag {
         key                 = "Name"
-        value               = "dataeng-modulo-4-instance"
+        value               = "dataeng-ec2-instance"
         propagate_at_launch = true
       }
     }
@@ -146,7 +146,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
     ```hcl
     output "autoscaling_group_name" {
-      value = aws_autoscaling_group.dataeng_modulo_4_asg.name
+      value = aws_autoscaling_group.dataeng_asg.name
     }
     ```
 
@@ -157,7 +157,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     ```
 
 ## Parabéns
-Você concluiu o módulo 4! Agora você sabe como criar instâncias EC2 e configurar Auto Scaling Groups.
+Você concluiu o módulo! Agora você sabe como criar instâncias EC2 e configurar Auto Scaling Groups.
 
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
