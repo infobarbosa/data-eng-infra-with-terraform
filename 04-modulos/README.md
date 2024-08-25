@@ -97,63 +97,6 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
       }
     }
 
-    resource "aws_glue_catalog_table" "dataeng_modulo_4_tb_pedidos" {
-      database_name = aws_glue_catalog_database.dataeng_modulo_4_db.name
-      name          = "tb_raw_pedidos"
-      table_type    = "EXTERNAL_TABLE"
-      parameters = {
-        classification = "csv",
-        "compressionType" = "gzip",
-        "skip.header.line.count" = "1"
-      }
-      storage_descriptor {
-        location = "s3://<ALTERE_AQUI_PARA_O_NOME_DO_SEU_BUCKET>/raw/pedidos/"
-        input_format = "org.apache.hadoop.mapred.TextInputFormat"
-        output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
-        compressed = false
-        number_of_buckets = -1
-        ser_de_info {
-          serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
-          parameters = {
-            "field.delim" = ";"
-          }
-        }
-        columns {
-            name = "id_pedido"
-            type = "string"
-        }
-
-        columns {
-            name = "produto"
-            type = "string"
-        }
-
-        columns {
-            name = "valor_unitario"
-            type = "float"
-        }
-
-        columns {
-            name = "quantidade"
-            type = "bigint"
-        }
-
-        columns {
-            name = "data_criacao"
-            type = "timestamp"
-        }      
-
-        columns {
-            name = "uf"
-            type = "string"
-        }
-
-        columns {
-            name = "id_cliente"
-            type = "bigint"
-        }  
-      } 
-    }
     ```
 
 5. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
@@ -177,8 +120,150 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
     ```
 
     ```sh
-    terraform apply
+    terraform apply --auto-approve
     ```
+
+8. Verifique no Athena se a tabela foi criada como esperado.
+
+## Desafio
+Execute novamente o exercício anterior, desta vez crie a tabela `tb_raw_pedidos`.
+Os tipos das colunas:
+
+| Atributo        | Tipo      | Obs                                               | 
+| ---             | ---       | ---                                               |
+| ID_PEDIDO       | string    | O identificador da pessoa                         | 
+| PRODUTO         | string    | O nome do produto no pedido                       | 
+| VALOR_UNITARIO  | float     | O valor unitário do produto no pedido             | 
+| QUANTIDADE      | bigint    | A quantidade do produto no pedido                 | 
+| DATA_CRIACAO    | timestamp | A data da criação do pedido                       | 
+| UF              | string    | A sigla da unidade federativa (estado) no Brasil  | 
+| ID_CLIENTE      | bigint    | O identificador do cliente                        | 
+
+A seguir está o template:
+```hcl
+    resource "aws_glue_catalog_table" "dataeng_modulo_4_tb_pedidos" {
+      database_name = <AJUSTE_AQUI>
+      name          = <AJUSTE_AQUI>
+      table_type    = "EXTERNAL_TABLE"
+      parameters = {
+        classification = <AJUSTE_AQUI>,
+        "compressionType" = <AJUSTE_AQUI>,
+        "skip.header.line.count" = <AJUSTE_AQUI>
+      }
+      storage_descriptor {
+        location = <AJUSTE_AQUI>
+        input_format = "org.apache.hadoop.mapred.TextInputFormat"
+        output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+        compressed = false
+        number_of_buckets = -1
+        ser_de_info {
+          serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+          parameters = {
+            "field.delim" = "<AJUSTE_AQUI>"
+          }
+        }
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }
+
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }
+
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }
+
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }
+
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }      
+
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }
+
+        columns {
+            name = "<AJUSTE_AQUI>"
+            type = "<AJUSTE_AQUI>"
+        }  
+      } 
+    }
+
+```
+## Solução do desafio
+<details>
+  <summary>Clique aqui</summary>
+  
+  ```hcl
+        resource "aws_glue_catalog_table" "dataeng_modulo_4_tb_pedidos" {
+          database_name = aws_glue_catalog_database.dataeng_modulo_4_db.name
+          name          = "tb_raw_pedidos"
+          table_type    = "EXTERNAL_TABLE"
+          parameters = {
+            classification = "csv",
+            "compressionType" = "gzip",
+            "skip.header.line.count" = "1"
+          }
+          storage_descriptor {
+            location = "s3://<ALTERE_AQUI_PARA_O_NOME_DO_SEU_BUCKET>/raw/pedidos/"
+            input_format = "org.apache.hadoop.mapred.TextInputFormat"
+            output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+            compressed = false
+            number_of_buckets = -1
+            ser_de_info {
+              serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+              parameters = {
+                "field.delim" = ";"
+              }
+            }
+            columns {
+                name = "id_pedido"
+                type = "string"
+            }
+
+            columns {
+                name = "produto"
+                type = "string"
+            }
+
+            columns {
+                name = "valor_unitario"
+                type = "float"
+            }
+
+            columns {
+                name = "quantidade"
+                type = "bigint"
+            }
+
+            columns {
+                name = "data_criacao"
+                type = "timestamp"
+            }      
+
+            columns {
+                name = "uf"
+                type = "string"
+            }
+
+            columns {
+                name = "id_cliente"
+                type = "bigint"
+            }  
+          } 
+        }
+  ```
+</details>
 
 ## Parabéns
 Você concluiu o módulo 3! Agora você sabe como configurar o backend remoto para o state do Terraform e criar módulos reutilizáveis.
