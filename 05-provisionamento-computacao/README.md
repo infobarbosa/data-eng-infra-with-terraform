@@ -96,6 +96,8 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 Você deve ter percebido que a instância AWS EC2 foi criada na VPC default da conta.<br>
 Altere as configurações de forma que seja remanejada para a VPC e security group corretos.
 
+Referência: [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#network-and-credit-specification-example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#network-and-credit-specification-example)
+
 ### Exercício 2: Configurar Auto Scaling Group
 
 1. Crie a estrutura de pastas para o Auto Scaling Group:
@@ -148,7 +150,7 @@ Altere as configurações de forma que seja remanejada para a VPC e security gro
     variable "instance_type" {
       description = "Tipo da instância EC2"
       type        = string
-      default     = "t2.micro"
+      default     = "t3.micro"
     }
 
     variable "key_name" {
