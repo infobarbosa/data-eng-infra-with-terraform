@@ -63,7 +63,7 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
         "skip.header.line.count" = "1"
       }
       storage_descriptor {
-        location = "s3://path-to-your-bucket/tb_raw_clientes/"
+        location = "s3://<ALTERE_AQUI_PARA_O_NOME_DO_SEU_BUCKET>/raw/clientes/"
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
         compressed = false
@@ -107,7 +107,7 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
         "skip.header.line.count" = "1"
       }
       storage_descriptor {
-        location = "s3://path-to-your-bucket/tb_raw_pedidos/"
+        location = "s3://<ALTERE_AQUI_PARA_O_NOME_DO_SEU_BUCKET>/raw/pedidos/"
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
         compressed = false
