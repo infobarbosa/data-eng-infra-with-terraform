@@ -40,22 +40,32 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     touch ./emr-cluster/outputs.tf
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
+2. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+  ```hcl
+  module "emr-cluster" {
+    source  = "./modules/emr-cluster"
+
+    cluster_name = "dataeng-emr-cluster"
+  }
+  ```
+3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/main.tf`:
+    > **Atenção!** Você deve substituir algumas informações no script abaixo, `service_role` e `instance_profile`.
+
     ```hcl
-    resource "aws_emr_cluster" "dataeng_modulo_5_emr" {
-      name          = "dataeng-modulo-5-emr"
-      release_label = "emr-5.30.0"
+    resource "aws_emr_cluster" "dataeng_emr" {
+      name          = "dataeng-emr"
+      release_label = "emr-7.2.0"
       applications  = ["Hadoop", "Spark"]
-      service_role  = aws_iam_role.emr_service_role.arn
+      service_role  = <SUBSTITUIR_PELO_ARN_DE_EMR_DefaultRole>
       ec2_attributes {
-        instance_profile = aws_iam_instance_profile.emr_instance_profile.arn
-        subnet_id        = var.subnet_id
+        instance_profile = <SUBSTITUIR_PELO_ARN_DE_EMR_EC2_DefaultRole>
+        subnet_id        = aws_subnet.dataeng-public-subnet.id
       }
       master_instance_group {
-        instance_type = "m5.xlarge"
+        instance_type = "m4.large"
       }
       core_instance_group {
-        instance_type = "m5.xlarge"
+        instance_type = "m4.large"
         instance_count = 2
       }
       step {
@@ -71,16 +81,16 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         action_on_failure = "CONTINUE"
         hadoop_jar_step {
           jar = "command-runner.jar"
-          args = ["spark-submit", "s3://path-to-your-bucket/scripts/spark_job.py"]
+          args = ["spark-submit", "s3://<SUBSTITUA_PELO_SEU>/scripts/spark_job.py"]
         }
       }
       tags = {
-        Name = "dataeng-modulo-5-emr"
+        Name = "dataeng-emr"
       }
     }
 
     resource "aws_iam_role" "emr_service_role" {
-      name = "dataeng-modulo-5-emr-service-role"
+      name = "dataeng-emr-service-role"
       assume_role_policy = jsonencode({
         Version = "2012-10-17"
         Statement = [{
@@ -99,12 +109,12 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
 
     resource "aws_iam_instance_profile" "emr_instance_profile" {
-      name = "dataeng-modulo-5-emr-instance-profile"
+      name = "dataeng-emr-instance-profile"
       role = aws_iam_role.emr_service_role.name
     }
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `variables.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/variables.tf`:
     ```hcl
     variable "subnet_id" {
       description = "ID da subnet para o cluster EMR"
@@ -112,7 +122,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
     ```hcl
     output "emr_cluster_id" {
       value = aws_emr_cluster.dataeng_modulo_5_emr.id
