@@ -158,11 +158,6 @@ Referência: [https://registry.terraform.io/providers/hashicorp/aws/latest/docs/
       type        = string
       default     = "vockey"
     }
-
-    variable "subnet_ids" {
-      description = "IDs das subnets para o Auto Scaling Group"
-      type        = list(string)
-    }
     ```
 
 4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
