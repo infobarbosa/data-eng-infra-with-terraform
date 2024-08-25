@@ -1,4 +1,4 @@
-# Módulo 5: Criação do Cluster AWS EMR
+# Módulo 6: Criação do Cluster AWS EMR
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
@@ -32,12 +32,16 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         └── spark_job.py
     ```
 
+    ```sh
+    mkdir -p ./emr-cluster
+    mkdir -p ./emr-cluster/scripts
+    touch ./emr-cluster/main.tf
+    touch ./emr-cluster/variables.tf
+    touch ./emr-cluster/outputs.tf
+    ```
+
 2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
     ```hcl
-    provider "aws" {
-      region = "us-east-1"
-    }
-
     resource "aws_emr_cluster" "dataeng_modulo_5_emr" {
       name          = "dataeng-modulo-5-emr"
       release_label = "emr-5.30.0"
@@ -136,7 +140,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     terraform apply
     ```
 
-### Exercício Avançado: Criação do cluster EMR e execução de EMR Steps
+### Exercício 2: Criação do cluster EMR e execução de EMR Steps
 
 1. Adicione o seguinte conteúdo ao arquivo `main.tf` para incluir os steps:
     ```hcl
