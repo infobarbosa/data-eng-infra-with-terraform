@@ -56,9 +56,9 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       name          = "dataeng-emr"
       release_label = "emr-7.2.0"
       applications  = ["Hadoop", "Spark"]
-      service_role  = <SUBSTITUIR_PELO_ARN_DE_EMR_DefaultRole>
+      service_role  = "EMR_DefaultRole"
       ec2_attributes {
-        instance_profile = <SUBSTITUIR_PELO_ARN_DE_EMR_EC2_DefaultRole>
+        instance_profile = "EMR_EC2_DefaultRole">
         subnet_id        = var.subnet_id
       }
       master_instance_group {
@@ -87,30 +87,6 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       tags = {
         Name = "dataeng-emr"
       }
-    }
-
-    resource "aws_iam_role" "emr_service_role" {
-      name = "dataeng-emr-service-role"
-      assume_role_policy = jsonencode({
-        Version = "2012-10-17"
-        Statement = [{
-          Action = "sts:AssumeRole"
-          Effect = "Allow"
-          Principal = {
-            Service = "elasticmapreduce.amazonaws.com"
-          }
-        }]
-      })
-    }
-
-    resource "aws_iam_role_policy_attachment" "service_role_policy" {
-      role       = aws_iam_role.emr_service_role.name
-      policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
-    }
-
-    resource "aws_iam_instance_profile" "emr_instance_profile" {
-      name = "dataeng-emr-instance-profile"
-      role = aws_iam_role.emr_service_role.name
     }
     ```
 5. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/variables.tf`:
