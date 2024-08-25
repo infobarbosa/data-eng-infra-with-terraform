@@ -20,7 +20,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
 ## Laboratório
 
-### Exercício Simples: Criar uma Instância EC2
+### Exercício 1: Criar uma Instância EC2
 
 1. Crie a estrutura de pastas para a instância EC2:
     ```
@@ -77,7 +77,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     terraform apply
     ```
 
-### Exercício Avançado: Configurar Auto Scaling Group
+### Exercício 2: Configurar Auto Scaling Group
 
 1. Crie a estrutura de pastas para o Auto Scaling Group:
     ```
