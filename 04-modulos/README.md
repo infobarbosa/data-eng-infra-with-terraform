@@ -268,7 +268,7 @@ A seguir está o template:
 Não esqueça de verificar o resultado no AWS Athena. ;)
 
 ## Parabéns
-Você concluiu o módulo 3! Agora você sabe como configurar o backend remoto para o state do Terraform e criar módulos reutilizáveis.
+Você concluiu o módulo! Agora você sabe como criar módulos reutilizáveis no Terraform.
 
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
