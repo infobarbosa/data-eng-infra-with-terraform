@@ -57,7 +57,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     variable "instance_type" {
       description = "Tipo da instância EC2"
       type        = string
-      default     = "t2.micro"
+      default     = "t3.micro"
     }
     ```
 
