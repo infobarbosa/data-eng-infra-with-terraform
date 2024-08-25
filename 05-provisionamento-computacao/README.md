@@ -71,11 +71,25 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     }
     ```
 
-5. Execute o Terraform:
+5. Verifique o id da AMI utilizando o seguinte comando no terminal:
+  ```sh
+  aws ec2 describe-images \
+    --filters "Name=architecture,Values=x86_64" "Name=creation-date,Values=2024-08-*" "Name=owner-id,Values=099720109477" "Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20240801" \
+    --owners amazon \
+    --query 'Images[*].[ImageId,Name,Description]' \
+    --output json
+  ```
+
+6. Execute o Terraform:
     ```sh
     terraform init
-    terraform apply
     ```
+    
+    ```
+    terraform apply --auto-approve
+    ```
+
+7. Verifique o resultado no painel AWS EC2.
 
 ### Exercício 2: Configurar Auto Scaling Group
 
@@ -150,11 +164,25 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     }
     ```
 
-5. Execute o Terraform:
+5. Verifique o id da AMI utilizando o seguinte comando no terminal:
+  ```sh
+  aws ec2 describe-images \
+    --filters "Name=architecture,Values=x86_64" "Name=creation-date,Values=2024-08-*" "Name=owner-id,Values=099720109477" "Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20240801" \
+    --owners amazon \
+    --query 'Images[*].[ImageId,Name,Description]' \
+    --output json
+  ```
+
+6. Execute o Terraform:
     ```sh
     terraform init
-    terraform apply
     ```
+    
+    ```
+    terraform apply --auto-approve
+    ```
+
+7. Verifique o resultado no painel AWS EC2.
 
 ## Parabéns
 Você concluiu o módulo! Agora você sabe como criar instâncias EC2 e configurar Auto Scaling Groups.
