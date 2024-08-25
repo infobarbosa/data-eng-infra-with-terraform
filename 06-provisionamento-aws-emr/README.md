@@ -44,8 +44,6 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   ```hcl
   module "emr-cluster" {
     source  = "./modules/emr-cluster"
-
-    cluster_name = "dataeng-emr-cluster"
   }
   ```
 3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/main.tf`:
@@ -117,7 +115,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
     ```hcl
     output "emr_cluster_id" {
-      value = aws_emr_cluster.dataeng_modulo_5_emr.id
+      value = aws_emr_cluster.dataeng_emr.id
     }
     ```
 
