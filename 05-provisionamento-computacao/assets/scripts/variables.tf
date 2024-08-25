@@ -7,5 +7,11 @@ variable "ami_id" {
 variable "instance_type" {
   description = "Tipo da instância EC2"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
+}
+
+variable "key_name" {
+  description = "Nome da Key Pair para acessar a instância"
+  type        = string
+  default     = "vockey"
 }

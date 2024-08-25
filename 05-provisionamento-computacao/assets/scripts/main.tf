@@ -2,35 +2,34 @@ provider "aws" {
   region = "us-east-1"
 }
 
+data "aws_caller_identity" "current" {}
+
 module "glue-catalog" {
   source  = "./modules/glue-catalog"
 
   database_name = "dataeng-glue-database"
 }
 
-data "aws_caller_identity" "current" {}
-
-resource "aws_s3_bucket" "dataeng-modulo-1-bucket" {
+resource "aws_s3_bucket" "dataeng-bucket" {
   bucket = "dataeng-modulo-1-${data.aws_caller_identity.current.account_id}-${random_string.suffix.result}"
-  force_destroy = true
 
   tags = {
-    Name        = "dataeng-modulo-1-bucket"
+    Name        = "dataeng-bucket"
     Environment = "Dev"
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "dataeng-modulo-1-bucket-ownership-controls" {
-    bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+resource "aws_s3_bucket_ownership_controls" "dataeng-bucket-ownership-controls" {
+    bucket = aws_s3_bucket.dataeng-bucket.id
     rule {
         object_ownership = "BucketOwnerPreferred"
     }
 }
 
-resource "aws_s3_bucket_acl" "dataeng-modulo-1-bucket-acl" {
-    depends_on = [aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls]
+resource "aws_s3_bucket_acl" "dataeng-bucket-acl" {
+    depends_on = [aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls]
 
-    bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+    bucket = aws_s3_bucket.dataeng-bucket.id
     acl    = "private"
 }
 
@@ -41,43 +40,44 @@ resource "random_string" "suffix" {
   special = false
 }
 
+
 resource "aws_s3_object" "dataset_clientes" {
-    bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+    bucket = aws_s3_bucket.dataeng-bucket.id
     key    = "raw/clientes/clientes.csv.gz"
     source = "./datasets-csv-clientes/clientes.csv.gz"
 }
 
 resource "aws_s3_object" "dataset_pedidos" {
-    bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+    bucket = aws_s3_bucket.dataeng-bucket.id
     key    = "raw/pedidos/pedidos-2024-01-01.csv.gz"
     source = "./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz"
 }
 
-resource "aws_vpc" "dataeng-modulo-2-vpc" {
+resource "aws_vpc" "dataeng-vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "dataeng-modulo-2-vpc"
+    Name = "dataeng-vpc"
   }
 }
 
-resource "aws_subnet" "dataeng-modulo-2-subnet" {
-  vpc_id            = aws_vpc.dataeng-modulo-2-vpc.id
+resource "aws_subnet" "dataeng-public-subnet" {
+  vpc_id            = aws_vpc.dataeng-vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   tags = {
-    Name = "dataeng-modulo-2-subnet"
+    Name = "dataeng-public-subnet"
   }
 }
 
-resource "aws_internet_gateway" "dataeng-modulo-2-igw" {
-  vpc_id = aws_vpc.dataeng-modulo-2-vpc.id
+resource "aws_internet_gateway" "dataeng-igw" {
+  vpc_id = aws_vpc.dataeng-vpc.id
   tags = {
-    Name = "dataeng-modulo-2-igw"
+    Name = "dataeng-igw"
   }
 }
 
-resource "aws_security_group" "dataeng-modulo-2-sg" {
-  vpc_id = aws_vpc.dataeng-modulo-2-vpc.id
+resource "aws_security_group" "dataeng-sg" {
+  vpc_id = aws_vpc.dataeng-vpc.id
 
   ingress {
     from_port   = 80
@@ -94,7 +94,34 @@ resource "aws_security_group" "dataeng-modulo-2-sg" {
   }
 
   tags = {
-    Name = "dataeng-modulo-2-sg"
+    Name = "dataeng-sg"
+  }
+}
+
+resource "aws_launch_template" "dataeng_lt" {
+  name_prefix   = "dataeng-lt"
+  image_id      = var.ami_id
+  instance_type = var.instance_type
+  key_name      = var.key_name
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      delete_on_termination = true
+      volume_size           = 8
+      volume_type           = "gp3"
+    }
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "dataeng-lt"
+    }
   }
 }
 
@@ -107,3 +134,23 @@ resource "aws_instance" "dataeng_ec2_instance" {
   }
 }
 
+resource "aws_autoscaling_group" "dataeng_asg" {
+  desired_capacity     = 2
+  max_size             = 3
+  min_size             = 1
+  vpc_zone_identifier  = [aws_subnet.dataeng-public-subnet.id]
+  launch_template {
+    id      = aws_launch_template.dataeng_lt.id
+    version = "$Latest"
+  }  
+  
+  tag {
+    key                 = "Name"
+    value               = "dataeng-ec2-instance"
+    propagate_at_launch = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
