@@ -265,6 +265,8 @@ A seguir está o template:
   ```
 </details>
 
+Não esqueça de verificar o resultado no AWS Athena. ;)
+
 ## Parabéns
 Você concluiu o módulo 3! Agora você sabe como configurar o backend remoto para o state do Terraform e criar módulos reutilizáveis.
 
