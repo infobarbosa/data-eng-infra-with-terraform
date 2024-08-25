@@ -205,13 +205,13 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     Copie o trecho a seguir e inclua ao final do arquivo `main.tf`:
     ```hcl
 
-    resource "aws_s3_object" "object" {
+    resource "aws_s3_object" "dataset_clientes" {
         bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
         key    = "raw/clientes/clientes.csv.gz"
         source = "./datasets-csv-clientes/clientes.csv.gz"
     }
 
-    resource "aws_s3_object" "object" {
+    resource "aws_s3_object" "dataset_pedidos" {
         bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
         key    = "raw/pedidos/pedidos-2024-01-01.csv.gz"
         source = "./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz"
