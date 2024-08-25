@@ -49,12 +49,12 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
     ```
 4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
     ```hcl
-    resource "aws_glue_catalog_database" "dataeng_modulo_4_db" {
+    resource "aws_glue_catalog_database" "dataeng-glue-database" {
       name = var.database_name
     }
 
-    resource "aws_glue_catalog_table" "dataeng_modulo_4_tb_clientes" {
-      database_name = aws_glue_catalog_database.dataeng_modulo_4_db.name
+    resource "aws_glue_catalog_table" "dataeng-glue-table-clientes" {
+      database_name = aws_glue_catalog_database.dataeng-glue-database.name
       name          = "tb_raw_clientes"
       table_type    = "EXTERNAL_TABLE"
       parameters = {
@@ -110,7 +110,7 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
 6. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/outputs.tf`:
     ```hcl
     output "glue_database_name" {
-      value = aws_glue_catalog_database.dataeng_modulo_4_db.name
+      value = aws_glue_catalog_database.dataeng-glue-database.name
     }
     ```
 
@@ -141,7 +141,7 @@ Os tipos das colunas:
 
 A seguir está o template:
 ```hcl
-    resource "aws_glue_catalog_table" "dataeng_modulo_4_tb_pedidos" {
+    resource "aws_glue_catalog_table" "dataeng-glue-table-pedidos" {
       database_name = <AJUSTE_AQUI>
       name          = <AJUSTE_AQUI>
       table_type    = "EXTERNAL_TABLE"
@@ -205,8 +205,8 @@ A seguir está o template:
   <summary>Clique aqui</summary>
   
   ```hcl
-        resource "aws_glue_catalog_table" "dataeng_modulo_4_tb_pedidos" {
-          database_name = aws_glue_catalog_database.dataeng_modulo_4_db.name
+        resource "aws_glue_catalog_table" "dataeng-glue-table-pedidos" {
+          database_name = aws_glue_catalog_database.dataeng-glue-database.name
           name          = "tb_raw_pedidos"
           table_type    = "EXTERNAL_TABLE"
           parameters = {

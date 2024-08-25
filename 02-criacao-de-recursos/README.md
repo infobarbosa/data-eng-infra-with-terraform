@@ -34,26 +34,26 @@ A configuração para o AWS Provider pode ser derivada de várias fontes, que s�
 
 Exemplo de configuração:
 ```hcl
-resource "aws_vpc" "dataeng-modulo-2-vpc" {
+resource "aws_vpc" "dataeng-vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "dataeng-modulo-2-vpc"
+    Name = "dataeng-vpc"
   }
 }
 
-resource "aws_subnet" "dataeng-modulo-2-subnet" {
-  vpc_id            = aws_vpc.dataeng-modulo-2-vpc.id
+resource "aws_subnet" "dataeng-public-subnet" {
+  vpc_id            = aws_vpc.dataeng-vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   tags = {
-    Name = "dataeng-modulo-2-subnet"
+    Name = "dataeng-public-subnet"
   }
 }
 
-resource "aws_internet_gateway" "dataeng-modulo-2-igw" {
-  vpc_id = aws_vpc.dataeng-modulo-2-vpc.id
+resource "aws_internet_gateway" "dataeng-igw" {
+  vpc_id = aws_vpc.dataeng-vpc.id
   tags = {
-    Name = "dataeng-modulo-2-igw"
+    Name = "dataeng-igw"
   }
 }
 ```
@@ -63,8 +63,8 @@ Security Groups atuam como firewalls virtuais para controlar o tráfego de entra
 
 Exemplo de configuração:
 ```hcl
-resource "aws_security_group" "dataeng-modulo-2-sg" {
-  vpc_id = aws_vpc.dataeng-modulo-2-vpc.id
+resource "aws_security_group" "dataeng-sg" {
+  vpc_id = aws_vpc.dataeng-vpc.id
 
   ingress {
     from_port   = 80
@@ -81,7 +81,7 @@ resource "aws_security_group" "dataeng-modulo-2-sg" {
   }
 
   tags = {
-    Name = "dataeng-modulo-2-sg"
+    Name = "dataeng-sg"
   }
 }
 ```
@@ -183,7 +183,7 @@ Outputs permitem expor valores de configuração para uso posterior.
 Exemplo de definição de outputs:
 ```hcl
 output "vpc_id" {
-  value = aws_vpc.dataeng-modulo-2-vpc.id
+  value = aws_vpc.dataeng-vpc.id
 }
 ```
 
@@ -208,19 +208,19 @@ output "vpc_id" {
       region = "us-east-1"
     }
 
-    resource "aws_vpc" "dataeng-modulo-2-vpc" {
+    resource "aws_vpc" "dataeng-vpc" {
       cidr_block = "10.0.0.0/16"
       tags = {
-        Name = "dataeng-modulo-2-vpc"
+        Name = "dataeng-vpc"
       }
     }
 
-    resource "aws_subnet" "dataeng-modulo-2-subnet" {
-      vpc_id            = aws_vpc.dataeng-modulo-2-vpc.id
+    resource "aws_subnet" "dataeng-public-subnet" {
+      vpc_id            = aws_vpc.dataeng-vpc.id
       cidr_block        = "10.0.1.0/24"
       availability_zone = "us-east-1a"
       tags = {
-        Name = "dataeng-modulo-2-subnet"
+        Name = "dataeng-public-subnet"
       }
     }
     ```
@@ -248,31 +248,31 @@ output "vpc_id" {
       region = "us-east-1"
     }
 
-    resource "aws_vpc" "dataeng-modulo-2-vpc" {
+    resource "aws_vpc" "dataeng-vpc" {
       cidr_block = "10.0.0.0/16"
       tags = {
-        Name = "dataeng-modulo-2-vpc"
+        Name = "dataeng-vpc"
       }
     }
 
-    resource "aws_subnet" "dataeng-modulo-2-subnet" {
-      vpc_id            = aws_vpc.dataeng-modulo-2-vpc.id
+    resource "aws_subnet" "dataeng-public-subnet" {
+      vpc_id            = aws_vpc.dataeng-vpc.id
       cidr_block        = "10.0.1.0/24"
       availability_zone = "us-east-1a"
       tags = {
-        Name = "dataeng-modulo-2-subnet"
+        Name = "dataeng-public-subnet"
       }
     }
 
-    resource "aws_internet_gateway" "dataeng-modulo-2-igw" {
-      vpc_id = aws_vpc.dataeng-modulo-2-vpc.id
+    resource "aws_internet_gateway" "dataeng-igw" {
+      vpc_id = aws_vpc.dataeng-vpc.id
       tags = {
-        Name = "dataeng-modulo-2-igw"
+        Name = "dataeng-igw"
       }
     }
 
-    resource "aws_security_group" "dataeng-modulo-2-sg" {
-      vpc_id = aws_vpc.dataeng-modulo-2-vpc.id
+    resource "aws_security_group" "dataeng-sg" {
+      vpc_id = aws_vpc.dataeng-vpc.id
 
       ingress {
         from_port   = 80
@@ -289,7 +289,7 @@ output "vpc_id" {
       }
 
       tags = {
-        Name = "dataeng-modulo-2-sg"
+        Name = "dataeng-sg"
       }
     }
     ```

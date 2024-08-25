@@ -83,26 +83,26 @@ Para instalar o Terraform, siga os passos abaixo:
 
     data "aws_caller_identity" "current" {}
 
-    resource "aws_s3_bucket" "dataeng-modulo-1-bucket" {
+    resource "aws_s3_bucket" "dataeng-bucket" {
       bucket = "dataeng-modulo-1-${data.aws_caller_identity.current.account_id}-${random_string.suffix.result}"
 
       tags = {
-        Name        = "dataeng-modulo-1-bucket"
+        Name        = "dataeng-bucket"
         Environment = "Dev"
       }
     }
 
-    resource "aws_s3_bucket_ownership_controls" "dataeng-modulo-1-bucket-ownership-controls" {
-        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+    resource "aws_s3_bucket_ownership_controls" "dataeng-bucket-ownership-controls" {
+        bucket = aws_s3_bucket.dataeng-bucket.id
         rule {
             object_ownership = "BucketOwnerPreferred"
         }
     }
 
-    resource "aws_s3_bucket_acl" "dataeng-modulo-1-bucket-acl" {
-        depends_on = [aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls]
+    resource "aws_s3_bucket_acl" "dataeng-bucket-acl" {
+        depends_on = [aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls]
 
-        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        bucket = aws_s3_bucket.dataeng-bucket.id
         acl    = "private"
     }
 
@@ -135,12 +135,12 @@ Para instalar o Terraform, siga os passos abaixo:
     ```
     random_string.suffix: Creating...
     random_string.suffix: Creation complete after 0s [id=bbkfru]
-    aws_s3_bucket.dataeng-modulo-1-bucket: Creating...
-    aws_s3_bucket.dataeng-modulo-1-bucket: Creation complete after 1s [id=dataeng-modulo-1-bbkfru]
-    aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls: Creating...
-    aws_s3_bucket_ownership_controls.dataeng-modulo-1-bucket-ownership-controls: Creation complete after 0s [id=dataeng-modulo-1-bbkfru]
-    aws_s3_bucket_acl.dataeng-modulo-1-bucket-acl: Creating...
-    aws_s3_bucket_acl.dataeng-modulo-1-bucket-acl: Creation complete after 0s [id=dataeng-modulo-1-bbkfru,private]
+    aws_s3_bucket.dataeng-bucket: Creating...
+    aws_s3_bucket.dataeng-bucket: Creation complete after 1s [id=dataeng-modulo-1-bbkfru]
+    aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls: Creating...
+    aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls: Creation complete after 0s [id=dataeng-modulo-1-bbkfru]
+    aws_s3_bucket_acl.dataeng-bucket-acl: Creating...
+    aws_s3_bucket_acl.dataeng-bucket-acl: Creation complete after 0s [id=dataeng-modulo-1-bbkfru,private]
     ```
 
     Perceba que o nome do bucket é informado na saída do comando.
@@ -166,7 +166,7 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     ```hcl
 
     resource "aws_s3_object" "object" {
-        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        bucket = aws_s3_bucket.dataeng-bucket.id
         key    = "pombo.txt"
         source = "./pombo.txt"
     }
@@ -206,13 +206,13 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     ```hcl
 
     resource "aws_s3_object" "dataset_clientes" {
-        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        bucket = aws_s3_bucket.dataeng-bucket.id
         key    = "raw/clientes/clientes.csv.gz"
         source = "./datasets-csv-clientes/clientes.csv.gz"
     }
 
     resource "aws_s3_object" "dataset_pedidos" {
-        bucket = aws_s3_bucket.dataeng-modulo-1-bucket.id
+        bucket = aws_s3_bucket.dataeng-bucket.id
         key    = "raw/pedidos/pedidos-2024-01-01.csv.gz"
         source = "./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz"
     }
