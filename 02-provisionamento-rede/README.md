@@ -121,7 +121,7 @@ resource "aws_route_table_association" "dataeng-public-association" {
 ## 7. Tabela de rotas para a subnet privada (private route table)
 ```hcl
 resource "aws_route_table" "dataeng-private-rt" {
-  vpc_id = aws_vpc.aws_vpc.dataeng-vpc.id.id
+  vpc_id = aws_vpc.dataeng-vpc.id
   tags = {
     Name = "dataeng-private-rt"
   }
@@ -180,8 +180,8 @@ Exemplos:
 ```hcl
 resource "aws_security_group" "dataeng-public-sg" {
   name        = "public-sg"
-  description = "Security group para a subnet pública"
-  vpc_id      = aws_vpc.aws_vpc.dataeng-vpc.id.id
+  description = "Security group para a subnet publica"
+  vpc_id      = aws_vpc.dataeng-vpc.id
 
   # Permitir tráfego HTTP de entrada
   ingress {
@@ -218,9 +218,9 @@ resource "aws_security_group" "dataeng-public-sg" {
 ### 10.2 - Security Group para a Subnet Privada
 ```hcl
 resource "aws_security_group" "dataeng-private-sg" {
-  name        = "private-sg"
+  name        = "dataeng-private-sg"
   description = "Security group para a subnet privada"
-  vpc_id      = aws_vpc.aws_vpc.dataeng-vpc.id.id
+  vpc_id      = aws_vpc.dataeng-vpc.id
 
   # Permitir tráfego de entrada HTTP da subnet pública
   ingress {
@@ -228,7 +228,7 @@ resource "aws_security_group" "dataeng-private-sg" {
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.dataeng-public-sg.cidr_block]
+    cidr_blocks      = [aws_subnet.dataeng-public-subnet.cidr_block]
   }
 
   # Permitir todo o tráfego de saída
@@ -247,11 +247,11 @@ resource "aws_security_group" "dataeng-private-sg" {
 
 ### 10.3 - Output dos IDs dos Security Groups
 ```hcl
-output "dataeng-public-sg-id" {
+output "dataeng_public_sg_id" {
   value = aws_security_group.dataeng-public-sg.id
 }
 
-output "dataeng-private-sgid" {
+output "dataeng_private_sg_id" {
   value = aws_security_group.dataeng-private-sg.id
 }
 ```

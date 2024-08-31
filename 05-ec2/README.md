@@ -15,8 +15,8 @@ As instâncias EC2 são máquinas virtuais que você pode usar para executar sua
 ### Configuração de AMIs e Key Pairs
 AMIs são modelos que contêm a configuração necessária para iniciar uma instância, incluindo o sistema operacional e o software instalado. Key Pairs são usadas para acessar as instâncias de forma segura.
 
-### Auto Scaling Groups e Launch Configurations
-Auto Scaling Groups permitem que você configure a escalabilidade automática das suas instâncias EC2, garantindo que você tenha o número certo de instâncias para lidar com a carga de trabalho. Launch Configurations definem como as instâncias devem ser iniciadas.
+### Auto Scaling Groups e Launch Templates
+Auto Scaling Groups permitem que você configure a escalabilidade automática das suas instâncias EC2, garantindo que você tenha o número certo de instâncias para lidar com a carga de trabalho. Launch Templates definem como as instâncias devem ser iniciadas.
 
 ## Laboratório
 
@@ -24,29 +24,41 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
 1. Crie a estrutura de pastas para a instância EC2:
     ```
-    ec2-instance/
+    ec2/
     ├── main.tf
     ├── variables.tf
     ├── outputs.tf
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
-    ```hcl
-    provider "aws" {
-      region = "us-east-1"
-    }
-
-    resource "aws_instance" "dataeng_ec2_instance" {
-      ami           = var.ami_id
-      instance_type = var.instance_type
-
-      tags = {
-        Name = "dataeng-ec2-instance"
-      }
-    }
+    ```sh
+    mkdir -p modules/ec2
+    touch modules/ec2/main.tf
+    touch modules/ec2/variables.tf
+    touch modules/ec2/outputs.tf
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `variables.tf`:
+2. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/main.tf`:
+    ```hcl
+    resource "aws_instance" "dataeng_ec2_instance" {
+        ami                         = var.ami_id
+        instance_type               = var.instance_type
+        key_name                    = "vockey"
+        associate_public_ip_address = true
+        tags = {
+            Name = "dataeng-ec2-instance"
+        }
+
+        user_data = <<-EOF
+            #!/bin/bash
+            sudo apt update
+            sudo apt install -y apache2
+            sudo systemctl start apache2
+            sudo systemctl enable apache2
+            EOF
+    } 
+    ```
+
+3. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/variables.tf`:
     ```hcl
     variable "ami_id" {
       description = "ID da AMI para a instância EC2"
@@ -59,9 +71,20 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       type        = string
       default     = "t3.micro"
     }
+
+    variable "public_subnet_id" {
+        description = "ID da subnet pública"
+        type        = string
+    }
+
+    variable "dataeng_public_sg_id" {
+        description = "ID do security group público"
+        type        = string
+    }
+
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/outputs.tf`:
     ```hcl
     output "instance_id" {
       value = aws_instance.dataeng_ec2_instance.id
@@ -81,6 +104,15 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     --output json
   ```
 
+6. Acrescente o trecho a seguir em `main.tf`:
+  ```hcl
+  module "ec2" {
+    source = "./modules/ec2"
+
+    public_subnet_id     = module.vpc.public_subnet_id
+    dataeng_public_sg_id = module.vpc.dataeng_public_sg_id
+  }
+  ```
 6. Execute o Terraform:
     ```sh
     terraform init
