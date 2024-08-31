@@ -10,22 +10,105 @@ A gestão dos custos gerados pelos recursos criados durante os laboratórios é 
 ## Módulos do Terraform
 Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles permitem que você agrupe recursos relacionados e os reutilize em diferentes partes da sua infraestrutura.
 
+Para criar um módulo Terraform, você deve seguir os seguintes passos:
+
+1. Crie uma estrutura de diretórios para o seu módulo, com um arquivo `main.tf`, um arquivo `variables.tf` e um arquivo `outputs.tf`.
+2. No arquivo `main.tf`, defina os recursos que serão criados pelo módulo.
+3. No arquivo `variables.tf`, defina as variáveis que serão utilizadas pelo módulo.
+4. No arquivo `outputs.tf`, defina as saídas que serão retornadas pelo módulo.
+5. Utilize o módulo em outros arquivos Terraform, referenciando-o com a diretiva `module`.
+6. Passe os valores das variáveis necessárias para o módulo através dos argumentos da diretiva `module`.
+7. Utilize as saídas do módulo conforme necessário nos outros arquivos Terraform.
+
+Dessa forma, você poderá criar e reutilizar módulos Terraform para organizar e simplificar o seu código.
+
+Exemplo:
+
+A estrutura de diretórios:
+```
+├── main.tf
+├── modules
+│   └── vpc
+│       ├── main.tf
+│       ├── outputs.tf
+│       └── variables.tf
+```
+
+O arquivo `./modules/vpc/main.tf
+```hcl
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "MyVPC"
+  }
+}
+
+...
+# outros recursos
+```
+
+No arquivo `main.tf` (diretório principal), você faria referência ao módulo VPC da seguinte forma:
+
+```hcl
+module "vpc" {
+  source  = "./modules/vpc"
+
+  // Especifique quaisquer variáveis necessárias para o módulo VPC aqui
+}
+```
+
 ### Laboratório
 
-#### Exercício 1: Criar e utilizar Módulos para Glue Database e Glue Table
-
-**Referência**: [Glue Catalog](https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/aws-glue-data-catalog.html)
-
-1. Crie a estrutura de pastas para o módulo Glue Database:
+#### Exercício 1: Refatorar os recursos de rede em seu próprio módulo
     ```
     ├── main.tf
     ├── modules
-    │   └── glue-catalog
+    │   └── vpc
     │       ├── main.tf
     │       ├── outputs.tf
     │       └── variables.tf
-    ├── terraform.tfstate
-    └── terraform.tfstate.backup
+    ```
+
+#### Exercício 2: Refatorar os recursos de S3 em seu próprio módulo
+    ```
+    ├── main.tf
+    ├── modules
+    │   ├── s3
+    │   │   ├── main.tf
+    │   │   ├── outputs.tf
+    │   │   └── variables.tf
+    │   └── vpc
+    │       ├── main.tf
+    │       ├── outputs.tf
+    │       └── variables.tf
+    ```
+
+  Adicione o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
+  ```hcl
+  output "dataeng-bucket" {
+      value = aws_s3_bucket.dataeng-bucket.bucket
+  }
+  ```
+#### Exercício 3: Criar e utilizar Módulos para Glue Database e Glue Table
+
+**Referência**: [Glue Catalog](https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/aws-glue-data-catalog.html)
+
+1. Crie a estrutura de pastas para o módulo `glue-catalog`:
+    ```
+    ├── main.tf
+    ├── modules
+    │   ├── glue-catalog
+    │   │   ├── main.tf
+    │   │   ├── outputs.tf
+    │   │   └── variables.tf
+    │   ├── s3
+    │   │   ├── main.tf
+    │   │   ├── outputs.tf
+    │   │   └── variables.tf
+    │   └── vpc
+    │       ├── main.tf
+    │       ├── outputs.tf
+    │       └── variables.tf
     ```
 
     ```sh
@@ -102,7 +185,12 @@ Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles p
 5. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
     ```hcl
     variable "database_name" {
-      description = "Nome do banco de dados Glue"
+      description = "The name of the Glue database"
+      type        = string
+    }
+
+    variable "bucket_name" {
+      description = "The name of the S3 bucket"
       type        = string
     }
     ```
