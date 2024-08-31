@@ -6,9 +6,7 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 ## Atenção aos custos!
 Lembre-se de que a gestão dos custos dos recursos criados é de responsabilidade do aluno. Certifique-se de destruir todos os recursos ao final de cada exercício para evitar cobranças desnecessárias.
 
-## Teoria
-
-## Variáveis no Terraform
+## Introdução
 Variáveis permitem parametrizar a configuração do Terraform, tornando-a mais flexível e reutilizável.
 
 Exemplo de definição e uso de variáveis:
