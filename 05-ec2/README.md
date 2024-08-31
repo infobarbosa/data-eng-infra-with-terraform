@@ -124,24 +124,59 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
 7. Verifique o resultado no painel AWS EC2.
 
+8. Destrua apenas o recurso EC2.
+  ```sh
+  terraform plan -destroy -target="module.ec2.aws_instance.dataeng_ec2_instance"
+  ```
+
+  ```sh
+  terraform destroy -target="module.ec2.aws_instance.dataeng_ec2_instance" --auto-approve
+  ```
 
 ### Exercício 2: Configurar Auto Scaling Group
 
 1. Crie a estrutura de pastas para o Auto Scaling Group:
     ```
-    auto-scaling/
     ├── main.tf
-    ├── variables.tf
-    ├── outputs.tf
+    ├── modules
+    │   ├── asg
+    │   │   ├── main.tf
+    │   │   ├── outputs.tf
+    │   │   └── variables.tf
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
+    ```sh
+    mkdir -p modules/asg
+    touch modules/asg/main.tf
+    touch modules/asg/variables.tf
+    touch modules/asg/outputs.tf
+    ```
+2. Crie um arquivo `./modules/asg/userdata.sh` com o seguinte conteúdo:
+  ```sh
+  #!/bin/bash
+  apt-get update
+  apt-get install -y apache2
+  echo "<h1>Welcome to the Apache server!</h1>" > /var/www/html/index.html
+  echo "<p>Server IP: \$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)</p>" >> /var/www/html/index.html
+  systemctl restart apache2
+
+  ```
+
+3. Adicione o seguinte conteúdo ao arquivo `./modules/asg/main.tf`:
     ```hcl
     resource "aws_launch_template" "dataeng_lt" {
       name_prefix   = "dataeng-lt"
       image_id      = var.ami_id
       instance_type = var.instance_type
       key_name      = var.key_name
+      
+      network_interfaces {
+        associate_public_ip_address = true
+        delete_on_termination      = true
+        security_groups = [ var.dataeng_public_sg_id ]
+      }
+
+      user_data = filebase64("${path.module}/userdata.sh")
 
       lifecycle {
         create_before_destroy = true
@@ -168,7 +203,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       desired_capacity     = 2
       max_size             = 3
       min_size             = 1
-      vpc_zone_identifier  = [aws_subnet.dataeng-public-subnet.id]
+      vpc_zone_identifier  = [var.dataeng_public_subnet_id]
       launch_template {
         id      = aws_launch_template.dataeng_lt.id
         version = "$Latest"
@@ -186,27 +221,38 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     }
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `variables.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./modules/asg/variables.tf`:
     ```hcl
     variable "ami_id" {
-      description = "ID da AMI para a instância EC2"
-      type        = string
+        description = "ID da AMI para a instância EC2"
+        type        = string
+        default     = "ami-0e86e20dae9224db8"
     }
 
     variable "instance_type" {
-      description = "Tipo da instância EC2"
-      type        = string
-      default     = "t3.micro"
+        description = "Tipo da instância EC2"
+        type        = string
+        default     = "t3.micro"
     }
 
     variable "key_name" {
-      description = "Nome da Key Pair para acessar a instância"
-      type        = string
-      default     = "vockey"
+        description = "Nome da Key Pair para acessar a instância"
+        type        = string
+        default     = "vockey"
+    }
+
+    variable "dataeng_public_subnet_id" {
+        description = "Id da subnet publica"
+        type        = string
+    }
+
+    variable "dataeng_public_sg_id" {
+        description = "Id do security group"
+        type        = string
     }
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./modules/asg/outputs.tf`:
     ```hcl
     output "autoscaling_group_name" {
       value = aws_autoscaling_group.dataeng_asg.name
@@ -222,7 +268,17 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     --output json
   ```
 
-6. Execute o Terraform:
+6. Adicione o seguinte conteúdo ao arquivo `main.tf`:
+  ```hcl
+  module "asg" {
+    source = "./modules/asg"
+
+    dataeng_public_subnet_id  = module.vpc.public_subnet_id
+    dataeng_public_sg_id      = module.vpc.dataeng_public_sg_id
+  } 
+  ```
+
+7. Execute o Terraform:
     ```sh
     terraform init
     ```
