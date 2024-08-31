@@ -81,36 +81,14 @@ Para instalar o Terraform, siga os passos abaixo:
       region = "us-east-1"
     }
 
-    data "aws_caller_identity" "current" {}
-
     resource "aws_s3_bucket" "dataeng-bucket" {
-      bucket = "dataeng-modulo-1-${data.aws_caller_identity.current.account_id}-${random_string.suffix.result}"
+        bucket_prefix = "dataeng-"
+        force_destroy = true
 
-      tags = {
-        Name        = "dataeng-bucket"
-        Environment = "Dev"
-      }
-    }
-
-    resource "aws_s3_bucket_ownership_controls" "dataeng-bucket-ownership-controls" {
-        bucket = aws_s3_bucket.dataeng-bucket.id
-        rule {
-            object_ownership = "BucketOwnerPreferred"
+        tags = {
+            Name        = "dataeng-bucket"
+            Environment = "Dev"
         }
-    }
-
-    resource "aws_s3_bucket_acl" "dataeng-bucket-acl" {
-        depends_on = [aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls]
-
-        bucket = aws_s3_bucket.dataeng-bucket.id
-        acl    = "private"
-    }
-
-    resource "random_string" "suffix" {
-      length  = 6
-      lower = true
-      min_lower = 6
-      special = false
     }
     ```
 
@@ -133,14 +111,10 @@ Para instalar o Terraform, siga os passos abaixo:
 
     Output esperado:
     ```
-    random_string.suffix: Creating...
-    random_string.suffix: Creation complete after 0s [id=bbkfru]
+    ...
+    Plan: 1 to add, 0 to change, 0 to destroy.
     aws_s3_bucket.dataeng-bucket: Creating...
-    aws_s3_bucket.dataeng-bucket: Creation complete after 1s [id=dataeng-modulo-1-bbkfru]
-    aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls: Creating...
-    aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls: Creation complete after 0s [id=dataeng-modulo-1-bbkfru]
-    aws_s3_bucket_acl.dataeng-bucket-acl: Creating...
-    aws_s3_bucket_acl.dataeng-bucket-acl: Creation complete after 0s [id=dataeng-modulo-1-bbkfru,private]
+    aws_s3_bucket.dataeng-bucket: Creation complete after 4s [id=dataeng-20240831140200859000000001]
     ```
 
     Perceba que o nome do bucket é informado na saída do comando.
@@ -179,7 +153,7 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
 4. **Aplique o plano**:
     ```sh
-    terraform apply
+    terraform apply --auto-approve
     ```
 5. **Verifique**
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
@@ -211,12 +185,6 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
         source = "./datasets-csv-clientes/clientes.csv.gz"
     }
 
-    resource "aws_s3_object" "dataset_pedidos" {
-        bucket = aws_s3_bucket.dataeng-bucket.id
-        key    = "raw/pedidos/pedidos-2024-01-01.csv.gz"
-        source = "./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz"
-    }
-
     ```
 
 3. **Crie um plano de execução**:
@@ -226,11 +194,14 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
 4. **Aplique o plano**:
     ```sh
-    terraform apply
+    terraform apply --auto-approve
     ```
 5. **Verifique**
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
+
+### Exercício 5 - Upload do objeto `pedidos-2024-01-01.csv.gz`
+Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
 
 ## Parabéns
 Parabéns pela conclusão do módulo 1! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
