@@ -1,4 +1,4 @@
-# Módulo 2: Criação de Recursos Básicos na AWS
+# Módulo 2: Provisionamento de rede na AWS
 Author: Prof. Barbosa<br>
 Contact: infobarbosa@gmail.com<br>
 Github: [infobarbosa](https://github.com/infobarbosa)
@@ -6,7 +6,8 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 ## Atenção aos custos!
 Lembre-se de que a gestão dos custos dos recursos criados é de responsabilidade do aluno. Certifique-se de destruir todos os recursos ao final de cada exercício para evitar cobranças desnecessárias.
 
-## Teoria
+## Introdução
+A infraestrutura de rede é um componente fundamental para o sucesso de qualquer projeto de engenharia de dados. Neste tutorial, vamos explorar como provisionar uma rede na AWS usando o Terraform. Você aprenderá a criar uma VPC, subnets, internet gateway e muito mais. Além disso, vamos abordar a configuração do AWS Provider e a associação de tabelas de roteamento. Ao final, você terá os conhecimentos necessários para criar uma infraestrutura de rede escalável e automatizada na AWS. Vamos começar! 
 
 ### Configuração do AWS Provider
 Para configurar o AWS Provider, você precisa definir a região e as credenciais de acesso.<br> 
