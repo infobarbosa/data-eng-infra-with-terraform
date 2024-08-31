@@ -287,7 +287,24 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     terraform apply --auto-approve
     ```
 
-7. Verifique o resultado no painel AWS EC2.
+8. Verifique o resultado no painel AWS EC2.
+
+9. Destrua o Auto Scaling Group.
+  ```sh
+  terraform plan -destroy -target="module.asg.aws_autoscaling_group.dataeng_asg" 
+  ```
+  
+  ```sh
+  terraform plan -destroy -target="module.asg.aws_launch_template.dataeng_lt" 
+  ```
+  
+  ```sh
+  terraform destroy -target="module.asg.aws_autoscaling_group.dataeng_asg" --auto-approve
+  ```
+  
+  ```sh
+  terraform destroy -target="module.asg.aws_launch_template.dataeng_lt" --auto-approve
+  ```
 
 ## Parabéns
 Você concluiu o módulo! Agora você sabe como criar instâncias EC2 e configurar Auto Scaling Groups.
