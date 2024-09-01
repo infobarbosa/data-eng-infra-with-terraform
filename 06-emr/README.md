@@ -30,7 +30,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         │   ├── main.tf
         │   ├── outputs.tf
         │   ├── scripts
-        │   │   └── spark_job.py
+        │   │   └── clientes_spark_job.py
         │   └── variables.tf
     ```
 
@@ -40,7 +40,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     touch ./modules/emr/variables.tf
     touch ./modules/emr/outputs.tf
     mkdir -p ./modules/emr/scripts
-    touch ./modules/emr/scripts/spark_job.py
+    touch ./modules/emr/scripts/clientes_spark_job.py
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/emr/main.tf`:
@@ -72,7 +72,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         }
       }
       step {
-        name = "Spark job"
+        name = "Clientes Spark Job"
         action_on_failure = "CONTINUE"
         hadoop_jar_step {
           jar = "command-runner.jar"
@@ -130,7 +130,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```hcl
     resource "aws_s3_object" "clientes_spark_job" {
         bucket = var.bucket_name
-        key    = "scripts/spark_job.py"
+        key    = "scripts/clientes_spark_job.py"
         source = "./modules/emr/scripts/clientes_spark_job.py"
     }
     ```
@@ -185,11 +185,11 @@ Abaixo segue um exemplo de criação do EMR Step no cluster.
 1. Adicione o seguinte conteúdo ao arquivo `main.tf` para incluir os steps:
     ```hcl
     step {
-      name = "Spark job"
+      name = "Pedidos Spark Job"
       action_on_failure = "CONTINUE"
       hadoop_jar_step {
         jar = "command-runner.jar"
-        args = ["spark-submit", "s3://${var.bucket_name}/scripts/spark_job.py"]
+        args = ["spark-submit", "s3://${var.bucket_name}/scripts/pedidos_spark_job.py"]
       }
     }
     ```
