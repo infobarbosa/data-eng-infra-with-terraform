@@ -24,31 +24,34 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 1. Crie a estrutura de pastas para o cluster EMR:
     ```
-    emr-cluster/
     ├── main.tf
-    ├── variables.tf
-    ├── outputs.tf
-    └── scripts/
-        └── spark_job.py
+    └── modules
+        ├── emr
+        │   ├── main.tf
+        │   ├── outputs.tf
+        │   ├── scripts
+        │   │   └── spark_job.py
+        │   └── variables.tf
     ```
 
     ```sh
-    mkdir -p ./modules/emr-cluster
-    mkdir -p ./modules/emr-cluster/scripts
-    touch ./modules/emr-cluster/main.tf
-    touch ./modules/emr-cluster/variables.tf
-    touch ./modules/emr-cluster/outputs.tf
+    mkdir -p ./modules/emr
+    touch ./modules/emr/main.tf
+    touch ./modules/emr/variables.tf
+    touch ./modules/emr/outputs.tf
+    mkdir -p ./modules/emr/scripts
+    touch ./modules/emr/scripts/spark_job.py
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
   ```hcl
   module "emr-cluster" {
-    source  = "./modules/emr-cluster"
+    source  = "./modules/emr"
 
     subnet_id = aws_subnet.dataeng-public-subnet.id
   }
   ```
-3. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/main.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./emr/main.tf`:
     > **Atenção!** Você deve substituir algumas informações no script abaixo, `service_role` e `instance_profile`.
 
     ```hcl
@@ -89,7 +92,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       }
     }
     ```
-5. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/variables.tf`:
+5. Adicione o seguinte conteúdo ao arquivo `./emr/variables.tf`:
     ```hcl
     variable "subnet_id" {
       description = "Id da subnet"
@@ -97,7 +100,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-5. Adicione o seguinte conteúdo ao arquivo `./emr-cluster/outputs.tf`:
+5. Adicione o seguinte conteúdo ao arquivo `./emr/outputs.tf`:
     ```hcl
     output "emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
