@@ -178,8 +178,8 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 É a sua vez! Utilizando o conhecimento adquirido nos módulos anteriores, crie via Terraform a tabela `tb_stage_clientes`.<br>
 Valide que a criação ocorreu com sucesso via console AWS Athena.
 
-### Desafio: Criação e execução de EMR Steps de pedidos
-É a sua vez! Utilizando os conhecimentos adquiridos anterioremente, crie o job `pedidos_spark_job`.
+### Desafio 2: Criação e execução de EMR Steps de pedidos
+Utilizando os conhecimentos adquiridos anterioremente, crie o job `pedidos_spark_job`.
 Abaixo segue um exemplo de criação do EMR Step no cluster.
 
 1. Adicione o seguinte conteúdo ao arquivo `main.tf` para incluir os steps:
@@ -199,6 +199,9 @@ Abaixo segue um exemplo de criação do EMR Step no cluster.
     terraform init
     terraform apply
     ```
+### Desafio 3: Criação da tabela `tb_stage_pedidos` no AWS Glue Catalog.
+É a sua vez! Utilizando o conhecimento adquirido nas etapas anteriores, crie via Terraform a tabela `tb_stage_pedidos`.<br>
+Valide que a criação ocorreu com sucesso via console AWS Athena.
 
 ## Parabéns
 Você concluiu o módulo! Agora você sabe como criar um cluster EMR e configurar EMR Steps.
