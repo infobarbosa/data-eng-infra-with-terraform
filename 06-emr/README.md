@@ -107,26 +107,56 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 5. Crie o script Python `clientes_spark_job.py` na pasta `/modules/emr/scripts/`:
     > **Atenção!** Edite o script para refletir o nome do seu bucket
     ```python
-    from pyspark.sql import SparkSession
+    import sys
+    from awsglue.transforms import *
+    from awsglue.utils import getResolvedOptions
+    from pyspark.context import SparkContext
+    from awsglue.context import GlueContext
+    from awsglue.job import Job
 
-    spark = SparkSession.builder.appName("CSV to Parquet").getOrCreate()
+    # Inicializa o contexto Spark e o contexto Glue
+    sc = SparkContext()
+    glueContext = GlueContext(sc)
+    spark = glueContext.spark_session
+    job = Job(glueContext)
 
-    BUCKET_NAME = "<<SUBSTITUA_AQUI_PELO_SEU_BUCKET>>"
+    # Obtém as opções de execução
+    args = getResolvedOptions(sys.argv, ['clientes_spark_job'])
 
-    # Ler o arquivo CSV do S3
-    df = spark.read.csv(f"s3://{BUCKET_NAME}/raw/clientes/", header=True, inferSchema=True)
+    # Define o nome do job
+    job.init(args['clientes_spark_job'], args)
 
-    # Escrever o arquivo Parquet no S3
-    df.write.parquet(f"s3://{BUCKET_NAME}/stage/clientes/")
+    # Lê a tabela tb_raw_clientes do catálogo Glue
+    datasource = glueContext.create_dynamic_frame.from_catalog(database = "dataeng-glue-database", table_name = "tb_raw_clientes")
 
-    #####ADICIONAR O CÓDIGO PARA ATUALIZAÇÃO DO CATÁLOGO DE DADOS!######
+    # Transformações nos dados
+    # ...
 
-    spark.stop()
+    # Escreve a tabela tb_stage_clientes
+    glueContext.write_dynamic_frame.from_catalog(frame = datasource, database = "dataeng-glue-database", table_name = "tb_stage_clientes")
+
+    # Atualiza o catálogo Glue
+    glueContext.catalog.refresh_table(database = "dataeng-glue-database", table_name = "tb_stage_clientes")
+
+    # Finaliza o job
+    job.commit()
+    # Configuração do cluster EMR
+    job.init(args['clientes_spark_job'], args, connection_args={"--conf": "spark.yarn.submit.waitAppCompletion=false"})
+    job_run = job.run()
+
+    # Aguarda a conclusão do job no cluster EMR
+    job_run.wait_for_completion()
     ```
 
-    Perceba que você ainda precisa editar o script para inserir o nome do bucket. Mais adiante vamos aprender a tornar esse parâmetro configurável. ;)
+    Perceba que no script estamos fazendo referência a uma tabela `tb_stage_clientes` que não existe ainda. Mais adiante vamos adicionar o script para criá-la.
 
-5. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
+5. Criando a tabela `tb_stage_clientes`
+
+  Adicione o trecho a seguir no arquivo `./modules/glue-catalog/main.tf`:
+  ```hcl
+  ```
+
+6. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
     ```hcl
     resource "aws_s3_object" "clientes_spark_job" {
         bucket = var.dataeng_bucket_name
@@ -135,9 +165,9 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-6. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+7. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
   ```hcl
-  module "emr-cluster" {
+  module "emr" {
     source  = "./modules/emr"
 
     dataeng_private_subnet_id = module.vpc.public_subnet_id
@@ -145,7 +175,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   }
   ```
 
-7. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
+8. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
 
     Para os propósitos deste laboratório esses recursos não serão mais necessários.
     ```
@@ -160,7 +190,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-8. Execute o Terraform:
+9. Execute o Terraform:
     ```sh
     terraform init
     ```
@@ -172,7 +202,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```sh
     terraform apply --auto-approve
     ```
-8. Verifique a criação do arquivo parquet via console S3.
+10. Verifique a criação do arquivo parquet via console S3.
 
 ### Desafio 1: Criação da tabela `tb_stage_clientes` no AWS Glue Catalog.
 É a sua vez! Utilizando o conhecimento adquirido nos módulos anteriores, crie via Terraform a tabela `tb_stage_clientes`.<br>
@@ -210,6 +240,10 @@ Você concluiu o módulo! Agora você sabe como criar um cluster EMR e configura
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
 terraform destroy
+```
+
+## Destruição seletiva dos recursos
+```sh
 ```
 
 ## Referência
