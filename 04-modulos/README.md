@@ -127,7 +127,7 @@ module "vpc" {
     module "glue-catalog" {
       source  = "./modules/glue-catalog"
 
-      database_name = "dataeng-glue-database"
+      database_name = "dataengdb"
     }
     ```
 4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
