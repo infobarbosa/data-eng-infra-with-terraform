@@ -227,8 +227,8 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   ```sh
   #!/bin/bash
 
-  # Install boto3
-  sudo python3 -m pip install boto3 awsglue
+  echo "`date -Is` - Instalando boto3"
+  sudo pip install boto3 
   ```
 10. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
   ```hcl
