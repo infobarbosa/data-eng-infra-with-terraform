@@ -286,12 +286,19 @@ terraform destroy
 ```
 
 ## Destruição seletiva dos recursos
+
+**Cluster EMR**
 ```sh
 terraform plan -destroy -target="module.emr.aws_emr_cluster.dataeng_emr" 
 ```
 
 ```sh
 terraform destroy -target="module.emr.aws_emr_cluster.dataeng_emr" --auto-approve
+```
+
+**Spark Job Clientes**
+```sh
+terraform destroy -target="module.emr.aws_s3_object.clientes_spark_job" --auto-approve
 ```
 
 ## Referência
