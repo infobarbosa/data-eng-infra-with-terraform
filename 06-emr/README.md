@@ -112,45 +112,46 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 5. Crie o script Python `clientes_spark_job.py` na pasta `/modules/emr/scripts/`:
     
     ```python
+    import os
     import sys
-    from awsglue.transforms import *
-    from awsglue.utils import getResolvedOptions
-    from pyspark.context import SparkContext
-    from awsglue.context import GlueContext
-    from awsglue.job import Job
+    import boto3
+    from datetime import datetime
 
-    # Inicializa o contexto Spark e o contexto Glue
-    sc = SparkContext()
-    glueContext = GlueContext(sc)
-    spark = glueContext.spark_session
-    job = Job(glueContext)
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import *
 
-    # Obtém as opções de execução
-    args = getResolvedOptions(sys.argv, ['clientes_spark_job'])
+    print("Iniciando o script de processamento dos dados: clientes_spark_job")
+    spark = SparkSession \
+        .builder \
+        .appName("clientes_spark_job") \
+        .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
+        .enableHiveSupport() \
+        .getOrCreate()
 
-    # Define o nome do job
-    job.init(args['clientes_spark_job'], args)
+    spark.catalog.setCurrentDatabase("dataengdb")
 
-    # Lê a tabela tb_raw_clientes do catálogo Glue
-    datasource = glueContext.create_dynamic_frame.from_catalog(database = "dataeng-glue-database", table_name = "tb_raw_clientes")
+    print("Definindo a variavel BUCKET_NAME que vamos utilizar ao longo do codigo")
+    BUCKET_NAME = ""
+    s3_client = boto3.client('s3')
+    response = s3_client.list_buckets()
 
-    # Transformações nos dados
-    # ...
+    for bucket in response['Buckets']:
+        if bucket['Name'].startswith('dataeng-'):
+            BUCKET_NAME = bucket['Name']
+            break
 
-    # Escreve a tabela tb_stage_clientes
-    glueContext.write_dynamic_frame.from_catalog(frame = datasource, database = "dataeng-glue-database", table_name = "tb_stage_clientes")
+    print("O bucket que vamos utilizar serah: " + BUCKET_NAME)
 
-    # Atualiza o catálogo Glue
-    glueContext.catalog.refresh_table(database = "dataeng-glue-database", table_name = "tb_stage_clientes")
+    print("Obtendo os dados de clientes")
+    df_clientes = spark.sql("select * from dataengdb.tb_raw_clientes")
+    df_clientes.show(5)
 
-    # Finaliza o job
-    job.commit()
-    # Configuração do cluster EMR
-    job.init(args['clientes_spark_job'], args, connection_args={"--conf": "spark.yarn.submit.waitAppCompletion=false"})
-    job_run = job.run()
+    print("Escrevendo os dados de clientes como parquet no S3")
+    df_clientes.write.format("json").mode("overwrite").save("s3://" + BUCKET_NAME + "/stage/clientes")
 
-    # Aguarda a conclusão do job no cluster EMR
-    job_run.wait_for_completion()
+    print("Finalizando o script de processamento dos dados: clientes_spark_job")
+
+
     ```
 
     Perceba que no script estamos fazendo referência a uma tabela `tb_stage_clientes` que não existe ainda. Mais adiante vamos adicionar o script para criá-la.
