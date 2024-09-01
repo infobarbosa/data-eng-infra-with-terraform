@@ -53,7 +53,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       applications  = ["Hadoop", "Spark"]
       service_role  = "EMR_DefaultRole"
       ec2_attributes {
-        instance_profile = "EMR_EC2_DefaultRole">
+        instance_profile = "EMR_EC2_DefaultRole"
         subnet_id        = var.dataeng_private_subnet_id
       }
       master_instance_group {
