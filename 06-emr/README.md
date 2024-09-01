@@ -126,10 +126,10 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     Perceba que você ainda precisa editar o script para inserir o nome do bucket. Mais adiante vamos aprender a tornar esse parâmetro configurável. ;)
 
-5. Adicione o trecho abaixo ao módulo `s3` no arquivo `./modules/emr/main.tf`:
+5. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
     ```hcl
     resource "aws_s3_object" "clientes_spark_job" {
-        bucket = var.bucket_name
+        bucket = var.dataeng_bucket_name
         key    = "scripts/clientes_spark_job.py"
         source = "./modules/emr/scripts/clientes_spark_job.py"
     }
