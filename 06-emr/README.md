@@ -62,8 +62,12 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       }
       core_instance_group {
         instance_type = "m4.large"
-        instance_count = 2
+        instance_count = 1
       }
+      bootstrap_action {
+        path = "s3://${var.dataeng_bucket_name}/scripts/bootstrap-actions.sh"
+        name = "Install boto3 e awsglue"
+      }  
       step {
         name = "Setup Hadoop Debugging"
         action_on_failure = "TERMINATE_CLUSTER"
@@ -151,7 +155,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     Perceba que no script estamos fazendo referência a uma tabela `tb_stage_clientes` que não existe ainda. Mais adiante vamos adicionar o script para criá-la.
 
-5. Criando a tabela `tb_stage_clientes`
+6. Criando a tabela `tb_stage_clientes`
 
   Adicione o trecho a seguir no arquivo `./modules/glue-catalog/main.tf`:
   ```hcl
@@ -201,16 +205,32 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   }  
   ```
 
-6. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
-    ```hcl
-    resource "aws_s3_object" "clientes_spark_job" {
-        bucket = var.dataeng_bucket_name
-        key    = "scripts/clientes_spark_job.py"
-        source = "./modules/emr/scripts/clientes_spark_job.py"
-    }
-    ```
+7. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
+  ```hcl
+  resource "aws_s3_object" "clientes_spark_job" {
+      bucket = var.dataeng_bucket_name
+      key    = "scripts/clientes_spark_job.py"
+      source = "./modules/emr/scripts/clientes_spark_job.py"
+  }
+  ```
 
-7. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+8. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
+  ```hcl
+  resource "aws_s3_object" "bootstrap_actions_sh" {
+      bucket = var.dataeng_bucket_name
+      key    = "scripts/bootstrap-actions.sh"
+      source = "./modules/emr/scripts/bootstrap-actions.sh"
+  }  
+  ```
+
+9. Adicione o seguinte conteúdo ao arquivo `./modules/emr/scripts/bootstrap-actions.sh`
+  ```sh
+  #!/bin/bash
+
+  # Install boto3
+  sudo python3 -m pip install boto3 awsglue
+  ```
+10. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
   ```hcl
   module "emr" {
     source  = "./modules/emr"
@@ -220,7 +240,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   }
   ```
 
-8. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
+11. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
 
     Para os propósitos deste laboratório esses recursos não serão mais necessários.
     ```
@@ -235,7 +255,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-9. Execute o Terraform:
+12. Execute o Terraform:
     ```sh
     terraform init
     ```
@@ -247,9 +267,9 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```sh
     terraform apply --auto-approve
     ```
-10. Verifique a criação do arquivo parquet via console S3.
+13. Verifique a criação do arquivo parquet via console S3.
 
-11. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
+14. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
 
 ### Desafio 1: Criação e execução de EMR Steps de pedidos
 Utilizando os conhecimentos adquiridos anterioremente, crie o job `pedidos_spark_job`.
