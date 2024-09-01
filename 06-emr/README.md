@@ -105,7 +105,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```
 
 5. Crie o script Python `clientes_spark_job.py` na pasta `/modules/emr/scripts/`:
-    > **Atenção!** Edite o script para refletir o nome do seu bucket
+    
     ```python
     import sys
     from awsglue.transforms import *
