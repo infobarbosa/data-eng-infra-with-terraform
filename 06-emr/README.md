@@ -43,15 +43,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     touch ./modules/emr/scripts/spark_job.py
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
-  ```hcl
-  module "emr-cluster" {
-    source  = "./modules/emr"
-
-    subnet_id = aws_subnet.dataeng-public-subnet.id
-  }
-  ```
-3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/main.tf`:
+2. Adicione o seguinte conteúdo ao arquivo `./modules/emr/main.tf`:
     > **Atenção!** Você deve substituir algumas informações no script abaixo, `service_role` e `instance_profile`.
 
     ```hcl
@@ -62,7 +54,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       service_role  = "EMR_DefaultRole"
       ec2_attributes {
         instance_profile = "EMR_EC2_DefaultRole">
-        subnet_id        = var.subnet_id
+        subnet_id        = var.dataeng_private_subnet_id
       }
       master_instance_group {
         instance_type = "m4.large"
@@ -84,7 +76,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         action_on_failure = "CONTINUE"
         hadoop_jar_step {
           jar = "command-runner.jar"
-          args = ["spark-submit", "s3://${var.bucket_name}/scripts/spark_job.py"]
+          args = ["spark-submit", "s3://${var.dataeng_bucket_name}/scripts/clientes_spark_job.py"]
         }
       }
       tags = {
@@ -92,7 +84,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       }
     }
     ```
-5. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
     ```hcl
     variable "dataeng_private_subnet_id" {
       description = "Id da subnet privada"
@@ -105,7 +97,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
     ```
 
-5. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
     ```hcl
     output "emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
@@ -131,7 +123,10 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     spark.stop()
     ```
-6. Adicione o trecho abaixo ao módulo `s3` no arquivo `./modules/emr/main.tf`:
+
+    Perceba que você ainda precisa editar o script para inserir o nome do bucket. Mais adiante vamos aprender a tornar esse parâmetro configurável. ;)
+
+5. Adicione o trecho abaixo ao módulo `s3` no arquivo `./modules/emr/main.tf`:
     ```hcl
     resource "aws_s3_object" "clientes_spark_job" {
         bucket = var.bucket_name
@@ -139,7 +134,33 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         source = "./modules/emr/scripts/clientes_spark_job.py"
     }
     ```
-7. Execute o Terraform:
+
+6. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+  ```hcl
+  module "emr-cluster" {
+    source  = "./modules/emr"
+
+    dataeng_private_subnet_id = module.vpc.public_subnet_id
+    dataeng_bucket_name = module.s3.dataeng-bucket
+  }
+  ```
+
+7. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
+
+    Para os propósitos deste laboratório esses recursos não serão mais necessários.
+    ```
+    module "ec2" {
+      ...
+    }
+    ```
+
+    ```
+    module "asg" {
+      ...
+    }
+    ```
+
+8. Execute o Terraform:
     ```sh
     terraform init
     ```
