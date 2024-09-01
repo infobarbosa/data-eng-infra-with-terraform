@@ -313,3 +313,4 @@ Você concluiu o módulo! Agora você sabe como criar instâncias EC2 e configur
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
 terraform destroy
+```
