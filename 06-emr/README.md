@@ -244,6 +244,11 @@ terraform destroy
 
 ## Destruição seletiva dos recursos
 ```sh
+terraform plan -destroy -target="module.emr.aws_emr_cluster.dataeng_emr" 
+```
+
+```sh
+terraform destroy -target="module.emr.aws_emr_cluster.dataeng_emr" --auto-approve
 ```
 
 ## Referência
