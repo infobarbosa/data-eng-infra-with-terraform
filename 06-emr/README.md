@@ -7,7 +7,7 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 ## Atenção aos custos!
 A gestão dos custos gerados pelos recursos criados durante os laboratórios é de responsabilidade do aluno. Certifique-se de destruir todos os recursos após a conclusão dos exercícios.
 
-## Teoria
+## Introdução
 
 ### Parâmetros essenciais
 Para criar um cluster EMR, você precisa definir parâmetros como o nome do cluster, a versão do Hadoop, a configuração das instâncias e os passos (steps) que serão executados no cluster.
