@@ -248,11 +248,9 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```
 10. Verifique a criação do arquivo parquet via console S3.
 
-### Desafio 1: Criação da tabela `tb_stage_clientes` no AWS Glue Catalog.
-É a sua vez! Utilizando o conhecimento adquirido nos módulos anteriores, crie via Terraform a tabela `tb_stage_clientes`.<br>
-Valide que a criação ocorreu com sucesso via console AWS Athena.
+11. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
 
-### Desafio 2: Criação e execução de EMR Steps de pedidos
+### Desafio 1: Criação e execução de EMR Steps de pedidos
 Utilizando os conhecimentos adquiridos anterioremente, crie o job `pedidos_spark_job`.
 Abaixo segue um exemplo de criação do EMR Step no cluster.
 
@@ -273,7 +271,7 @@ Abaixo segue um exemplo de criação do EMR Step no cluster.
     terraform init
     terraform apply
     ```
-### Desafio 3: Criação da tabela `tb_stage_pedidos` no AWS Glue Catalog.
+### Desafio 2: Criação da tabela `tb_stage_pedidos` no AWS Glue Catalog.
 É a sua vez! Utilizando o conhecimento adquirido nas etapas anteriores, crie via Terraform a tabela `tb_stage_pedidos`.<br>
 Valide que a criação ocorreu com sucesso via console AWS Athena.
 
