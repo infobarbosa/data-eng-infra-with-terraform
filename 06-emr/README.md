@@ -187,3 +187,6 @@ Para evitar custos adicionais, destrua os recursos criados:
 ```sh
 terraform destroy
 ```
+
+## Referência
+O modelo de camadas de armazenamento utilizado neste laboratório tem como base o **AWS Prescriptive Guidance** que pode ser encontrado [aqui](https://docs.aws.amazon.com/prescriptive-guidance/latest/defining-bucket-names-data-lakes/naming-structure-data-layers.html).
