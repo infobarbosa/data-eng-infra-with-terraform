@@ -321,5 +321,9 @@ terraform destroy -target="module.emr.aws_emr_cluster.dataeng_emr" --auto-approv
 terraform destroy -target="module.emr.aws_s3_object.clientes_spark_job" --auto-approve
 ```
 
+```sh
+terraform destroy -target="module.emr.aws_s3_object.bootstrap_actions_sh" --auto-approve
+```
+
 ## Referência
 O modelo de camadas de armazenamento utilizado neste laboratório tem como base o **AWS Prescriptive Guidance** que pode ser encontrado [aqui](https://docs.aws.amazon.com/prescriptive-guidance/latest/defining-bucket-names-data-lakes/naming-structure-data-layers.html).
