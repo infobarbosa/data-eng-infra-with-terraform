@@ -69,6 +69,7 @@ module "vpc" {
     │       └── variables.tf
     ```
 
+    Crie a estrutura de diretórios:
     ```sh
     mkdir -p ./modules/vpc
     touch ./modules/vpc/main.tf
@@ -90,6 +91,7 @@ module "vpc" {
     │       └── variables.tf
     ```
 
+    Crie a estrutura de diretórios:
     ```sh
     mkdir -p ./modules/s3
     touch ./modules/s3/main.tf
