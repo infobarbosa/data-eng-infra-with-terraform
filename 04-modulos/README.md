@@ -34,7 +34,7 @@ A estrutura de diretórios:
 │       └── variables.tf
 ```
 
-O arquivo `./modules/vpc/main.tf
+O arquivo `./modules/vpc/main.tf`
 ```hcl
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
