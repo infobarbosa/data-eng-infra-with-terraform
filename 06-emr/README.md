@@ -41,6 +41,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     touch ./modules/emr/outputs.tf
     mkdir -p ./modules/emr/scripts
     touch ./modules/emr/scripts/clientes_spark_job.py
+    touch ./modules/emr/scripts/bootstrap-actions.sh
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/emr/main.tf`:
