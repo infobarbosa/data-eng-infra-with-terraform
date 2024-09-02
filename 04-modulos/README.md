@@ -144,6 +144,7 @@ module "vpc" {
       source  = "./modules/glue-catalog"
 
       database_name = "dataengdb"
+      bucket_name   = module.s3.dataeng-bucket
     }
     ```
 4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
