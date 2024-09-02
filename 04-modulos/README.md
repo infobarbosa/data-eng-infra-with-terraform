@@ -69,6 +69,13 @@ module "vpc" {
     │       └── variables.tf
     ```
 
+    ```sh
+    mkdir -p ./modules/vpc
+    touch ./modules/vpc/main.tf
+    touch ./modules/vpc/variables.tf
+    touch ./modules/vpc/outputs.tf
+    ```
+
 #### Exercício 2: Refatorar os recursos de S3 em seu próprio módulo
     ```
     ├── main.tf
@@ -81,6 +88,13 @@ module "vpc" {
     │       ├── main.tf
     │       ├── outputs.tf
     │       └── variables.tf
+    ```
+
+    ```sh
+    mkdir -p ./modules/s3
+    touch ./modules/s3/main.tf
+    touch ./modules/s3/variables.tf
+    touch ./modules/s3/outputs.tf
     ```
 
   Adicione o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
