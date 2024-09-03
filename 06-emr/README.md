@@ -148,7 +148,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     df_clientes.show(5)
 
     print("Escrevendo os dados de clientes como parquet no S3")
-    df_clientes.write.format("parquet").mode("overwrite").save(f"s3://${BUCKET_NAME}/stage/clientes")
+    df_clientes.write.format("parquet").mode("overwrite").save(f"s3://{BUCKET_NAME}/stage/clientes")
 
     print("Finalizando o script de processamento dos dados: clientes_spark_job")
 
