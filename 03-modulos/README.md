@@ -100,10 +100,11 @@ module "vpc" {
   ```
 
   **Remova** também o recurso `pombo-object`:
+  ```hcl
   resource "aws_s3_object" "pombo-object" {
     ...
   }
-
+  ```
 4. Adicione o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
   ```hcl
   output "dataeng-bucket" {
