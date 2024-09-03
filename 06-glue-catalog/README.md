@@ -100,10 +100,6 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
 2. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
     ```hcl
-    provider "aws" {
-      region = "us-east-1"
-    }
-
     module "glue-catalog" {
       source  = "./modules/glue-catalog"
 
