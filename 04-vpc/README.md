@@ -1,4 +1,4 @@
-# Módulo 2: Provisionamento de rede na AWS
+# Módulo 4: Provisionamento de rede na AWS
 Author: Prof. Barbosa<br>
 Contact: infobarbosa@gmail.com<br>
 Github: [infobarbosa](https://github.com/infobarbosa)

@@ -1,4 +1,4 @@
-# Módulo 3: Variáveis no Terraform
+# Módulo 2: Variáveis no Terraform
 Author: Prof. Barbosa<br>
 Contact: infobarbosa@gmail.com<br>
 Github: [infobarbosa](https://github.com/infobarbosa)

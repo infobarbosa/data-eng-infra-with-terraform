@@ -1,4 +1,4 @@
-# Módulo 4: Módulos
+# Módulo 6: Glue Catalog
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
@@ -7,53 +7,69 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 ## Atenção aos custos!
 A gestão dos custos gerados pelos recursos criados durante os laboratórios é de responsabilidade do aluno. Certifique-se de destruir todos os recursos após a conclusão dos exercícios.
 
-## Módulos do Terraform
-Módulos no Terraform são uma maneira de organizar e reutilizar código. Eles permitem que você agrupe recursos relacionados e os reutilize em diferentes partes da sua infraestrutura.
+## Introdução ao AWS Glue Catalog
 
-Para criar um módulo Terraform, você deve seguir os seguintes passos:
+O AWS Glue Catalog é um serviço de metadados totalmente gerenciado que facilita a descoberta, organização e consulta de dados em várias fontes de dados. Ele fornece um catálogo centralizado onde você pode registrar e gerenciar metadados de tabelas, partições e esquemas de dados.
 
-1. Crie uma estrutura de diretórios para o seu módulo, com um arquivo `main.tf`, um arquivo `variables.tf` e um arquivo `outputs.tf`.
-2. No arquivo `main.tf`, defina os recursos que serão criados pelo módulo.
-3. No arquivo `variables.tf`, defina as variáveis que serão utilizadas pelo módulo.
-4. No arquivo `outputs.tf`, defina as saídas que serão retornadas pelo módulo.
-5. Utilize o módulo em outros arquivos Terraform, referenciando-o com a diretiva `module`.
-6. Passe os valores das variáveis necessárias para o módulo através dos argumentos da diretiva `module`.
-7. Utilize as saídas do módulo conforme necessário nos outros arquivos Terraform.
+Com o AWS Glue Catalog, você pode criar e gerenciar bancos de dados, tabelas e partições, além de definir esquemas de dados para suas fontes de dados. Ele também oferece recursos de descoberta de dados, permitindo que você pesquise e navegue pelos metadados armazenados no catálogo.
 
-Dessa forma, você poderá criar e reutilizar módulos Terraform para organizar e simplificar o seu código.
+Além disso, o AWS Glue Catalog é integrado a outros serviços da AWS, como o AWS Glue, que permite a execução de ETL (Extração, Transformação e Carga) em seus dados, e o Amazon Athena, que permite a consulta interativa de dados usando SQL padrão.
+
+Com o AWS Glue Catalog, você pode organizar e estruturar seus dados de forma eficiente, facilitando a análise e o processamento de dados em escala. Ele oferece uma solução completa para gerenciar metadados e simplificar a descoberta e o acesso aos seus dados.
+
+### Glue Database
+
+O AWS Glue Database é um recurso do AWS Glue Catalog que permite criar e gerenciar bancos de dados para organizar e estruturar seus metadados de tabelas e esquemas de dados. Com o Glue Database, você pode agrupar tabelas relacionadas em um único banco de dados, facilitando a organização e a consulta dos dados.
 
 Exemplo:
-
-A estrutura de diretórios:
-```
-├── main.tf
-├── modules
-│   └── vpc
-│       ├── main.tf
-│       ├── outputs.tf
-│       └── variables.tf
-```
-
-O arquivo `./modules/vpc/main.tf`
 ```hcl
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
-  tags = {
-    Name = "MyVPC"
-  }
+resource "aws_glue_catalog_database" "example_database" {
+  name = "dataeng_db"
 }
-
-...
-# outros recursos
 ```
 
-No arquivo `main.tf` (diretório principal), você faria referência ao módulo VPC da seguinte forma:
+### Glue Table
 
+O AWS Glue Table é um recurso do AWS Glue Catalog que representa uma tabela de dados em um banco de dados. Uma tabela contém informações sobre a estrutura dos dados, como colunas, tipos de dados, localização física e outros metadados relevantes.
+
+Exemplo:
 ```hcl
-module "vpc" {
-  source  = "./modules/vpc"
+resource "aws_glue_catalog_table" "example_table" {
+  database_name = "dataeng_db"
+  name          = "dataeng_tb"
+  table_type    = "EXTERNAL_TABLE"
+  parameters = {
+    classification = "parquet",
+    "compressionType" = "snappy",
+    "skip.header.line.count" = "1"
+  }
+  storage_descriptor {
+    location = "s3://qualquer-bucket/data/"
+    input_format = "org.apache.hadoop.mapred.TextInputFormat"
+    output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+    compressed = false
+    number_of_buckets = -1
+    ser_de_info {
+      serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+      parameters = {
+        "field.delim" = ","
+      }
+    }
+    columns {
+        name = "id"
+        type = "int"
+    }
 
-  // Especifique quaisquer variáveis necessárias para o módulo VPC aqui
+    columns {
+        name = "nome"
+        type = "string"
+    }
+
+    columns {
+        name = "idade"
+        type = "int"
+    }
+  } 
 }
 ```
 
