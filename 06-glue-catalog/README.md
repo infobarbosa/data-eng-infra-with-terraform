@@ -345,13 +345,18 @@ Para evitar custos adicionais, destrua os recursos criados:
 terraform destroy --auto-approve
 ```
 
-## Destruição seletiva
+### Destruição seletiva
 
-1. Glue Database
-```sh
+Para destruir seletivamente os recursos criados pelo Terraform neste arquivo, você pode utilizar os seguintes comandos:
 
-```
+1. Para destruir apenas o módulo `glue-catalog` e seus recursos associados, execute o seguinte comando:
+  ```sh
+  terraform destroy -target="module.glue-catalog.aws_glue_catalog_database.dataeng-glue-database" --auto-approve
+  ```
 
-2. Glue Table
-```sh
-```
+2. Para destruir apenas a tabela `tb_raw_clientes`, execute o seguinte comando:
+  ```sh
+  terraform destroy -target=module.glue-catalog.aws_glue_catalog_table.dataeng-glue-table-clientes --auto-approve
+  ```
+
+Certifique-se de revisar cuidadosamente os recursos que serão destruídos antes de executar esses comandos, pois eles não podem ser desfeitos.
