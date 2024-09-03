@@ -21,9 +21,9 @@ Infraestrutura como Código (IaC) é a prática de gerenciar e provisionar recur
 - **Escalabilidade**: Facilita a replicação de ambientes.
 
 ### Conceitos básicos: Providers, Resources, Modules, State
-- **Providers**: São responsáveis por gerenciar os recursos. Exemplo: AWS, Azure, Google Cloud.
+- **Providers**: São plug-ins gerenciadores de recursos e que interagem com provedores de nuvem, ferramentas de terceiros e outras APIs. Exemplo: AWS, Azure, Google Cloud.
 - **Resources**: São os componentes básicos que compõem a infraestrutura, como instâncias EC2, buckets S3, etc.
-- **Modules**: São contêineres para múltiplos recursos que são usados juntos.
+- **Modules**: são blocos de código independentes que são isolados e empacotados para reutilização.
 - **State**: Mantém o mapeamento dos recursos do mundo real para a configuração do Terraform.
 
 ### Instalação e configuração do Terraform
