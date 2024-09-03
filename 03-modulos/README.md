@@ -57,9 +57,9 @@ module "vpc" {
 }
 ```
 
-### Laboratório
+## Laboratório
 
-#### Exercício 1: Refatorar os recursos de S3 em seu próprio módulo
+### Exercício 1: Refatorar os recursos de S3 em seu próprio módulo
 
   ```
   ├── main.tf
@@ -72,52 +72,52 @@ module "vpc" {
   ```
 
 1. Crie a estrutura de diretórios:
-  ```sh
-  mkdir -p ./modules/s3
-  touch ./modules/s3/main.tf
-  touch ./modules/s3/variables.tf
-  touch ./modules/s3/outputs.tf
-  ```
+    ```sh
+    mkdir -p ./modules/s3
+    touch ./modules/s3/main.tf
+    touch ./modules/s3/variables.tf
+    touch ./modules/s3/outputs.tf
+    ```
 
 2. Adicione o trecho a seguir em `./modules/s3/main.tf`:
-  ```hcl
-  resource "aws_s3_bucket" "dataeng-bucket" {
-      bucket_prefix = "dataeng-"
-      force_destroy = true
+    ```hcl
+    resource "aws_s3_bucket" "dataeng-bucket" {
+        bucket_prefix = "dataeng-"
+        force_destroy = true
 
-      tags = {
-          Name        = "dataeng-bucket"
-          Environment = "Dev"
-      }
-  }
-  ```
+        tags = {
+            Name        = "dataeng-bucket"
+            Environment = "Dev"
+        }
+    }
+    ```
 
 3. **Remova** o recurso `dataeng-bucket` de `./main.tf`:
-  ```hcl
-  resource "aws_s3_bucket" "dataeng-bucket" {
-    ...
-  }
-  ```
+    ```hcl
+    resource "aws_s3_bucket" "dataeng-bucket" {
+      ...
+    }
+    ```
 
-  **Remova** também o recurso `pombo-object`:
-  ```hcl
-  resource "aws_s3_object" "pombo-object" {
-    ...
-  }
-  ```
+    **Remova** também o recurso `pombo-object`:
+    ```hcl
+    resource "aws_s3_object" "pombo-object" {
+      ...
+    }
+    ```
 4. Adicione o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
-  ```hcl
-  output "dataeng-bucket" {
-      value = aws_s3_bucket.dataeng-bucket.bucket
-  }
-  ```
+    ```hcl
+    output "dataeng-bucket" {
+        value = aws_s3_bucket.dataeng-bucket.bucket
+    }
+    ```
 
 3. Adicione o trecho a seguir em `./main.tf`
-  ```hcl
-  module "s3" {
-    source  = "./modules/s3"
-  }
-  ```
+    ```hcl
+    module "s3" {
+      source  = "./modules/s3"
+    }
+    ```
 
 ### Exercício 2: Incluindo objetos **úteis** no S3
 
@@ -125,39 +125,39 @@ Nesta etapa vamos fazer o download de dois datasets que vamos utilizar ao longo 
 Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso `aws_s3_object`.
 
 1. **Faça o clone** dos repositórios a seguir:<br>
-  ```sh
-  git clone https://github.com/infobarbosa/datasets-csv-clientes
-  ```
+    ```sh
+    git clone https://github.com/infobarbosa/datasets-csv-clientes
+    ```
 
-  ```sh
-  git clone https://github.com/infobarbosa/datasets-csv-pedidos
-  ```
+    ```sh
+    git clone https://github.com/infobarbosa/datasets-csv-pedidos
+    ```
 
 2. **Edite** o arquivo `./modules/s3/main.tf`:
 
-  Adicione o trecho a seguir ao final do arquivo `main.tf`:
-  ```hcl
+    Adicione o trecho a seguir ao final do arquivo `main.tf`:
+    ```hcl
 
-  resource "aws_s3_object" "dataset_clientes" {
-      bucket = aws_s3_bucket.dataeng-bucket.id
-      key    = "raw/clientes/clientes.csv.gz"
-      source = "./datasets-csv-clientes/clientes.csv.gz"
-  }
+    resource "aws_s3_object" "dataset_clientes" {
+        bucket = aws_s3_bucket.dataeng-bucket.id
+        key    = "raw/clientes/clientes.csv.gz"
+        source = "./datasets-csv-clientes/clientes.csv.gz"
+    }
 
-  ```
+    ```
 
 3. **Crie** um plano de execução:
-  ```sh
-  terraform plan
-  ```
+    ```sh
+    terraform plan
+    ```
 
 4. **Aplique o plano**:
-  ```sh
-  terraform apply --auto-approve
-  ```
+    ```sh
+    terraform apply --auto-approve
+    ```
 5. **Verifique**
-  Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
-  Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
+    Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
+    Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
 ### Exercício 5 - Upload do objeto `pedidos-2024-01-01.csv.gz`
 Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
@@ -170,3 +170,19 @@ Para evitar custos adicionais, destrua os recursos criados:
 ```sh
 terraform destroy
 ```
+
+## Destruição Seletiva
+
+Para destruir seletivamente os recursos criados neste módulo, execute os seguintes comandos:
+
+1. Destruição do bucket S3:
+```sh
+terraform destroy -target=module.s3.aws_s3_bucket.dataeng-bucket
+```
+
+2. Destruição dos objetos no bucket S3:
+```sh
+terraform destroy -target=module.s3.aws_s3_object.dataset_clientes
+```
+
+Lembre-se de substituir `module.s3` pelo nome do módulo que você definiu em seu arquivo `main.tf`.
