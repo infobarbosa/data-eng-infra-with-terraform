@@ -288,7 +288,8 @@ Para evitar custos desnecessários, destrua os recursos criados: <br>
 terraform destroy
 ```
 
-## Destruição seletiva
+### Destruição seletiva
+Se você deseja destruir seletivamente os recursos criados neste arquivo, você pode usar os seguintes comandos:
 
 **VPC**
 ```sh
@@ -298,4 +299,86 @@ terraform plan -destroy -target="module.vpc.aws_vpc.dataeng-vpc"
 ```sh
 terraform destroy -target="module.vpc.aws_vpc.dataeng-vpc" --auto-approve
 ```
+
+**Subnet pública**
+```sh
+terraform plan -destroy -target="module.vpc.aws_subnet.dataeng-public-subnet" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_subnet.dataeng-public-subnet" --auto-approve
+```
+
+**Subnet privada**
+```sh
+terraform plan -destroy -target="module.vpc.aws_subnet.dataeng-private-subnet" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_subnet.dataeng-private-subnet" --auto-approve
+```
+
+**Internet Gateway**
+```sh
+terraform plan -destroy -target="module.vpc.aws_internet_gateway.dataeng-igw" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_internet_gateway.dataeng-igw" --auto-approve
+```
+
+**Tabela de rotas para a subnet pública**
+```sh
+terraform plan -destroy -target="module.vpc.aws_route_table.dataeng-public-rt" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_route_table.dataeng-public-rt" --auto-approve
+```
+
+**Associação da tabela de rotas à subnet pública**
+```sh
+terraform plan -destroy -target="module.vpc.aws_route_table_association.dataeng-public-association" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_route_table_association.dataeng-public-association" --auto-approve
+```
+
+**Tabela de rotas para a subnet privada**
+```sh
+terraform plan -destroy -target="module.vpc.aws_route_table.dataeng-private-rt" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_route_table.dataeng-private-rt" --auto-approve
+```
+
+**Associação da tabela de rotas à subnet privada**
+```sh
+terraform plan -destroy -target="module.vpc.aws_route_table_association.dataeng-private-association" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_route_table_association.dataeng-private-association" --auto-approve
+```
+
+**Security Group para a Subnet Pública**
+```sh
+terraform plan -destroy -target="module.vpc.aws_security_group.dataeng-public-sg" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_security_group.dataeng-public-sg" --auto-approve
+```
+
+**Security Group para a Subnet Privada**
+```sh
+terraform plan -destroy -target="module.vpc.aws_security_group.dataeng-private-sg" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_security_group.dataeng-private-sg" --auto-approve
+```
+
 
