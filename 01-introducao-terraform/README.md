@@ -160,10 +160,24 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
 ## Parabéns
-Parabéns pela conclusão do módulo 1! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
+Parabéns pela conclusão do módulo! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
 
 ## Destruição dos recursos
 Para evitar custos desnecessários, destrua os recursos criados:
 ```sh
 terraform destroy
 ```
+
+### Destruição seletiva
+
+A destruição seletiva de recursos no Terraform permite que você escolha quais recursos deseja destruir, em vez de destruir todos os recursos definidos no seu código.
+
+Para realizar a destruição seletiva, você pode utilizar o comando `terraform destroy` seguido do argumento `-target` e o nome do recurso que deseja destruir. Por exemplo:
+
+```sh
+terraform destroy -target=aws_s3_object.pombo-object
+```
+
+Isso irá destruir apenas o recurso do bucket S3 chamado `pombo-object`, mantendo os demais recursos intactos.
+
+Lembre-se de que a destruição seletiva deve ser usada com cuidado, pois pode levar a dependências não gerenciadas e a um estado inconsistente da infraestrutura. Certifique-se de entender completamente as implicações antes de executar a destruição seletiva.
