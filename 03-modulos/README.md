@@ -135,7 +135,7 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 
 2. **Edite** o arquivo `./modules/s3/main.tf`:
 
-    Adicione o trecho a seguir ao final do arquivo `main.tf`:
+    Adicione o trecho a seguir ao final do arquivo:
     ```hcl
 
     resource "aws_s3_object" "dataset_clientes" {
@@ -160,7 +160,7 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
 ### Exercício 5 - Upload do objeto `pedidos-2024-01-01.csv.gz`
-Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
+Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `./modules/s3/main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
 
 ## Parabéns
 Você concluiu o módulo! Agora você sabe como criar módulos reutilizáveis no Terraform.
