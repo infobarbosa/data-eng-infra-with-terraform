@@ -19,6 +19,29 @@ provider "aws" {
   region = var.region
 }
 ```
+### Locals
+
+As variáveis Locals no Terraform permitem definir valores intermediários que podem ser reutilizados em várias partes do código. Elas são úteis para evitar repetição de código e simplificar a leitura e manutenção do código.
+
+Um exemplo simples de uso de variáveis Locals é a definição de um nome de recurso concatenando o nome do ambiente e o nome do projeto:
+
+```hcl
+locals {
+  environment = "dev"
+  project = "myproject"
+  resource_name = "${local.environment}-${local.project}-resource"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  tags = {
+    Name = local.resource_name
+  }
+}
+```
+
+Neste exemplo, a variável Local `resource_name` é definida como a concatenação das variáveis `environment` e `project`. Em seguida, ela é utilizada como valor para a tag `Name` do recurso `aws_instance`. Isso permite que o nome do recurso seja automaticamente gerado com base nas variáveis definidas.
 
 ### Arquivo `variables.tfvars`
 
