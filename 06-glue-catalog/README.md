@@ -111,7 +111,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
       bucket_name   = module.s3.dataeng-bucket
     }
     ```
-4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
     ```hcl
     resource "aws_glue_catalog_database" "dataeng-glue-database" {
       name = var.database_name
@@ -163,7 +163,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
     ```
 
-5. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
     ```hcl
     variable "database_name" {
       description = "The name of the Glue database"
@@ -176,14 +176,14 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     }
     ```
 
-6. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/outputs.tf`:
+5. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/outputs.tf`:
     ```hcl
     output "glue_database_name" {
       value = aws_glue_catalog_database.dataeng-glue-database.name
     }
     ```
 
-7. Execute o Terraform no diretório raiz:
+6. Execute o Terraform no diretório raiz:
     ```sh
     terraform init
     ```
@@ -192,7 +192,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     terraform apply --auto-approve
     ```
 
-8. Verifique no Athena se a tabela foi criada como esperado.
+7. Verifique no Athena se a tabela foi criada como esperado.
 
 ## Desafio
 Execute novamente o exercício anterior, desta vez crie a tabela `tb_raw_pedidos`.
