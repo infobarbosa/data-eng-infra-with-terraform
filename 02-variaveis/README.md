@@ -152,8 +152,25 @@ variable "subnet_ids" {
 }
 ```
 
+## Outputs Values
+O Terraform Outputs é uma funcionalidade do Terraform que permite definir e expor valores calculados ou informações relevantes sobre a infraestrutura provisionada. Esses valores podem ser utilizados por outros módulos ou recursos do Terraform, ou podem ser exibidos para o usuário final como informações úteis.
+
+**Uso**:<br>
+Os outputs são definidos no arquivo de configuração do Terraform usando a sintaxe "output". Cada output é composto por um nome e um valor, que pode ser uma expressão ou uma referência a um recurso existente. Os outputs podem ser referenciados em outros módulos ou recursos usando a sintaxe: <br>
+
+  * `"${module.<nome_do_modulo>.<nome_do_output>}"`
+ 
+  Exemplo:
+  ```
+  output "instance_ip" {
+    value = aws_instance.dataeng-exemplo.public_ip
+  }
+  ```
+ 
+  Neste exemplo, estamos definindo um output chamado "instance_ip" que retorna o endereço IP público de uma instância EC2 criada usando o provedor AWS. Esse valor pode ser utilizado em outros módulos ou recursos do Terraform.
+
 ## Parabéns
-Parabéns pela conclusão do módulo 2! Você aprendeu a utilizar as variáveis do Terraform.
+Parabéns pela conclusão do módulo! Você aprendeu a utilizar as variáveis e outputs do Terraform.
 
 ## Destruição dos recursos
 Para evitar custos desnecessários, destrua os recursos criados: <br>

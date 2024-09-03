@@ -33,10 +33,28 @@ A configuração para o AWS Provider pode ser derivada de várias fontes, que s�
 - **Subnets**: Segmentos de uma VPC onde você pode agrupar recursos.
 - **Internet Gateway**: Permite que instâncias em uma VPC se comuniquem com a internet.
 
-## 1. VPC
+## 1. Estrutura de diretórios
+  ```
+  ├── main.tf
+  ├── modules
+  │   └── vpc
+  │       ├── main.tf
+  │       ├── outputs.tf
+  │       └── variables.tf
+  ```
+
+  Crie a estrutura de diretórios:
+  ```sh
+  mkdir -p ./modules/vpc
+  touch ./modules/vpc/main.tf
+  touch ./modules/vpc/variables.tf
+  touch ./modules/vpc/outputs.tf
+  ```
+
+## 2. VPC
 O recurso `aws_vpc` é usado no Terraform para criar uma Virtual Private Cloud (VPC) na AWS. Uma VPC é uma rede virtual dedicada à sua conta AWS, onde você pode provisionar recursos como instâncias EC2, sub-redes, gateways de internet e muito mais. Ao criar um recurso `aws_vpc`, você precisa especificar o bloco CIDR da VPC, que define o intervalo de endereços IP disponíveis para os recursos dentro da VPC. Além disso, você pode adicionar tags para identificação e gerenciamento do recurso. Através do uso do Terraform, é possível automatizar a criação e configuração de VPCs de forma simples e escalável.
 
-Exemplo:
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_vpc" "dataeng-vpc" {
   cidr_block = "10.0.0.0/16"
@@ -48,10 +66,11 @@ resource "aws_vpc" "dataeng-vpc" {
 }
 ```
 
-## 2. Subnet pública
+## 3. Subnet pública
 O recurso `aws_subnet` é usado no Terraform para criar uma subnet na AWS. Uma subnet é um segmento de uma VPC onde você pode agrupar recursos. Ela é definida por um bloco CIDR e está associada a uma VPC específica. A subnet pode ser configurada com várias propriedades, como o ID da VPC, o bloco CIDR, a zona de disponibilidade e tags para identificação e gerenciamento. <br>
 Através do uso do recurso `aws_subnet`, é possível criar e gerenciar subnets de forma automatizada e escalável na infraestrutura da AWS.
 
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_subnet" "dataeng-public-subnet" {
   vpc_id            = aws_vpc.dataeng-vpc.id
@@ -63,7 +82,9 @@ resource "aws_subnet" "dataeng-public-subnet" {
 }
 ```
 
-## 3. Subnet privada
+## 4. Subnet privada
+
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_subnet" "dataeng-private-subnet" {
   vpc_id            = aws_vpc.dataeng-vpc.id
@@ -75,9 +96,10 @@ resource "aws_subnet" "dataeng-private-subnet" {
 }
 ```
 
-## 4. Internet Gateway
+## 5. Internet Gateway
 O recurso `aws_internet_gateway` é usado no Terraform para criar um gateway de internet na AWS. Esse gateway permite que as instâncias em uma VPC se comuniquem com a internet. Ele é associado à VPC e pode ser usado para rotear o tráfego de rede entre a VPC e a internet. O recurso pode ser configurado com tags para facilitar a identificação e gerenciamento.
 
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_internet_gateway" "dataeng-igw" {
   vpc_id = aws_vpc.dataeng-vpc.id
@@ -87,14 +109,15 @@ resource "aws_internet_gateway" "dataeng-igw" {
 }
 ```
 
-## 5. Tabela de rotas para a subnet pública (route table)
+## 6. Tabela de rotas para a subnet pública (route table)
 
- O recurso `aws_route_table` é usado para criar uma tabela de roteamento na AWS. <br>
- Uma tabela de roteamento é responsável por determinar para onde o tráfego de rede deve ser encaminhado.<br>
- Ela contém regras de roteamento que especificam os destinos e os gateways ou instâncias associados a esses destinos.<br>
- Com a tabela de roteamento, é possível controlar o fluxo de tráfego entre as sub-redes na sua infraestrutura de nuvem.<br>
- A tabela de roteamento é um componente essencial para a configuração de redes virtuais na AWS.
+O recurso `aws_route_table` é usado para criar uma tabela de roteamento na AWS. <br>
+Uma tabela de roteamento é responsável por determinar para onde o tráfego de rede deve ser encaminhado.<br>
+Ela contém regras de roteamento que especificam os destinos e os gateways ou instâncias associados a esses destinos.<br>
+Com a tabela de roteamento, é possível controlar o fluxo de tráfego entre as sub-redes na sua infraestrutura de nuvem.<br>
+A tabela de roteamento é um componente essencial para a configuração de redes virtuais na AWS.
 
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_route_table" "dataeng-public-rt" {
   vpc_id = aws_vpc.dataeng-vpc.id
@@ -108,9 +131,10 @@ resource "aws_route_table" "dataeng-public-rt" {
 }
 ```
 
-## 6. Associar a tabela de rotas à subnet pública
+## 7. Associar a tabela de rotas à subnet pública
 O recurso `aws_route_table_association` permite associar uma tabela de roteamento do Amazon Web Services (AWS) a uma sub-rede específica. Essa associação determina qual tabela de roteamento será usada para direcionar o tráfego de rede para a sub-rede correspondente. Ao utilizar esse recurso, é possível configurar de forma eficiente as rotas de rede para as sub-redes em uma infraestrutura na nuvem da AWS, garantindo a conectividade correta entre os recursos.
 
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_route_table_association" "dataeng-public-association" {
   subnet_id      = aws_subnet.dataeng-public-subnet.id
@@ -118,7 +142,9 @@ resource "aws_route_table_association" "dataeng-public-association" {
 }
 ```
 
-## 7. Tabela de rotas para a subnet privada (private route table)
+## 8. Tabela de rotas para a subnet privada (private route table)
+
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_route_table" "dataeng-private-rt" {
   vpc_id = aws_vpc.dataeng-vpc.id
@@ -127,7 +153,9 @@ resource "aws_route_table" "dataeng-private-rt" {
   }
 }
 ```
-## 8. Associar a tabela de rotas à subnet privada
+## 9. Associar a tabela de rotas à subnet privada
+
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_route_table_association" "dataeng-private-association" {
   subnet_id      = aws_subnet.dataeng-private-subnet.id
@@ -136,23 +164,8 @@ resource "aws_route_table_association" "dataeng-private-association" {
 ```
 
 ## 9. Outputs Values
-O Terraform Outputs é uma funcionalidade do Terraform que permite definir e expor valores calculados ou informações relevantes sobre a infraestrutura provisionada. Esses valores podem ser utilizados por outros módulos ou recursos do Terraform, ou podem ser exibidos para o usuário final como informações úteis.
 
-
-**Uso**:<br>
-Os outputs são definidos no arquivo de configuração do Terraform usando a sintaxe "output". Cada output é composto por um nome e um valor, que pode ser uma expressão ou uma referência a um recurso existente. Os outputs podem ser referenciados em outros módulos ou recursos usando a sintaxe: <br>
-
-  * `"${module.<nome_do_modulo>.<nome_do_output>}"`
- 
-  Exemplo:
-  ```
-  output "instance_ip" {
-    value = aws_instance.dataeng-exemplo.public_ip
-  }
-  ```
- 
-  Neste exemplo, estamos definindo um output chamado "instance_ip" que retorna o endereço IP público de uma instância EC2 criada usando o provedor AWS. Esse valor pode ser utilizado em outros módulos ou recursos do Terraform.
-
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/outputs.tf`:
 ```
 # Output dos IDs dos recursos
 output "vpc_id" {
@@ -175,8 +188,10 @@ output "internet_gateway_id" {
 ## 10. Security Groups
 Security Groups atuam como firewalls virtuais para controlar o tráfego de entrada e saída das instâncias.
 
-Exemplos:
+
 ### 10.1 - Security Group para a Subnet Pública
+
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_security_group" "dataeng-public-sg" {
   name        = "public-sg"
@@ -216,6 +231,8 @@ resource "aws_security_group" "dataeng-public-sg" {
 ```
 
 ### 10.2 - Security Group para a Subnet Privada
+
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 resource "aws_security_group" "dataeng-private-sg" {
   name        = "dataeng-private-sg"
@@ -246,6 +263,8 @@ resource "aws_security_group" "dataeng-private-sg" {
 ```
 
 ### 10.3 - Output dos IDs dos Security Groups
+
+**Adicione** o trecho a seguir no arquivo `./modules/vpc/outputs.tf`:
 ```hcl
 output "dataeng_public_sg_id" {
   value = aws_security_group.dataeng-public-sg.id
@@ -256,6 +275,8 @@ output "dataeng_private_sg_id" {
 }
 ```
 
+## 11. Verifique
+Abra o console AWS e verifique se todos os recursos foram criados como esperado.
 
 ## Parabéns
 Parabéns pela conclusão do módulo! Você aprendeu a criar recursos de rede na AWS usando Terraform.
@@ -265,5 +286,16 @@ Para evitar custos desnecessários, destrua os recursos criados: <br>
 
 ```sh
 terraform destroy
+```
+
+## Destruição seletiva
+
+**VPC**
+```sh
+terraform plan -destroy -target="module.vpc.aws_vpc.dataeng-vpc" 
+```
+
+```sh
+terraform destroy -target="module.vpc.aws_vpc.dataeng-vpc" --auto-approve
 ```
 

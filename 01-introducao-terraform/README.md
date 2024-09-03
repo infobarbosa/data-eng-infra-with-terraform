@@ -139,7 +139,7 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     Copie o trecho a seguir e inclua ao final do arquivo `main.tf`:
     ```hcl
 
-    resource "aws_s3_object" "object" {
+    resource "aws_s3_object" "pombo-object" {
         bucket = aws_s3_bucket.dataeng-bucket.id
         key    = "pombo.txt"
         source = "./pombo.txt"

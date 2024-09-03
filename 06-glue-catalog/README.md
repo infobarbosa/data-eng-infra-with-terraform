@@ -59,53 +59,9 @@ module "vpc" {
 
 ### Laboratório
 
-#### Exercício 1: Refatorar os recursos de rede em seu próprio módulo
-  ```
-  ├── main.tf
-  ├── modules
-  │   └── vpc
-  │       ├── main.tf
-  │       ├── outputs.tf
-  │       └── variables.tf
-  ```
+#### Exercício 1: Criar e utilizar o módulo `glue-catalog`
 
-  Crie a estrutura de diretórios:
-  ```sh
-  mkdir -p ./modules/vpc
-  touch ./modules/vpc/main.tf
-  touch ./modules/vpc/variables.tf
-  touch ./modules/vpc/outputs.tf
-  ```
-
-#### Exercício 2: Refatorar os recursos de S3 em seu próprio módulo
-  ```
-  ├── main.tf
-  ├── modules
-  │   ├── s3
-  │   │   ├── main.tf
-  │   │   ├── outputs.tf
-  │   │   └── variables.tf
-  │   └── vpc
-  │       ├── main.tf
-  │       ├── outputs.tf
-  │       └── variables.tf
-  ```
-
-  Crie a estrutura de diretórios:
-  ```sh
-  mkdir -p ./modules/s3
-  touch ./modules/s3/main.tf
-  touch ./modules/s3/variables.tf
-  touch ./modules/s3/outputs.tf
-  ```
-
-  Adicione o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
-  ```hcl
-  output "dataeng-bucket" {
-      value = aws_s3_bucket.dataeng-bucket.bucket
-  }
-  ```
-#### Exercício 3: Criar e utilizar Módulos para Glue Database e Glue Table
+Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glue Database e Glue Table
 
 **Referência**: [Glue Catalog](https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/aws-glue-data-catalog.html)
 
@@ -117,14 +73,6 @@ module "vpc" {
     │   │   ├── main.tf
     │   │   ├── outputs.tf
     │   │   └── variables.tf
-    │   ├── s3
-    │   │   ├── main.tf
-    │   │   ├── outputs.tf
-    │   │   └── variables.tf
-    │   └── vpc
-    │       ├── main.tf
-    │       ├── outputs.tf
-    │       └── variables.tf
     ```
 
     ```sh
@@ -373,10 +321,21 @@ A seguir está o template:
 Não esqueça de verificar o resultado no AWS Athena. ;)
 
 ## Parabéns
-Você concluiu o módulo! Agora você sabe como criar módulos reutilizáveis no Terraform.
+Você concluiu o módulo! Agora você sabe como criar recursos do AWS Glue via Terraform.
 
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
-terraform destroy
+terraform destroy --auto-approve
+```
+
+## Destruição seletiva
+
+1. Glue Database
+```sh
+
+```
+
+2. Glue Table
+```sh
 ```
