@@ -275,13 +275,22 @@ output "dataeng_private_sg_id" {
 }
 ```
 ## 11. Defina o module em `./main.tf`
-    ```hcl
-    module "vpc" {
-      source  = "./modules/vpc"
-    }
-    ```
+```hcl
+module "vpc" {
+  source  = "./modules/vpc"
+}
+```
 
-## 11. Verifique
+## 12. Aplique o script
+```sh
+terraform plan
+```
+
+```sh
+terraform apply --auto-approve
+```
+
+## 13. Verifique
 Abra o console AWS e verifique se todos os recursos foram criados como esperado.
 
 ## Parabéns
