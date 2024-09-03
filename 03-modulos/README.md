@@ -159,7 +159,7 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
-### Exercício 5 - Upload do objeto `pedidos-2024-01-01.csv.gz`
+### Exercício 3 - Upload do objeto `pedidos-2024-01-01.csv.gz`
 Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `./modules/s3/main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
 
 ## Parabéns
