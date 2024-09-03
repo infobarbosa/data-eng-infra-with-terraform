@@ -274,6 +274,12 @@ output "dataeng_private_sg_id" {
   value = aws_security_group.dataeng-private-sg.id
 }
 ```
+## 11. Defina o module em `./main.tf`
+    ```hcl
+    module "vpc" {
+      source  = "./modules/vpc"
+    }
+    ```
 
 ## 11. Verifique
 Abra o console AWS e verifique se todos os recursos foram criados como esperado.
