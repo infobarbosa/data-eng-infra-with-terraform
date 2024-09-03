@@ -159,50 +159,6 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
-### Exercício 4: Incluindo um objeto **útil** no S3
-Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
-
-1. **Faça o clone** dos repositórios a seguir:<br>
-    ```sh
-    git clone https://github.com/infobarbosa/datasets-csv-clientes
-    ```
-
-    ```sh
-    git clone https://github.com/infobarbosa/datasets-csv-pedidos
-    ```
-
-2. **Edite novamente o arquivo `main.tf`**:
-    ```sh
-    nano main.tf
-    ```
-
-    Copie o trecho a seguir e inclua ao final do arquivo `main.tf`:
-    ```hcl
-
-    resource "aws_s3_object" "dataset_clientes" {
-        bucket = aws_s3_bucket.dataeng-bucket.id
-        key    = "raw/clientes/clientes.csv.gz"
-        source = "./datasets-csv-clientes/clientes.csv.gz"
-    }
-
-    ```
-
-3. **Crie um plano de execução**:
-    ```sh
-    terraform plan
-    ```
-
-4. **Aplique o plano**:
-    ```sh
-    terraform apply --auto-approve
-    ```
-5. **Verifique**
-    Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
-    Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
-
-### Exercício 5 - Upload do objeto `pedidos-2024-01-01.csv.gz`
-Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
-
 ## Parabéns
 Parabéns pela conclusão do módulo 1! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
 
