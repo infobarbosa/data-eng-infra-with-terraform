@@ -314,3 +314,33 @@ Para evitar custos adicionais, destrua os recursos criados:
 ```sh
 terraform destroy
 ```
+
+### Destruição Seletiva dos Recursos
+
+Para realizar a destruição seletiva dos recursos criados neste módulo, siga os passos abaixo:
+
+1. Abra o terminal e navegue até o diretório do projeto.
+
+2. Execute o seguinte comando para visualizar o plano de destruição dos recursos:
+  ```sh
+  terraform plan -destroy
+  ```
+
+3. Analise o plano de destruição para verificar quais recursos serão removidos.
+
+4. Selecione os recursos que deseja destruir e execute o comando abaixo substituindo `$RESOURCE_NAME` pelo nome do recurso:
+  ```sh
+  terraform destroy -target="module.ec2.aws_instance.dataeng_ec2_instance"
+  ```
+
+  ```sh
+  terraform destroy -target="module.asg.aws_autoscaling_group.dataeng_asg"
+  ```
+
+  ```sh
+  terraform destroy -target="module.asg.aws_launch_template.dataeng_lt"
+  ```
+
+5. Confirme a destruição dos recursos quando solicitado.
+
+Lembre-se de que a destruição seletiva dos recursos pode resultar em dependências não resolvidas. Certifique-se de entender as implicações antes de prosseguir.
