@@ -284,7 +284,7 @@ Abaixo segue um exemplo de criação do EMR Step no cluster.
       action_on_failure = "CONTINUE"
       hadoop_jar_step {
         jar = "command-runner.jar"
-        args = ["spark-submit", "s3://${var.bucket_name}/scripts/pedidos_spark_job.py"]
+        args = ["spark-submit", "s3://${var.dataeng_bucket_name}/scripts/pedidos_spark_job.py"]
       }
     }
     ```
