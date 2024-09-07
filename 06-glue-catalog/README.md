@@ -103,14 +103,14 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     module "glue-catalog" {
       source  = "./modules/glue-catalog"
 
-      database_name = "dataengdb"
-      bucket_name   = module.s3.dataeng-bucket
+      dataeng_database_name = "dataengdb"
+      dataeng_bucket_name   = module.s3.dataeng-bucket
     }
     ```
 3. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
     ```hcl
     resource "aws_glue_catalog_database" "dataeng-glue-database" {
-      name = var.database_name
+      name = var.dataeng_database_name
     }
 
     resource "aws_glue_catalog_table" "dataeng-glue-table-clientes" {
@@ -123,7 +123,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
         "skip.header.line.count" = "1"
       }
       storage_descriptor {
-        location = "s3://${var.bucket_name}/raw/clientes/"
+        location = "s3://${var.dataeng_bucket_name}/raw/clientes/"
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
         compressed = false
@@ -161,13 +161,13 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
     ```hcl
-    variable "database_name" {
-      description = "The name of the Glue database"
+    variable "dataeng_database_name" {
+      description = "O nome do database no Glue Catalog"
       type        = string
     }
 
-    variable "bucket_name" {
-      description = "The name of the S3 bucket"
+    variable "dataeng_bucket_name" {
+      description = "O nome do bucket no AWS S3"
       type        = string
     }
     ```
@@ -280,7 +280,7 @@ A seguir está o template:
             "skip.header.line.count" = "1"
           }
           storage_descriptor {
-            location = "s3://${var.bucket_name}/raw/pedidos/"
+            location = "s3://${var.dataeng_bucket_name}/raw/pedidos/"
             input_format = "org.apache.hadoop.mapred.TextInputFormat"
             output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
             compressed = false
