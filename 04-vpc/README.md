@@ -283,6 +283,10 @@ module "vpc" {
 
 ## 12. Aplique o script
 ```sh
+terraform init
+```
+
+```sh
 terraform plan
 ```
 
