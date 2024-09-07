@@ -171,7 +171,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
           "skip.header.line.count" = "0"
       }
       storage_descriptor {
-          location = "s3://${var.bucket_name}/stage/clientes/"
+          location = "s3://${var.dataeng_bucket_name}/stage/clientes/"
 
           input_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
           output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
