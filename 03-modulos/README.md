@@ -71,7 +71,7 @@ module "vpc" {
 
   ```
 
-1. Crie a estrutura de diretórios:
+1. **Crie** a estrutura de diretórios:
     ```sh
     mkdir -p ./modules/s3
     touch ./modules/s3/main.tf
@@ -79,7 +79,7 @@ module "vpc" {
     touch ./modules/s3/outputs.tf
     ```
 
-2. Adicione o trecho a seguir em `./modules/s3/main.tf`:
+2. **Adicione** o trecho a seguir em `./modules/s3/main.tf`:
     ```hcl
     resource "aws_s3_bucket" "dataeng-bucket" {
         bucket_prefix = "dataeng-"
@@ -105,20 +105,34 @@ module "vpc" {
       ...
     }
     ```
-4. Adicione o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
+4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
     ```hcl
     output "dataeng-bucket" {
         value = aws_s3_bucket.dataeng-bucket.bucket
     }
     ```
 
-3. Adicione o trecho a seguir em `./main.tf`
+5. **Adicione** o trecho a seguir em `./main.tf`
     ```hcl
     module "s3" {
       source  = "./modules/s3"
     }
+
+6. **Inicialize** o módulo:
+    ```sh
+    terraform init
     ```
 
+7. **Crie** um plano de execução:
+    ```sh
+    terraform plan
+    ```
+
+8. **Aplique o plano**:
+    ```sh
+    terraform apply --auto-approve
+    ```
+    
 ### Exercício 2: Incluindo objetos **úteis** no S3
 
 Nesta etapa vamos fazer o download de dois datasets que vamos utilizar ao longo do curso.<br>
