@@ -17,6 +17,7 @@ resource "aws_lambda_function" "dataeng_lambda" {
   environment {
     variables = {
       EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
+      DATAENG_BUCKET_NAME = var.dataeng_bucket_name
     }
   }
 }
@@ -36,5 +37,6 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     lambda_function_arn = aws_lambda_function.dataeng_lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_suffix       = ".csv.gz"
+
   }
 }
