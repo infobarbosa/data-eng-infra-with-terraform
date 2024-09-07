@@ -82,7 +82,7 @@ module "vpc" {
 2. **Adicione** o trecho a seguir em `./modules/s3/main.tf`:
     ```hcl
     resource "aws_s3_bucket" "dataeng-bucket" {
-        bucket_prefix = "dataeng-"
+        bucket = "dataeng-${var.dataeng_turma}-${var.dataeng_account_id}"
         force_destroy = true
 
         tags = {
@@ -91,8 +91,46 @@ module "vpc" {
         }
     }
     ```
+3. **Adicione** o trecho a seguir no arquivo `./modules/s3/variables.tf`.
+    ```hcl
+    variable "dataeng_turma" {
+        description = "O identificador da sua turma em letras minusculas, sem espaços ou caracteres especiais"
+        type        = string
+    }
 
-3. **Remova** o recurso `dataeng-bucket` de `./main.tf`:
+    variable "dataeng_account_id" {
+        description = "O account id"
+        type        = string
+    }
+    ```
+
+4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
+    ```hcl
+    output "dataeng-bucket" {
+        value = aws_s3_bucket.dataeng-bucket.bucket
+    }
+    ```
+
+5. **Adicione** o trecho a seguir no **início** do arquivo`./main.tf`:
+    ```hcl
+    data "aws_caller_identity" "current" {}
+
+    locals {
+        dataeng_account_id = data.aws_caller_identity.current.account_id
+        dataeng_turma = "<<SUBSTITUA PELA SUA TURMA>>"
+    }
+    ```
+
+6. **Adicione** o trecho a seguir no **final** do arquivo `./main.tf`:
+    ```hcl
+    module "s3" {
+      source  = "./modules/s3"
+      dataeng_account_id = local.dataeng_account_id
+      dataeng_turma = local.dataeng_turma
+    }
+    ```
+
+7. **Remova** o recurso `dataeng-bucket` de `./main.tf`:
     ```hcl
     resource "aws_s3_bucket" "dataeng-bucket" {
       ...
@@ -105,30 +143,18 @@ module "vpc" {
       ...
     }
     ```
-4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
-    ```hcl
-    output "dataeng-bucket" {
-        value = aws_s3_bucket.dataeng-bucket.bucket
-    }
-    ```
 
-5. **Adicione** o trecho a seguir em `./main.tf`
-    ```hcl
-    module "s3" {
-      source  = "./modules/s3"
-    }
-
-6. **Inicialize** o módulo:
+8. **Inicialize** o módulo:
     ```sh
     terraform init
     ```
 
-7. **Crie** um plano de execução:
+9. **Crie** um plano de execução:
     ```sh
     terraform plan
     ```
 
-8. **Aplique o plano**:
+10. **Aplique o plano**:
     ```sh
     terraform apply --auto-approve
     ```
