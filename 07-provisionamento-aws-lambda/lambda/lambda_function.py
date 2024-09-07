@@ -3,17 +3,19 @@ import os
 
 def lambda_handler(event, context):
     emr_client = boto3.client('emr')
-    cluster_id = os.environ['EMR_CLUSTER_ID']
+    dataeng_cluster_id = os.environ['EMR_CLUSTER_ID']
+    dataeng_bucket_name = os.environ['DATAENG_BUCKET_NAME']
+
     step = {
-        'Name': 'Process CSV File',
+        'Name': 'Processamento de pedidos',
         'ActionOnFailure': 'CONTINUE',
         'HadoopJarStep': {
             'Jar': 'command-runner.jar',
-            'Args': ['spark-submit', 's3://path-to-your-bucket/scripts/spark_job.py']
+            'Args': ['spark-submit', f's3://{dataeng_bucket_name}/scripts/pedido_spark_job.py']
         }
     }
     response = emr_client.add_job_flow_steps(
-        JobFlowId=cluster_id,
+        JobFlowId=dataeng_cluster_id,
         Steps=[step]
     )
     return response
