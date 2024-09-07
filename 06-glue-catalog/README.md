@@ -280,7 +280,7 @@ A seguir está o template:
             "skip.header.line.count" = "1"
           }
           storage_descriptor {
-            location = "s3://<ALTERE_AQUI_PARA_O_NOME_DO_SEU_BUCKET>/raw/pedidos/"
+            location = "s3://${var.bucket_name}/raw/pedidos/"
             input_format = "org.apache.hadoop.mapred.TextInputFormat"
             output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
             compressed = false
