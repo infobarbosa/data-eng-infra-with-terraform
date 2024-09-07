@@ -25,6 +25,15 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     └── lambda_function.py
     ```
 
+    ```sh
+    mkdir -p ./modules/lambda/
+    touch ./modules/lambda/main.tf 
+    touch ./modules/lambda/variables.tf 
+    touch ./modules/lambda/outputs.tf 
+    touch ./modules/lambda/lambda_function.py
+    touch ./modules/lambda/pedidos_spark_job.py
+    ```
+
 2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
     ```hcl
     provider "aws" {
