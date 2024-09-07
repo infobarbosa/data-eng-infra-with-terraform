@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         'ActionOnFailure': 'CONTINUE',
         'HadoopJarStep': {
             'Jar': 'command-runner.jar',
-            'Args': ['spark-submit', f's3://{dataeng_bucket_name}/scripts/pedido_spark_job.py']
+            'Args': ['spark-submit', f's3://{dataeng_bucket_name}/scripts/pedidos_spark_job.py']
         }
     }
     response = emr_client.add_job_flow_steps(
