@@ -109,6 +109,10 @@ module "vpc" {
     output "dataeng-bucket" {
         value = aws_s3_bucket.dataeng-bucket.bucket
     }
+
+    output "dataeng_bucket_arn" {
+       value = "${aws_s3_bucket.dataeng-bucket.arn}"
+    }
     ```
 
 5. **Adicione** o trecho a seguir no **início** do arquivo`./main.tf`:
