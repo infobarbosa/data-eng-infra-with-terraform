@@ -26,12 +26,12 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     ```
 
     ```sh
-    mkdir -p ./modules/lambda/
+    mkdir -p ./modules/lambda/scripts
     touch ./modules/lambda/main.tf 
     touch ./modules/lambda/variables.tf 
     touch ./modules/lambda/outputs.tf 
-    touch ./modules/lambda/lambda_function.py
-    touch ./modules/lambda/pedidos_spark_job.py
+    touch ./modules/lambda/scripts/lambda_function.py
+    touch ./modules/lambda/scripts/pedidos_spark_job.py
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/main.tf`:
@@ -45,12 +45,12 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     }
 
     resource "aws_lambda_function" "dataeng_lambda" {
-      filename         = "lambda_function.zip"
+      filename         = "./modules/lambda/scripts/lambda_function.zip"
       function_name    = "dataeng_lambda"
       role             = local.dataeng_role
       handler          = "lambda_function.lambda_handler"
       runtime          = "python3.8"
-      source_code_hash = base64sha256(file("lambda_function.zip"))
+      source_code_hash = base64sha256(file("./modules/lambda/scripts/lambda_function.zip"))
       environment {
         variables = {
           EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
