@@ -107,6 +107,10 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       type        = string
     }
 
+    variable "dataeng_bucket_arn" {
+      description = "ARN do bucket S3"
+      type        = string
+    }
     ```
 
 
