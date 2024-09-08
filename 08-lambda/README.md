@@ -1,4 +1,4 @@
-# Módulo 6: Criação de Função AWS Lambda
+# Módulo 8: Funções AWS Lambda
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
@@ -34,86 +34,78 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     touch ./modules/lambda/pedidos_spark_job.py
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `main.tf`:
+2. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/main.tf`:
     ```hcl
-    provider "aws" {
-      region = "us-east-1"
+    data "aws_iam_roles" "roles" {
+      name_regex = "LabRole"
     }
 
-    resource "aws_s3_bucket" "dataeng_modulo_6_bucket" {
-      bucket = "dataeng-modulo-6-bucket"
-      acl    = "private"
+    locals {
+      dataeng_role = data.aws_iam_roles.roles.roles[0].arn
     }
 
-    resource "aws_iam_role" "lambda_exec_role" {
-      name = "dataeng-modulo-6-lambda-exec-role"
-      assume_role_policy = jsonencode({
-        Version = "2012-10-17"
-        Statement = [{
-          Action = "sts:AssumeRole"
-          Effect = "Allow"
-          Principal = {
-            Service = "lambda.amazonaws.com"
-          }
-        }]
-      })
-    }
-
-    resource "aws_iam_role_policy_attachment" "lambda_exec_policy" {
-      role       = aws_iam_role.lambda_exec_role.name
-      policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-    }
-
-    resource "aws_lambda_function" "dataeng_modulo_6_lambda" {
+    resource "aws_lambda_function" "dataeng_lambda" {
       filename         = "lambda_function.zip"
-      function_name    = "dataeng_modulo_6_lambda"
-      role             = aws_iam_role.lambda_exec_role.arn
+      function_name    = "dataeng_lambda"
+      role             = local.dataeng_role
       handler          = "lambda_function.lambda_handler"
       runtime          = "python3.8"
-      source_code_hash = filebase64sha256("lambda_function.zip")
+      source_code_hash = base64sha256(file("lambda_function.zip"))
       environment {
         variables = {
-          EMR_CLUSTER_ID = var.emr_cluster_id
+          EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
+          DATAENG_BUCKET_NAME = var.dataeng_bucket_name
         }
       }
     }
 
-    resource "aws_lambda_permission" "allow_s3_to_invoke" {
+    resource "aws_lambda_permission" "dataeng_s3_invoke" {
       statement_id  = "AllowS3Invoke"
       action        = "lambda:InvokeFunction"
-      function_name = aws_lambda_function.dataeng_modulo_6_lambda.function_name
+      function_name = aws_lambda_function.dataeng_lambda.function_name
       principal     = "s3.amazonaws.com"
-      source_arn    = aws_s3_bucket.dataeng_modulo_6_bucket.arn
+      source_arn    = var.dataeng_bucket_arn
     }
 
     resource "aws_s3_bucket_notification" "bucket_notification" {
-      bucket = aws_s3_bucket.dataeng_modulo_6_bucket.id
+      bucket = var.dataeng_bucket_name
 
       lambda_function {
-        lambda_function_arn = aws_lambda_function.dataeng_modulo_6_lambda.arn
+        lambda_function_arn = aws_lambda_function.dataeng_lambda.arn
         events              = ["s3:ObjectCreated:*"]
-        filter_suffix       = ".csv"
+        filter_prefix       = "raw/pedidos/"
+        filter_suffix       = ".csv.gz"
+
       }
     }
+
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `variables.tf`:
+3. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/variables.tf`:
     ```hcl
-    variable "emr_cluster_id" {
+    variable "dataeng_emr_cluster_id" {
       description = "ID do cluster EMR"
       type        = string
     }
+
+    variable "dataeng_bucket_name" {
+      description = "Nome do bucket S3"
+      type        = string
+    }
+
+    variable "dataeng_bucket_arn" {
+      description = "ARN do bucket S3"
+      type        = string
+    }
+
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/outputs.tf`:
     ```hcl
-    output "lambda_function_arn" {
-      value = aws_lambda_function.dataeng_modulo_6_lambda.arn
+    output "dataeng_lambda_arn" {
+      value = aws_lambda_function.dataeng_lambda.arn
     }
 
-    output "s3_bucket_name" {
-      value = aws_s3_bucket.dataeng_modulo_6_bucket.bucket
-    }
     ```
 
 5. Crie o script Python `lambda_function.py` na pasta `lambda/`:
@@ -123,17 +115,19 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
     def lambda_handler(event, context):
         emr_client = boto3.client('emr')
-        cluster_id = os.environ['EMR_CLUSTER_ID']
+        dataeng_cluster_id = os.environ['DATAENG_EMR_CLUSTER_ID']
+        dataeng_bucket_name = os.environ['DATAENG_BUCKET_NAME']
+
         step = {
-            'Name': 'Process CSV File',
+            'Name': 'Processamento de pedidos',
             'ActionOnFailure': 'CONTINUE',
             'HadoopJarStep': {
                 'Jar': 'command-runner.jar',
-                'Args': ['spark-submit', 's3://path-to-your-bucket/scripts/spark_job.py']
+                'Args': ['spark-submit', f's3://{dataeng_bucket_name}/scripts/pedidos_spark_job.py']
             }
         }
         response = emr_client.add_job_flow_steps(
-            JobFlowId=cluster_id,
+            JobFlowId=dataeng_cluster_id,
             Steps=[step]
         )
         return response
@@ -147,11 +141,14 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 7. Execute o Terraform:
     ```sh
     terraform init
-    terraform apply
+    ```
+
+    ```sh
+    terraform apply --auto-approve
     ```
 
 ## Parabéns
-Você concluiu o módulo 6! Agora você sabe como criar uma função Lambda que é ativada por um trigger do S3 e aciona um step no cluster EMR.
+Você concluiu o módulo! Agora você sabe como criar uma função Lambda que é ativada por um trigger do S3 e aciona um step no cluster EMR.
 
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
