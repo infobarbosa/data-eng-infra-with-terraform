@@ -20,7 +20,7 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
 
 ## Laboratório
 
-### Exercício Simples: Configurar Pipeline de CI/CD para Validar Código Terraform
+### Exercício 1: Configurar Pipeline de CI/CD para Validar Código Terraform
 
 1. Crie a estrutura de pastas para o Terraform e GitHub Actions:
     ```
@@ -108,7 +108,7 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
 
 6. Faça commit e push do código para o repositório GitHub.
 
-### Exercício Avançado: Implementar Deploy Contínuo de Infraestrutura usando GitHub Actions
+### Exercício 2: Implementar Deploy Contínuo de Infraestrutura usando GitHub Actions
 
 1. Adicione o seguinte conteúdo ao arquivo `.github/workflows/ci-cd-pipeline.yml` para incluir o deploy contínuo:
     ```yaml
