@@ -51,12 +51,12 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     }
 
     resource "aws_lambda_function" "dataeng_lambda" {
-      filename         = "./modules/lambda/scripts/lambda_function.zip"
+      filename         = "./modules/lambda/scripts/lambda/lambda_function.zip"
       function_name    = "dataeng_lambda"
       role             = local.dataeng_role
       handler          = "lambda_function.lambda_handler"
       runtime          = "python3.8"
-      source_code_hash = base64sha256(file("./modules/lambda/scripts/lambda_function.zip"))
+      source_code_hash = base64sha256(file("./modules/lambda/scripts/lambda/lambda_function.zip"))
       environment {
         variables = {
           EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
@@ -205,6 +205,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
     dataeng_emr_cluster_id = module.emr.dataeng_emr_cluster_id
     dataeng_bucket_name = module.s3.dataeng-bucket
+    dataeng_bucket_arn = module.s3.dataeng-bucket-arn
   } 
   ```
 
