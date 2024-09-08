@@ -107,11 +107,13 @@ module "vpc" {
 4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
     ```hcl
     output "dataeng-bucket" {
+        description = "O nome do bucket S3"
         value = aws_s3_bucket.dataeng-bucket.bucket
     }
 
     output "dataeng_bucket_arn" {
-       value = "${aws_s3_bucket.dataeng-bucket.arn}"
+        description = "O ARN do bucket S3"
+        value = aws_s3_bucket.dataeng-bucket.arn
     }
     ```
 
