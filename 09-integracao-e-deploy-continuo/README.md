@@ -39,35 +39,18 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
       region = "us-east-1"
     }
 
-    resource "aws_s3_bucket" "dataeng_modulo_7_bucket" {
-      bucket = "dataeng-modulo-7-${random_string.suffix.result}"
-      acl    = "private"
+    resource "aws_s3_bucket" "dataeng_bucket" {
+      bucket = "dataeng-${random_string.suffix.result}"
     }
 
     resource "random_string" "suffix" {
-      length  = 6
+      length  = 10
       special = false
       upper   = false
     }
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `variables.tf`:
-    ```hcl
-    variable "bucket_name" {
-      description = "Nome do bucket S3"
-      type        = string
-      default     = "dataeng-modulo-7"
-    }
-    ```
-
-4. Adicione o seguinte conteúdo ao arquivo `outputs.tf`:
-    ```hcl
-    output "bucket_name" {
-      value = aws_s3_bucket.dataeng_modulo_7_bucket.bucket
-    }
-    ```
-
-5. Adicione o seguinte conteúdo ao arquivo `.github/workflows/ci-cd-pipeline.yml`:
+3. Adicione o seguinte conteúdo ao arquivo `.github/workflows/ci-cd-pipeline.yml`:
     ```yaml
     name: CI/CD Pipeline
 
@@ -78,20 +61,21 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
       pull_request:
         branches:
           - main
-
     jobs:
       terraform:
         name: 'Terraform'
         runs-on: ubuntu-latest
+        environment: 
+          name: "AWS"
 
         steps:
           - name: 'Checkout code'
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
 
           - name: 'Set up Terraform'
-            uses: hashicorp/setup-terraform@v1
+            uses: hashicorp/setup-terraform@v3
             with:
-              terraform_version: 1.0.0
+              terraform_version: 1.9.2
 
           - name: 'Terraform Format'
             run: terraform fmt -check
@@ -104,6 +88,10 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
 
           - name: 'Terraform Plan'
             run: terraform plan
+            env:
+              AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}        
+
     ```
 
 6. Faça commit e push do código para o repositório GitHub.
@@ -126,15 +114,17 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
       terraform:
         name: 'Terraform'
         runs-on: ubuntu-latest
+        environment: 
+          name: "AWS"
 
         steps:
           - name: 'Checkout code'
-            uses: actions/checkout@v2
+            uses: actions/checkout@v4
 
           - name: 'Set up Terraform'
-            uses: hashicorp/setup-terraform@v1
+            uses: hashicorp/setup-terraform@v3
             with:
-              terraform_version: 1.0.0
+              terraform_version: 1.9.2
 
           - name: 'Terraform Format'
             run: terraform fmt -check
@@ -147,6 +137,9 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
 
           - name: 'Terraform Plan'
             run: terraform plan
+            env:
+              AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
           - name: 'Terraform Apply'
             if: github.ref == 'refs/heads/main'
@@ -156,14 +149,15 @@ O deploy contínuo permite que mudanças na infraestrutura sejam aplicadas autom
               AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     ```
 
-2. Adicione as credenciais AWS como segredos no repositório GitHub (`AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`).
-
-3. Faça commit e push do código para o repositório GitHub.
+2. Crie um environment no repositório Github chamado `AWS`.
+3. Adicione as credenciais AWS como segredos no repositório GitHub (`AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`).
+4. Faça commit e push do código para o repositório GitHub.
 
 ## Parabéns
-Você concluiu o módulo 7! Agora você sabe como configurar uma pipeline de CI/CD para validar e fazer deploy contínuo de infraestrutura na AWS usando GitHub Actions.
+Você concluiu o módulo! Agora você sabe como configurar uma pipeline de CI/CD para validar e fazer deploy contínuo de infraestrutura na AWS usando GitHub Actions.
 
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
-terraform destroy
+terraform destroy --auto-approve
+```
