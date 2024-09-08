@@ -18,11 +18,15 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
 1. Crie a estrutura de pastas para a função Lambda:
     ```
-    lambda/
     ├── main.tf
-    ├── variables.tf
-    ├── outputs.tf
-    └── lambda_function.py
+    ├── modules
+    │   ├── lambda
+    │   │   ├── main.tf
+    │   │   ├── outputs.tf
+    │   │   ├── scripts
+    │   │   │   ├── lambda_function.py
+    │   │   │   └── pedidos_spark_job.py
+    │   │   └── variables.tf
     ```
 
     ```sh
