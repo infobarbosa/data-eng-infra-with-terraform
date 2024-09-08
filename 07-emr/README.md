@@ -292,10 +292,19 @@ Abaixo segue um exemplo de criação do EMR Step no cluster.
 2. Execute o Terraform:
     ```sh
     terraform init
-    terraform apply
     ```
+
+    ```sh
+    terraform plan
+    ```
+
+    ```
+    terraform apply --auto-approve
+    ```
+
 ### Desafio 2: Criação da tabela `tb_stage_pedidos` no AWS Glue Catalog.
-É a sua vez! Utilizando o conhecimento adquirido nas etapas anteriores, crie via Terraform a tabela `tb_stage_pedidos`.<br>
+
+Utilizando o conhecimento adquirido nas etapas anteriores, crie via Terraform a tabela `tb_stage_pedidos`.<br>
 Valide que a criação ocorreu com sucesso via console AWS Athena.
 
 ## Parabéns
