@@ -1,4 +1,4 @@
-# Módulo 3: Módulos
+# Módulo 3: Módulos no Terraform
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
