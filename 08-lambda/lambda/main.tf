@@ -13,7 +13,7 @@ resource "aws_lambda_function" "dataeng_lambda" {
   role             = local.dataeng_role
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.8"
-  source_code_hash = filebase64sha256("lambda_function.zip")
+  source_code_hash = base64sha256(file("lambda_function.zip"))
   environment {
     variables = {
       EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
