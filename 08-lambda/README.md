@@ -107,11 +107,6 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       type        = string
     }
 
-    variable "dataeng_bucket_arn" {
-      description = "ARN do bucket S3"
-      type        = string
-    }
-
     ```
 
 
@@ -190,7 +185,26 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
   ```
 
-8. Execute o Terraform:
+8. Inclua o conteúdo a seguir ao final do arquivo `./modules/lambda/main.tf`:
+  ```hcl
+  resource "aws_s3_object" "pedidos_spark_job" {
+      bucket = var.dataeng_bucket_name
+      key    = "scripts/clientes_spark_job.py"
+      source = "./modules/lambda/scripts/job/clientes_spark_job.py"
+  }
+  ```
+
+9. Inclua o conteúdo a seguir ao final do arquivo `./main.ft`:
+  ```hcl
+  module "lambda" {
+    source  = "./modules/lambda"
+
+    dataeng_emr_cluster_id = module.emr.dataeng_emr_cluster_id
+    dataeng_bucket_name = module.s3.dataeng-bucket
+  } 
+  ```
+
+10. Execute o Terraform:
     ```sh
     terraform init
     ```
