@@ -1,4 +1,4 @@
-# Módulo 7: Integração e Deploy Contínuo
+# Módulo 9: Integração e Deploy Contínuo
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
