@@ -105,7 +105,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
     ```hcl
-    output "emr_cluster_id" {
+    output "dataeng_emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
     }
     ```
