@@ -76,7 +76,7 @@ Para instalar o Terraform, siga os passos abaixo:
     
     ```
 
-    **Adicione** o seguinte conteúdo ao arquivo `main.tf`**:
+    **Adicione** o seguinte conteúdo ao arquivo `main.tf`:
     ```hcl
     provider "aws" {
       region = "us-east-1"
