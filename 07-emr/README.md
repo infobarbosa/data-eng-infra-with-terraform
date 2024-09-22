@@ -42,6 +42,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     mkdir -p ./modules/emr/scripts
     touch ./modules/emr/scripts/clientes_spark_job.py
     touch ./modules/emr/scripts/bootstrap-actions.sh
+
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/emr/main.tf`:
@@ -90,6 +91,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         Name = "dataeng-emr"
       }
     }
+
     ```
 3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
     ```hcl
@@ -103,6 +105,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       description = "Nome do bucket que vamos usar"
       type        = string
     }
+
     ```
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
@@ -111,6 +114,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     output "dataeng_emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
     }
+
     ```
 
 5. Crie o script Python `clientes_spark_job.py` na pasta `/modules/emr/scripts/`:
@@ -209,6 +213,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
           }  
       }
   }  
+  
   ```
 
 7. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
@@ -219,6 +224,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       key    = "scripts/clientes_spark_job.py"
       source = "./modules/emr/scripts/clientes_spark_job.py"
   }
+
   ```
 
 8. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
@@ -229,6 +235,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       key    = "scripts/bootstrap-actions.sh"
       source = "./modules/emr/scripts/bootstrap-actions.sh"
   }  
+
   ```
 
 9. Adicione o seguinte conteúdo ao arquivo `./modules/emr/scripts/bootstrap-actions.sh`
@@ -237,6 +244,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
   echo "`date -Is` - Instalando boto3"
   sudo pip install boto3 
+
   ```
 10. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
   ```hcl
@@ -247,6 +255,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     dataeng_public_subnet_id = module.vpc.public_subnet_id
     dataeng_bucket_name = module.s3.dataeng-bucket
   }
+
   ```
 
 11. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
@@ -320,7 +329,7 @@ Você concluiu o módulo! Agora você sabe como criar um cluster EMR e configura
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
-terraform destroy
+terraform destroy --auto-approve
 ```
 
 ## Destruição seletiva dos recursos
@@ -328,19 +337,23 @@ terraform destroy
 **Cluster EMR**
 ```sh
 terraform plan -destroy -target="module.emr.aws_emr_cluster.dataeng_emr" 
+
 ```
 
 ```sh
 terraform destroy -target="module.emr.aws_emr_cluster.dataeng_emr" --auto-approve
+
 ```
 
 **Spark Job Clientes**
 ```sh
 terraform destroy -target="module.emr.aws_s3_object.clientes_spark_job" --auto-approve
+
 ```
 
 ```sh
 terraform destroy -target="module.emr.aws_s3_object.bootstrap_actions_sh" --auto-approve
+
 ```
 
 ## Referência
