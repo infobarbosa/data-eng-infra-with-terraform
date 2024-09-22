@@ -100,6 +100,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
 2. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
     ```hcl
+    # 2. module glue-catalog
     module "glue-catalog" {
       source  = "./modules/glue-catalog"
 
@@ -109,10 +110,12 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     ```
 3. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
     ```hcl
+    # 3.1. dataeng-glue-database
     resource "aws_glue_catalog_database" "dataeng-glue-database" {
       name = var.dataeng_database_name
     }
 
+    # 3.2. dataeng-glue-table-clientes
     resource "aws_glue_catalog_table" "dataeng-glue-table-clientes" {
       database_name = aws_glue_catalog_database.dataeng-glue-database.name
       name          = "tb_raw_clientes"
@@ -161,6 +164,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
     ```hcl
+    # 4. ./modules/glue-catalog/variables.tf
     variable "dataeng_database_name" {
       description = "O nome do database no Glue Catalog"
       type        = string
@@ -174,6 +178,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
 5. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/outputs.tf`:
     ```hcl
+    # 5. ./modules/glue-catalog/outputs.tf
     output "glue_database_name" {
       value = aws_glue_catalog_database.dataeng-glue-database.name
     }
