@@ -123,6 +123,7 @@ resource "aws_route_table" "dataeng-public-rt" {
     Name = "dataeng-public-rt"
   }
 }
+
 ```
 
 ## 6. Associar a tabela de rotas à subnet pública
@@ -135,6 +136,7 @@ resource "aws_route_table_association" "dataeng-public-association" {
   subnet_id      = aws_subnet.dataeng-public-subnet.id
   route_table_id = aws_route_table.dataeng-public-rt.id
 }
+
 ```
 
 ## 7. Security Group
@@ -178,6 +180,7 @@ resource "aws_security_group" "dataeng-public-sg" {
     Name = "dataeng-public-sg"
   }
 }
+
 ```
 
 ## 8. Outputs Values
@@ -210,19 +213,23 @@ output "dataeng_public_sg_id" {
 module "vpc" {
   source  = "./modules/vpc"
 }
+
 ```
 
 ## 13. Aplique o script
 ```sh
 terraform init
+
 ```
 
 ```sh
 terraform plan
+
 ```
 
 ```sh
 terraform apply --auto-approve
+
 ```
 
 ## 14. Verifique
@@ -235,7 +242,8 @@ Parabéns pela conclusão do módulo! Você aprendeu a criar recursos de rede na
 Para evitar custos desnecessários, destrua os recursos criados: <br>
 
 ```sh
-terraform destroy
+terraform destroy --auto-approve
+
 ```
 
 ### Destruição seletiva
@@ -244,55 +252,67 @@ Se você deseja destruir seletivamente os recursos criados neste arquivo, você 
 **VPC**
 ```sh
 terraform plan -destroy -target="module.vpc.aws_vpc.dataeng-vpc" 
+
 ```
 
 ```sh
 terraform destroy -target="module.vpc.aws_vpc.dataeng-vpc" --auto-approve
+
 ```
 
 **Subnet pública**
 ```sh
 terraform plan -destroy -target="module.vpc.aws_subnet.dataeng-public-subnet" 
+
 ```
 
 ```sh
 terraform destroy -target="module.vpc.aws_subnet.dataeng-public-subnet" --auto-approve
+
 ```
 
 **Internet Gateway**
 ```sh
 terraform plan -destroy -target="module.vpc.aws_internet_gateway.dataeng-igw" 
+
 ```
 
 ```sh
 terraform destroy -target="module.vpc.aws_internet_gateway.dataeng-igw" --auto-approve
+
 ```
 
 **Tabela de rotas para a subnet pública**
 ```sh
 terraform plan -destroy -target="module.vpc.aws_route_table.dataeng-public-rt" 
+
 ```
 
 ```sh
 terraform destroy -target="module.vpc.aws_route_table.dataeng-public-rt" --auto-approve
+
 ```
 
 **Associação da tabela de rotas à subnet pública**
 ```sh
 terraform plan -destroy -target="module.vpc.aws_route_table_association.dataeng-public-association" 
+
 ```
 
 ```sh
 terraform destroy -target="module.vpc.aws_route_table_association.dataeng-public-association" --auto-approve
+
 ```
 
 **Security Group para a Subnet Pública**
 ```sh
 terraform plan -destroy -target="module.vpc.aws_security_group.dataeng-public-sg" 
+
 ```
 
 ```sh
 terraform destroy -target="module.vpc.aws_security_group.dataeng-public-sg" --auto-approve
+
 ```
 
 
