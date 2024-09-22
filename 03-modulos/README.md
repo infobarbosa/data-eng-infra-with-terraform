@@ -77,6 +77,7 @@ module "vpc" {
     touch ./modules/s3/main.tf
     touch ./modules/s3/variables.tf
     touch ./modules/s3/outputs.tf
+
     ```
 
 2. **Adicione** o trecho a seguir em `./modules/s3/main.tf`:
@@ -90,6 +91,7 @@ module "vpc" {
             Environment = "Dev"
         }
     }
+
     ```
 3. **Adicione** o trecho a seguir no arquivo `./modules/s3/variables.tf`.
     ```hcl
@@ -102,6 +104,7 @@ module "vpc" {
         description = "O account id"
         type        = string
     }
+
     ```
 
 4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
@@ -115,6 +118,7 @@ module "vpc" {
         description = "O ARN do bucket S3"
         value = aws_s3_bucket.dataeng-bucket.arn
     }
+
     ```
 
 5. **Adicione** o trecho a seguir no **início** do arquivo`./main.tf`:
@@ -125,6 +129,7 @@ module "vpc" {
         dataeng_account_id = data.aws_caller_identity.current.account_id
         dataeng_turma = "<<SUBSTITUA PELA SUA TURMA>>"
     }
+
     ```
 
 6. **Adicione** o trecho a seguir no **final** do arquivo `./main.tf`:
@@ -134,6 +139,7 @@ module "vpc" {
       dataeng_account_id = local.dataeng_account_id
       dataeng_turma = local.dataeng_turma
     }
+
     ```
 
 7. **Remova** o recurso `dataeng-bucket` de `./main.tf`:
@@ -141,6 +147,7 @@ module "vpc" {
     resource "aws_s3_bucket" "dataeng-bucket" {
       ...
     }
+
     ```
 
     **Remova** também o recurso `pombo-object`:
@@ -148,21 +155,25 @@ module "vpc" {
     resource "aws_s3_object" "pombo-object" {
       ...
     }
+
     ```
 
 8. **Inicialize** o módulo:
     ```sh
     terraform init
+
     ```
 
 9. **Crie** um plano de execução:
     ```sh
     terraform plan
+
     ```
 
 10. **Aplique o plano**:
     ```sh
     terraform apply --auto-approve
+
     ```
     
 ### Exercício 2: Incluindo objetos **úteis** no S3
@@ -173,10 +184,12 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 1. **Faça o clone** dos repositórios a seguir:<br>
     ```sh
     git clone https://github.com/infobarbosa/datasets-csv-clientes
+
     ```
 
     ```sh
     git clone https://github.com/infobarbosa/datasets-csv-pedidos
+
     ```
 
 2. **Edite** o arquivo `./modules/s3/main.tf`:
@@ -195,11 +208,13 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 3. **Crie** um plano de execução:
     ```sh
     terraform plan
+
     ```
 
 4. **Aplique o plano**:
     ```sh
     terraform apply --auto-approve
+
     ```
 5. **Verifique**
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
@@ -214,7 +229,8 @@ Você concluiu o módulo! Agora você sabe como criar módulos reutilizáveis no
 ## Destruição dos recursos
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
-terraform destroy
+terraform destroy --auto-approve
+
 ```
 
 ## Destruição Seletiva
@@ -224,11 +240,11 @@ Para destruir seletivamente os recursos criados neste módulo, execute os seguin
 1. Destruição do bucket S3:
 ```sh
 terraform destroy -target=module.s3.aws_s3_bucket.dataeng-bucket
+
 ```
 
 2. Destruição dos objetos no bucket S3:
 ```sh
 terraform destroy -target=module.s3.aws_s3_object.dataset_clientes
-```
 
-Lembre-se de substituir `module.s3` pelo nome do módulo que você definiu em seu arquivo `main.tf`.
+```
