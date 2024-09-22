@@ -48,6 +48,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     > **Atenção!** Você deve substituir algumas informações no script abaixo, `service_role` e `instance_profile`.
 
     ```hcl
+    # 2. ./modules/emr/main.tf
     resource "aws_emr_cluster" "dataeng_emr" {
       name          = "dataeng-emr"
       release_label = "emr-7.2.0"
@@ -92,6 +93,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```
 3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
     ```hcl
+    # 3. ./modules/emr/variables.tf
     variable "dataeng_private_subnet_id" {
       description = "Id da subnet privada"
       type        = string
@@ -105,6 +107,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
     ```hcl
+    # 4. ./modules/emr/outputs.tf
     output "dataeng_emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
     }
@@ -161,6 +164,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
   Adicione o trecho a seguir no arquivo `./modules/glue-catalog/main.tf`:
   ```hcl
+  # 6. ./modules/glue-catalog/main.tf
   resource "aws_glue_catalog_table" "dataeng-glue-table-stage-clientes" {
       database_name = aws_glue_catalog_database.dataeng-glue-database.name
       name          = "tb_stage_clientes"
@@ -209,6 +213,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 7. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
   ```hcl
+  # 7. ./modules/emr/main.tf
   resource "aws_s3_object" "clientes_spark_job" {
       bucket = var.dataeng_bucket_name
       key    = "scripts/clientes_spark_job.py"
@@ -218,6 +223,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 8. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
   ```hcl
+  # 8. ./modules/emr/main.tf
   resource "aws_s3_object" "bootstrap_actions_sh" {
       bucket = var.dataeng_bucket_name
       key    = "scripts/bootstrap-actions.sh"
@@ -234,6 +240,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   ```
 10. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
   ```hcl
+  # 10. EMR
   module "emr" {
     source  = "./modules/emr"
 
