@@ -163,7 +163,7 @@ resource "aws_route_table_association" "dataeng-private-association" {
 }
 ```
 
-## 9. Outputs Values
+## 10. Outputs Values
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/outputs.tf`:
 ```
@@ -185,11 +185,11 @@ output "internet_gateway_id" {
 }
 ```
 
-## 10. Security Groups
+## 11. Security Groups
 Security Groups atuam como firewalls virtuais para controlar o tráfego de entrada e saída das instâncias.
 
 
-### 10.1 - Security Group para a Subnet Pública
+### 11.1 - Security Group para a Subnet Pública
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
@@ -230,7 +230,7 @@ resource "aws_security_group" "dataeng-public-sg" {
 }
 ```
 
-### 10.2 - Security Group para a Subnet Privada
+### 11.2 - Security Group para a Subnet Privada
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
@@ -262,7 +262,7 @@ resource "aws_security_group" "dataeng-private-sg" {
 }
 ```
 
-### 10.3 - Output dos IDs dos Security Groups
+### 11.3 - Output dos IDs dos Security Groups
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/outputs.tf`:
 ```hcl
@@ -274,14 +274,14 @@ output "dataeng_private_sg_id" {
   value = aws_security_group.dataeng-private-sg.id
 }
 ```
-## 11. Defina o module em `./main.tf`
+## 12. Defina o module em `./main.tf`
 ```hcl
 module "vpc" {
   source  = "./modules/vpc"
 }
 ```
 
-## 12. Aplique o script
+## 13. Aplique o script
 ```sh
 terraform init
 ```
@@ -294,7 +294,7 @@ terraform plan
 terraform apply --auto-approve
 ```
 
-## 13. Verifique
+## 14. Verifique
 Abra o console AWS e verifique se todos os recursos foram criados como esperado.
 
 ## Parabéns
