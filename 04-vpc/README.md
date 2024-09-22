@@ -56,6 +56,7 @@ O recurso `aws_vpc` é usado no Terraform para criar uma Virtual Private Cloud (
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 2. VPC
 resource "aws_vpc" "dataeng-vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_support   = true
@@ -72,6 +73,7 @@ Através do uso do recurso `aws_subnet`, é possível criar e gerenciar subnets 
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 3. Subnet pública
 resource "aws_subnet" "dataeng-public-subnet" {
   vpc_id            = aws_vpc.dataeng-vpc.id
   cidr_block        = "10.0.1.0/24"
@@ -86,6 +88,7 @@ resource "aws_subnet" "dataeng-public-subnet" {
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 4. Subnet privada
 resource "aws_subnet" "dataeng-private-subnet" {
   vpc_id            = aws_vpc.dataeng-vpc.id
   cidr_block        = "10.0.2.0/24"
@@ -101,6 +104,7 @@ O recurso `aws_internet_gateway` é usado no Terraform para criar um gateway de 
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 5. Internet Gateway
 resource "aws_internet_gateway" "dataeng-igw" {
   vpc_id = aws_vpc.dataeng-vpc.id
   tags = {
@@ -119,6 +123,7 @@ A tabela de roteamento é um componente essencial para a configuração de redes
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 6. Tabela de rotas para a subnet pública (route table)
 resource "aws_route_table" "dataeng-public-rt" {
   vpc_id = aws_vpc.dataeng-vpc.id
   route {
@@ -136,6 +141,7 @@ O recurso `aws_route_table_association` permite associar uma tabela de roteament
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 7. Associar a tabela de rotas à subnet pública
 resource "aws_route_table_association" "dataeng-public-association" {
   subnet_id      = aws_subnet.dataeng-public-subnet.id
   route_table_id = aws_route_table.dataeng-public-rt.id
@@ -146,6 +152,7 @@ resource "aws_route_table_association" "dataeng-public-association" {
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 8. Tabela de rotas para a subnet privada (private route table)
 resource "aws_route_table" "dataeng-private-rt" {
   vpc_id = aws_vpc.dataeng-vpc.id
   tags = {
@@ -157,6 +164,7 @@ resource "aws_route_table" "dataeng-private-rt" {
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 9. Associar a tabela de rotas à subnet privada
 resource "aws_route_table_association" "dataeng-private-association" {
   subnet_id      = aws_subnet.dataeng-private-subnet.id
   route_table_id = aws_route_table.dataeng-private-rt.id
@@ -167,6 +175,7 @@ resource "aws_route_table_association" "dataeng-private-association" {
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/outputs.tf`:
 ```
+# 10. Outputs Values
 # Output dos IDs dos recursos
 output "vpc_id" {
   value = aws_vpc.dataeng-vpc.id
@@ -193,6 +202,7 @@ Security Groups atuam como firewalls virtuais para controlar o tráfego de entra
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 11.1 - Security Group para a Subnet Pública
 resource "aws_security_group" "dataeng-public-sg" {
   name        = "public-sg"
   description = "Security group para a subnet publica"
@@ -234,6 +244,7 @@ resource "aws_security_group" "dataeng-public-sg" {
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
+# 11.2 - Security Group para a Subnet Privada
 resource "aws_security_group" "dataeng-private-sg" {
   name        = "dataeng-private-sg"
   description = "Security group para a subnet privada"
@@ -266,6 +277,7 @@ resource "aws_security_group" "dataeng-private-sg" {
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/outputs.tf`:
 ```hcl
+# 11.3 - Output dos IDs dos Security Groups
 output "dataeng_public_sg_id" {
   value = aws_security_group.dataeng-public-sg.id
 }
@@ -276,6 +288,7 @@ output "dataeng_private_sg_id" {
 ```
 ## 12. Defina o module em `./main.tf`
 ```hcl
+# 12. Defina o module em `./main.tf`
 module "vpc" {
   source  = "./modules/vpc"
 }
