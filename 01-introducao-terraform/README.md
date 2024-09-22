@@ -59,23 +59,24 @@ Para instalar o Terraform, siga os passos abaixo:
 
 ### Exercício 2: Configuração inicial do Terraform com AWS Provider
 
-1. **Crie um diretório de trabalho**:
+1. **Crie** um diretório de trabalho:
     ```sh
     mkdir terraform-lab
-    cd terraform-lab
+    
     ```
 
-2. **Crie um arquivo de configuração do Terraform**:
+    ```sh
+    cd terraform-lab
+    
+    ```
+
+2. **Crie** um arquivo de configuração do Terraform:
     ```sh
     touch main.tf
+    
     ```
 
-3. **Edite o arquivo `main.tf`** :
-    ```sh
-    nano main.tf
-    ```
-
-    Inclua o seguinte conteúdo:
+    **Adicione** o seguinte conteúdo ao arquivo `main.tf`**:
     ```hcl
     provider "aws" {
       region = "us-east-1"
@@ -92,19 +93,17 @@ Para instalar o Terraform, siga os passos abaixo:
     }
     ```
 
-    Se utilizou no `nano` então utilize `Control+O` (letra O) para salvar e `Control+X` para fechar.
-
-4. **Inicialize o Terraform**:
+3. **Inicialize o Terraform**:
     ```sh
     terraform init
     ```
 
-5. **Crie um plano de execução**:
+4. **Crie um plano de execução**:
     ```sh
     terraform plan
     ```
 
-6. **Aplique o plano**:
+5. **Aplique o plano**:
     ```sh
     terraform apply
     ```
@@ -119,7 +118,7 @@ Para instalar o Terraform, siga os passos abaixo:
 
     Perceba que o nome do bucket é informado na saída do comando.
 
-7. **Verifique**:
+6. **Verifique**:
     Acesse o console AWS S3 e verifique se o bucket foi criado como esperado.
 
 ### Exercício 3: Incluindo um objeto no S3
