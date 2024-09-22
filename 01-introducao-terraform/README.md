@@ -32,21 +32,25 @@ Para instalar o Terraform, siga os passos abaixo:
 1. **Baixar o Terraform**:
     ```sh
     wget https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_386.zip
+
     ```
 
 2. **Descompactar o arquivo**:
     ```sh
     unzip terraform_1.9.4_linux_386.zip
+
     ```
 
 3. **Mover o binário para o diretório de binários**:
     ```sh
     sudo mv terraform /usr/local/bin/
+
     ```
 
 4. **Verificar a instalação**:
     ```sh
     terraform -v
+
     ```
 
 ## Laboratório
@@ -91,21 +95,25 @@ Para instalar o Terraform, siga os passos abaixo:
             Environment = "Dev"
         }
     }
+
     ```
 
 3. **Inicialize o Terraform**:
     ```sh
     terraform init
+
     ```
 
 4. **Crie um plano de execução**:
     ```sh
     terraform plan
+
     ```
 
 5. **Aplique o plano**:
     ```sh
     terraform apply
+
     ```
 
     Output esperado:
@@ -128,32 +136,31 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     Vamos criar o arquivo `pombo.txt`:
     ```sh
     echo "pruuuuu" > pombo.txt
+    
     ```
 
-2. **Edite novamente o arquivo `main.tf`**:
-    ```sh
-    nano main.tf
-    ```
-
-    Copie o trecho a seguir e inclua ao final do arquivo `main.tf`:
+2. **Adicione** o trecho a seguir no arquivo `main.tf`:
     ```hcl
-
     resource "aws_s3_object" "pombo-object" {
         bucket = aws_s3_bucket.dataeng-bucket.id
         key    = "pombo.txt"
         source = "./pombo.txt"
     }
+
     ```
 
 3. **Crie um plano de execução**:
     ```sh
     terraform plan
+
     ```
 
 4. **Aplique o plano**:
     ```sh
     terraform apply --auto-approve
+    
     ```
+
 5. **Verifique**
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
