@@ -11,6 +11,9 @@ As instruções de criação estão [aqui](99-Cloud9-Environment).
 ## O que vamos construir
 ![infra-emr](img2.png)
 
+## O fluxo
+![Fluxo de dados](img1.png)
+
 ## Módulos
 
 1. [Introdução ao Terraform](01-introducao-terraform)
