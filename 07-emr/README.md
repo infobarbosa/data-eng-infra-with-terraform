@@ -57,7 +57,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
       log_uri = "s3://${var.dataeng_bucket_name}/emr/logs/"
       ec2_attributes {
         instance_profile = "EMR_EC2_DefaultRole"
-        subnet_id        = var.dataeng_private_subnet_id
+        subnet_id        = var.dataeng_public_subnet_id
       }
       master_instance_group {
         instance_type = "m4.large"
@@ -94,8 +94,8 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
     ```hcl
     # 3. ./modules/emr/variables.tf
-    variable "dataeng_private_subnet_id" {
-      description = "Id da subnet privada"
+    variable "dataeng_public_subnet_id" {
+      description = "Id da subnet publica"
       type        = string
     }
 
@@ -244,14 +244,14 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   module "emr" {
     source  = "./modules/emr"
 
-    dataeng_private_subnet_id = module.vpc.public_subnet_id
+    dataeng_public_subnet_id = module.vpc.public_subnet_id
     dataeng_bucket_name = module.s3.dataeng-bucket
   }
   ```
 
 11. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
 
-    Para os propósitos deste laboratório esses recursos não serão mais necessários.
+    Caso você tenha feito o módulo **05-ec2** Para os propósitos deste laboratório esses recursos não serão mais necessários.
     ```
     module "ec2" {
       ...
