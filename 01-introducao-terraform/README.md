@@ -165,6 +165,12 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     Abra o console AWS S3 e verifique se o arquivo foi criado corretamente.<br>
     Repare que não foi criado um novo bucket, apenas incluído o arquivo como esperado.
 
+    Você também pode utilizar o seguinte comando para checar:
+    ```sh
+    aws --profile localstack --endpoint-url=http://localhost:4566 s3 ls s3://O_NOME_DO_SEU_BUCKET_AQUI
+    
+    ```
+
 ## Parabéns
 Parabéns pela conclusão do módulo! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
 
