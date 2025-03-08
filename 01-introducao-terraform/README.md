@@ -167,6 +167,12 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
     Você também pode utilizar o seguinte comando para checar:
     ```sh
+    aws s3 ls s3://O_NOME_DO_SEU_BUCKET_AQUI
+    
+    ```
+
+    Caso esteja utilizando `localstack`:
+    ```sh
     aws --profile localstack --endpoint-url=http://localhost:4566 s3 ls s3://O_NOME_DO_SEU_BUCKET_AQUI
     
     ```
