@@ -4,7 +4,8 @@ Github: [infobarbosa](https://github.com/infobarbosa)
 
 # 01 - Ambiente localstack
 
-Uma alternativa ao uso do ambiente real AWS é o Localstack.
+Uma alternativa ao uso do ambiente real AWS é o Localstack.<br>
+Localstack é uma plataforma que simula a AWS em um ambiente local, permitindo o desenvolvimento e teste de aplicações que utilizam serviços da AWS sem a necessidade de acessar a nuvem real.
 
 Pré-requisito: 
 - AWS Cli
