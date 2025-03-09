@@ -2,6 +2,8 @@ Author: Prof. Barbosa<br>
 Contact: infobarbosa@gmail.com<br>
 Github: [infobarbosa](https://github.com/infobarbosa)
 
+---
+
 # 01 - Ambiente localstack
 
 Uma alternativa ao uso do ambiente real AWS é o Localstack.<br>
@@ -11,11 +13,15 @@ Pré-requisitos:
 - AWS Cli
 - Docker
 
+---
+
 # 02 - Pull do localstack
 ```bash
 docker pull localstack/localstack
 
 ```
+
+---
 
 # 03 - Um exemplo
 
@@ -37,6 +43,8 @@ Explicação dos parâmetros:
 - `-p 4566:4566`: Mapeia a porta principal do LocalStack (porta de entrada para os serviços).
 - `-p 4510-4559:4510-4559`: Mapeia um range de portas para serviços internos.
 - `-e SERVICES=s3`: Configura o LocalStack para iniciar apenas o serviço S3 (você pode incluir outros serviços, separando-os por vírgula).
+
+---
 
 # 04 - Configurando AWS CLI
 
@@ -83,6 +91,8 @@ aws --endpoint-url=http://localhost:4566 s3 ls
 
 ```
 
+---
+
 # 05 - Docker Compose
 Segue um exemplo de arquivo `compose.yml` que inicia o LocalStack com os serviços desejados, atribuindo um nome ao projeto (através de um label) e um nome fixo para o container:
 
@@ -116,6 +126,44 @@ Para iniciar, basta executar:
 ```bash
 docker compose up
 ```
+
+---
+
+# 06 - Terraform + Localstack
+
+A seguir, vamos incrementar o laboratório incluindo o **Terraform** para gerenciar recursos no LocalStack. Com o Terraform, você pode versionar e automatizar a criação de recursos (como buckets no S3) de forma declarativa. Este exemplo mostrará como configurar o Terraform para trabalhar com o LocalStack no Ubuntu 24.04.
+
+Para que o Terraform se conecte ao LocalStack (emulando os serviços da AWS), precisamos configurar o _provider_ da AWS com algumas opções especiais:
+
+- **Credenciais Dummy:** Utilizamos valores fictícios, pois o LocalStack não valida as credenciais reais.
+- **Endpoints Customizados:** Redirecionamos o endpoint do serviço S3 para o LocalStack.
+- **Outras Configurações:** Algumas flags (como `skip_credentials_validation` e `s3_force_path_style`) ajudam a evitar erros de validação.
+
+No arquivo `main.tf` adicione o seguinte conteúdo:
+
+```h
+
+provider "aws" {
+  region                      = "us-east-1"
+  access_key                  = "test"
+  secret_key                  = "test"
+  skip_credentials_validation = true
+  skip_requesting_account_id  = true
+  s3_force_path_style         = true
+
+  endpoints {
+    s3 = "http://localhost:4566"
+  }
+}
+
+```
+
+**Detalhes da Configuração:**
+
+- **`provider "aws"`:** Aqui definimos a região, as credenciais dummy (`test`/`test`) e outras opções para ignorar validações que não fazem sentido para um ambiente local.
+- **`endpoints { s3 = "http://localhost:4566" }`:** Redireciona as requisições do S3 para o LocalStack, que por padrão expõe o serviço na porta 4566.
+
+---
 
 # Parabéns! 
 
