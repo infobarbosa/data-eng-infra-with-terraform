@@ -35,6 +35,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     touch modules/ec2/main.tf
     touch modules/ec2/variables.tf
     touch modules/ec2/outputs.tf
+
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/main.tf`:
@@ -56,6 +57,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
             sudo systemctl enable apache2
             EOF
     } 
+
     ```
 
 3. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/variables.tf`:
@@ -85,15 +87,16 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     ```
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/outputs.tf`:
-    ```hcl
-    output "instance_id" {
-      value = aws_instance.dataeng_ec2_instance.id
-    }
+  ```hcl
+  output "instance_id" {
+    value = aws_instance.dataeng_ec2_instance.id
+  }
 
-    output "instance_public_ip" {
-      value = aws_instance.dataeng_ec2_instance.public_ip
-    }
-    ```
+  output "instance_public_ip" {
+    value = aws_instance.dataeng_ec2_instance.public_ip
+  }
+
+  ```
 
 5. Verifique o id da AMI utilizando o seguinte comando no terminal:
   ```sh
@@ -102,6 +105,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     --owners amazon \
     --query 'Images[*].[ImageId,Name,Description]' \
     --output json
+  
   ```
 
 6. Acrescente o trecho a seguir em `main.tf`:
@@ -112,17 +116,25 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     public_subnet_id     = module.vpc.public_subnet_id
     dataeng_public_sg_id = module.vpc.dataeng_public_sg_id
   }
+  
   ```
 6. Execute o Terraform:
-    ```sh
-    terraform init
-    ```
-    
-    ```
-    terraform apply --auto-approve
-    ```
+  ```sh
+  terraform init
+
+  ```
+  
+  ```
+  terraform apply --auto-approve
+  
+  ```
 
 7. Verifique o resultado no painel AWS EC2.
+
+  ```sh
+  aws ec2 describe-instances --filters "Name=tag:Name,Values=dataeng-ec2-instance" --query "Reservations[*].Instances[*].[InstanceId, State.Name,   InstanceType, PublicIpAddress]" --output table
+
+  ```
 
 8. Destrua apenas o recurso EC2.
   ```sh
