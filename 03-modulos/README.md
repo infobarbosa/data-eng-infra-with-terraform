@@ -127,7 +127,7 @@ module "vpc" {
 
     locals {
         dataeng_account_id = data.aws_caller_identity.current.account_id
-        dataeng_turma = "<<SUBSTITUA PELA SUA TURMA>>"
+        dataeng_turma = "<<SUBSTITUA PELA SUA TURMA EM LETRAS MINUSCULAS>>"
     }
 
     ```
