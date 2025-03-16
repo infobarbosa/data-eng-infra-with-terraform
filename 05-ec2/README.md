@@ -43,7 +43,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     resource "aws_instance" "dataeng_ec2_instance" {
         ami                         = var.ami_id
         instance_type               = var.instance_type
-        security_groups             = [var.dataeng_public_sg_id]
+        vpc_security_group_ids      = [var.dataeng_public_sg_id]
         subnet_id                   = var.public_subnet_id
         key_name                    = "vockey"
         associate_public_ip_address = true
