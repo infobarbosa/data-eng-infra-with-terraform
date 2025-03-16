@@ -228,6 +228,12 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 
     ``` 
 
+    - Verifique se a variável foi criada corretamente:
+    ```sh
+    echo $DATAENG_BUCKET
+    
+    ```
+
     - Execute o comando a seguir:
     ```sh
     aws s3 ls "s3://${DATAENG_BUCKET}/raw/clientes/"
