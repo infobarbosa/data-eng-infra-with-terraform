@@ -23,68 +23,68 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 ### Exercício 1: Criar uma Instância EC2
 
 1. Crie a estrutura de pastas para a instância EC2:
-    ```
-    ec2/
-    ├── main.tf
-    ├── variables.tf
-    ├── outputs.tf
-    ```
+  ```
+  ec2/
+  ├── main.tf
+  ├── variables.tf
+  ├── outputs.tf
+  ```
 
-    ```sh
-    mkdir -p modules/ec2
-    touch modules/ec2/main.tf
-    touch modules/ec2/variables.tf
-    touch modules/ec2/outputs.tf
+  ```sh
+  mkdir -p modules/ec2
+  touch modules/ec2/main.tf
+  touch modules/ec2/variables.tf
+  touch modules/ec2/outputs.tf
 
-    ```
+  ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/main.tf`:
-    ```hcl
-    resource "aws_instance" "dataeng_ec2_instance" {
-        ami                         = var.ami_id
-        instance_type               = var.instance_type
-        key_name                    = "vockey"
-        associate_public_ip_address = true
-        tags = {
-            Name = "dataeng-ec2-instance"
-        }
+  ```hcl
+  resource "aws_instance" "dataeng_ec2_instance" {
+      ami                         = var.ami_id
+      instance_type               = var.instance_type
+      key_name                    = "vockey"
+      associate_public_ip_address = true
+      tags = {
+          Name = "dataeng-ec2-instance"
+      }
 
-        user_data = <<-EOF
-            #!/bin/bash
-            sudo apt update
-            sudo apt install -y apache2
-            sudo systemctl start apache2
-            sudo systemctl enable apache2
-            EOF
-    } 
+      user_data = <<-EOF
+          #!/bin/bash
+          sudo apt update
+          sudo apt install -y apache2
+          sudo systemctl start apache2
+          sudo systemctl enable apache2
+          EOF
+  } 
 
-    ```
+  ```
 
 3. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/variables.tf`:
-    ```hcl
-    variable "ami_id" {
-      description = "ID da AMI para a instância EC2"
+  ```hcl
+  variable "ami_id" {
+    description = "ID da AMI para a instância EC2"
+    type        = string
+    default     = "ami-0e86e20dae9224db8"
+  }
+
+  variable "instance_type" {
+    description = "Tipo da instância EC2"
+    type        = string
+    default     = "t3.micro"
+  }
+
+  variable "public_subnet_id" {
+      description = "ID da subnet pública"
       type        = string
-      default     = "ami-0e86e20dae9224db8"
-    }
+  }
 
-    variable "instance_type" {
-      description = "Tipo da instância EC2"
+  variable "dataeng_public_sg_id" {
+      description = "ID do security group público"
       type        = string
-      default     = "t3.micro"
-    }
+  }
 
-    variable "public_subnet_id" {
-        description = "ID da subnet pública"
-        type        = string
-    }
-
-    variable "dataeng_public_sg_id" {
-        description = "ID do security group público"
-        type        = string
-    }
-
-    ```
+  ```
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/ec2/outputs.tf`:
   ```hcl
