@@ -238,6 +238,50 @@ terraform apply --auto-approve
 ## 14. Verifique
 Abra o console AWS e verifique se todos os recursos foram criados como esperado.
 
+Para verificar via terminal, siga os passos a seguir:
+    
+  - VPC
+  ```sh
+  aws ec2 describe-vpcs --filters "Name=tag:Name,Values=dataeng-vpc" --query "Vpcs[*].VpcId" --output text
+  
+  ```
+
+  - Subnet Pública
+  ```sh
+  aws ec2 describe-subnets --filters "Name=tag:Name,Values=dataeng-public-subnet" --query "Subnets[*].SubnetId" --output text
+
+
+  ```
+
+  - Internet Gateway
+  ```sh
+  aws ec2 describe-internet-gateways --filters "Name=tag:Name,Values=dataeng-igw" --query "InternetGateways[*].InternetGatewayId" --output text
+
+
+  ```
+
+  - Route Table (subnet pública)
+  ```sh
+  aws ec2 describe-route-tables --filters "Name=tag:Name,Values=dataeng-public-rt" --query "RouteTables[*].RouteTableId" --output text
+
+
+  ```
+
+  - Route Tables Association (subnet pública)
+  ```sh
+  aws ec2 describe-route-tables --filters "Name=tag:Name,Values=dataeng-public-rt" --query "RouteTables[*].Associations[*].RouteTableAssociationId" --output text
+
+
+  ```
+
+  - Security Groups
+  ```sh
+  aws ec2 describe-security-groups --filters "Name=tag:Name,Values=dataeng-public-sg" --query "SecurityGroups[*].GroupId" --output text
+
+
+  ```
+
+
 ---
 
 ## Parabéns
