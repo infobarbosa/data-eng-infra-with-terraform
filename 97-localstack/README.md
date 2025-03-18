@@ -131,6 +131,8 @@ docker compose up
 
 # 06 - Terraform + Localstack
 
+**Documentação oficial** nesse [link](https://docs.localstack.cloud/user-guide/integrations/terraform/)
+
 A seguir, vamos incrementar o laboratório incluindo o **Terraform** para gerenciar recursos no LocalStack. Com o Terraform, você pode versionar e automatizar a criação de recursos (como buckets no S3) de forma declarativa. Este exemplo mostrará como configurar o Terraform para trabalhar com o LocalStack no Ubuntu 24.04.
 
 Para que o Terraform se conecte ao LocalStack (emulando os serviços da AWS), precisamos configurar o _provider_ da AWS com algumas opções especiais:
