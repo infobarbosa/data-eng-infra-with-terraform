@@ -7,7 +7,7 @@ services:
       - "4566:4566"
       - "4510-4559:4510-4559"
     environment:
-      - SERVICES=glue,emr,s3,dynamodb,lambda,gluecatalog
+      - SERVICES=ec2,glue,emr,s3,dynamodb,lambda,gluecatalog
       - DEFAULT_REGION=us-east-1
       - DEBUG=1
     volumes:
