@@ -278,9 +278,47 @@ Para verificar via terminal, siga os passos a seguir:
   ```sh
   aws ec2 describe-security-groups --filters "Name=tag:Name,Values=dataeng-public-sg" --query "SecurityGroups[*].GroupId" --output text
 
-
   ```
 
+  #### Verificação com Localstack
+
+  **Atenção!** Execute apenas se estiver utilizando Localstack
+
+  - VPC
+    ```sh
+    aws ec2 --endpoint-url http://localhost:4566 describe-vpcs --filters "Name=tag:Name,Values=dataeng-vpc" --query "Vpcs[*].VpcId" --output text
+
+    ```
+
+  - Subnet Pública
+    ```SH
+    aws ec2 --endpoint-url http://localhost:4566 describe-subnets --filters "Name=tag:Name,Values=dataeng-public-subnet" --query "Subnets[*].SubnetId" --output text
+
+    ```
+
+  - Internet Gateway
+    ```sh
+    aws ec2 --endpoint-url http://localhost:4566 describe-internet-gateways --filters "Name=tag:Name,Values=dataeng-igw" --query "InternetGateways[*].InternetGatewayId" --output text
+    
+    ```
+
+  - Route Table (subnet pública)
+    ```sh
+    aws ec2 --endpoint-url http://localhost:4566 describe-route-tables --filters "Name=tag:Name,Values=dataeng-public-rt" --query "RouteTables[*].RouteTableId" --output text
+    
+    ```
+
+  - Route Tables Association (subnet pública)
+    ```sh
+    aws ec2 --endpoint-url http://localhost:4566 describe-route-tables --filters "Name=tag:Name,Values=dataeng-public-rt" --query "RouteTables[*].Associations[*].RouteTableAssociationId" --output text
+
+    ```
+
+  - Security Groups
+    ```sh
+    aws ec2 --endpoint-url http://localhost:4566 describe-security-groups --filters "Name=tag:Name,Values=dataeng-public-sg" --query "SecurityGroups[*].GroupId" --output text
+
+    ```
 
 ---
 
