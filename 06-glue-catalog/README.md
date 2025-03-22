@@ -194,8 +194,38 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     terraform apply --auto-approve
     ```
 
-7. Verifique no Athena se a tabela foi criada como esperado.
+7. Verifique no console AWS Glue se a tabela foi criada como esperado.
 
+    Para verificação via terminal:
+    - Database
+      ```sh
+      aws glue get-databases --query "DatabaseList[*].Name" --output table
+
+      ```
+      
+      ```sh
+      aws glue get-databases --output json
+      
+      ```
+
+    - Tabelas
+    
+      ```sh
+      aws glue get-tables --database-name dataengdb --query "TableList[*].Name" --output table
+
+      ```
+
+8. Faça uma consulta na tabela via **AWS Athena**
+
+    ```sql
+    SELECT COUNT(1) qtt FROM dataengdb.tb_raw_clientes;
+
+    ```
+
+    ```sql
+    SELECT * FROM dataengdb.tb_raw_clientes limit 10;
+    
+    ```
 ## Desafio
 Execute novamente o exercício anterior, desta vez crie a tabela `tb_raw_pedidos`.
 Os tipos das colunas:
