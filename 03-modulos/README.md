@@ -80,7 +80,7 @@ module "vpc" {
 
     ```
 
-2. **Adicione** o trecho a seguir em `./modules/s3/main.tf`:
+2. **Adicione** o trecho a seguir em **`./modules/s3/main.tf`**:
     ```hcl
     resource "aws_s3_bucket" "dataeng_bucket" {
         bucket = "dataeng-${var.dataeng_turma}-${var.dataeng_account_id}"
@@ -93,7 +93,7 @@ module "vpc" {
     }
 
     ```
-3. **Adicione** o trecho a seguir no arquivo `./modules/s3/variables.tf`.
+3. **Adicione** o trecho a seguir no arquivo **`./modules/s3/variables.tf`**.
     ```hcl
     variable "dataeng_turma" {
         description = "O identificador da sua turma em letras minusculas, sem espaços ou caracteres especiais"
@@ -107,7 +107,7 @@ module "vpc" {
 
     ```
 
-4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
+4. **Adicione** o trecho a seguir no arquivo **`./modules/s3/outputs.tf`**.
     ```hcl
     output "dataeng_bucket" {
         description = "O nome do bucket S3"
@@ -121,7 +121,7 @@ module "vpc" {
 
     ```
 
-5. **Adicione** o trecho a seguir no **início** do arquivo`./main.tf`:
+5. **Adicione** o trecho a seguir no **início** do arquivo **`./main.tf`**:
     ```hcl
     data "aws_caller_identity" "current" {}
 
@@ -132,7 +132,7 @@ module "vpc" {
 
     ```
 
-6. **Adicione** o trecho a seguir no **final** do arquivo `./main.tf`:
+6. **Adicione** o trecho a seguir no **final** do arquivo **`./main.tf`**:
     ```hcl
     module "s3" {
       source  = "./modules/s3"
@@ -142,9 +142,9 @@ module "vpc" {
 
     ```
 
-7. **Remova** o recurso `dataeng_bucket` de `./main.tf`:
+7. **Remova** o recurso `pombo_bucket` de **`./main.tf`**:
     ```hcl
-    resource "aws_s3_bucket" "dataeng_bucket" {
+    resource "aws_s3_bucket" "pombo_bucket" {
       ...
     }
 
