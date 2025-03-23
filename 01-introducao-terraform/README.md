@@ -121,7 +121,18 @@ Para instalar o Terraform, siga os passos abaixo:
     Perceba que o nome do bucket é informado na saída do comando.
 
 6. **Verifique**:
-    Acesse o console AWS S3 e verifique se o bucket foi criado como esperado.
+
+    Acesse o console **AWS S3** e verifique se o bucket foi criado como esperado.<br>
+    No terminal também é possível verificar:
+    ```sh
+    aws s3 ls
+
+    ```
+
+    ```sh
+    aws s3 ls s3://<COLOQUE O NOME DO SEU BUCKET AQUI>
+
+    ```
 
 ### Exercício 3: Incluindo um objeto no S3
 Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
