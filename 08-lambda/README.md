@@ -206,8 +206,8 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       source  = "./modules/lambda"
 
       dataeng_emr_cluster_id = module.emr.dataeng_emr_cluster_id
-      dataeng_bucket_name = module.s3.dataeng-bucket
-      dataeng_bucket_arn = module.s3.dataeng-bucket-arn
+      dataeng_bucket_name = module.s3.dataeng_bucket
+      dataeng_bucket_arn = module.s3.dataeng_bucket_arn
     } 
     ```
 
@@ -234,6 +234,7 @@ Você concluiu o módulo! Agora você sabe como criar uma função Lambda que é
 Para evitar custos adicionais, destrua os recursos criados:
 ```sh
 terraform destroy --auto-approve
+
 ```
 
 ### Destruição Seletiva de Recursos
@@ -241,17 +242,20 @@ terraform destroy --auto-approve
 Caso você queira destruir apenas alguns recursos específicos, ao invés de todos os recursos criados pelo Terraform, você pode utilizar os seguintes comandos:
 
 1. **aws_lambda_function.dataeng_lambda**
-  ```sh
-  terraform destroy -target=module.lambda.aws_lambda_function.dataeng_lambda --auto-approve
-  ```
+    ```sh
+    terraform destroy -target=module.lambda.aws_lambda_function.dataeng_lambda --auto-approve
+
+    ```
 
 2. **aws_lambda_permission.dataeng_s3_invoke**
-  ```sh
-  terraform destroy -target=module.lambda.aws_lambda_permission.dataeng_s3_invoke --auto-approve
-  ```
+    ```sh
+    terraform destroy -target=module.lambda.aws_lambda_permission.dataeng_s3_invoke --auto-approve
+    
+    ```
 
 3. Para destruir apenas a notificação do bucket S3, execute o seguinte comando:
-  ```sh
-  terraform destroy -target=aws_s3_bucket_notification.bucket_notification --auto-approve
-  ```
+    ```sh
+    terraform destroy -target=aws_s3_bucket_notification.bucket_notification --auto-approve
+    
+    ```
 
