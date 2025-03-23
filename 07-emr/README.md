@@ -285,7 +285,29 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```sh
     terraform apply --auto-approve
     ```
-13. Verifique a criação do arquivo parquet via console S3.
+13. **Verifique**
+    - No console AWS EMR verifique o status de criacao do cluster `dataeng-emr`.
+    - Via terminal:
+
+      ```sh
+      aws emr list-clusters --active --query "Clusters[?Name=='dataeng-emr'].Id" --output text
+
+      ``` 
+
+      ```sh
+      aws emr list-clusters --active --query "Clusters[?Name=='dataeng-emr'].[Id,Status.State,Status.Timeline.CreationDateTime]" --output table
+
+      ```
+
+    - No console AWS Glue Catalog verifique a criação da tabela `tb_stage_clientes`
+
+    - Via terminal:
+      ```sh
+      aws glue get-tables --database-name dataengdb --query "TableList[*].Name" --output table
+
+      ```
+
+    - No console AWS S3 verifique a criação do arquivo parquet na pasta `.../stage/clientes`.
 
 14. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
 
