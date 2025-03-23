@@ -83,17 +83,17 @@ Para instalar o Terraform, siga os passos abaixo:
     ```
 
     **Adicione** o seguinte conteúdo ao arquivo `main.tf`:
-    ```hcl
+    ```h
     provider "aws" {
       region = "us-east-1"
     }
 
-    resource "aws_s3_bucket" "dataeng_bucket" {
-        bucket_prefix = "dataeng-"
+    resource "aws_s3_bucket" "pombo_bucket" {
+        bucket_prefix = "pombo-bucket-"
         force_destroy = true
 
         tags = {
-            Name        = "dataeng_bucket"
+            Name        = "pombo_bucket"
             Environment = "Dev"
         }
     }
@@ -118,14 +118,6 @@ Para instalar o Terraform, siga os passos abaixo:
 
     ```
 
-    Output esperado:
-    ```
-    ...
-    Plan: 1 to add, 0 to change, 0 to destroy.
-    aws_s3_bucket.dataeng_bucket: Creating...
-    aws_s3_bucket.dataeng_bucket: Creation complete after 4s [id=dataeng-20240831140200859000000001]
-    ```
-
     Perceba que o nome do bucket é informado na saída do comando.
 
 6. **Verifique**:
@@ -142,9 +134,9 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     ```
 
 2. **Adicione** o trecho a seguir no arquivo `main.tf`:
-    ```hcl
+    ```h
     resource "aws_s3_object" "pombo_object" {
-        bucket = aws_s3_bucket.dataeng_bucket.id
+        bucket = aws_s3_bucket.pombo_bucket.id
         key    = "pombo.txt"
         source = "./pombo.txt"
     }
@@ -196,6 +188,11 @@ Para realizar a destruição seletiva, você pode utilizar o comando `terraform 
 
 ```sh
 terraform destroy -target=aws_s3_object.pombo_object
+
+```
+
+```sh
+terraform destroy -target=aws_s3_object.pombo_bucket
 
 ```
 
