@@ -80,7 +80,7 @@ module "vpc" {
 
     ```
 
-2. **Adicione** o trecho a seguir em **`./modules/s3/main.tf`**:
+2. **Adicione** o trecho a seguir em <span style="font-size: 22">**`./modules/s3/main.tf`**</span>:
     ```hcl
     resource "aws_s3_bucket" "dataeng_bucket" {
         bucket = "dataeng-${var.dataeng_turma}-${var.dataeng_account_id}"
