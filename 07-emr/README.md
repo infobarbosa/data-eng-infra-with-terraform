@@ -309,6 +309,12 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     - No console AWS S3 verifique a criação do arquivo parquet na pasta `.../stage/clientes`.
 
+    - No console AWS Athena verifique os dados via consulta SQL:
+      ```sql
+      SELECT * FROM "dataengdb"."tb_stage_clientes" limit 10;
+
+      ``` 
+
 14. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
 
 ### Desafio 1: Criação e execução de EMR Steps de pedidos
