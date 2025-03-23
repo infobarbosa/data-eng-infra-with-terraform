@@ -43,12 +43,12 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/main.tf`:
     ```hcl
-    data "aws_iam_roles" "roles" {
+    data "aws_iam_roles" "lab_role" {
       name_regex = "LabRole"
     }
 
     locals {
-      dataeng_role = data.aws_iam_roles.roles.roles[0].arn
+      dataeng_role = tolist(data.aws_iam_roles.lab_role.arns)[0]
     }
 
     resource "aws_lambda_function" "dataeng_lambda" {
@@ -57,7 +57,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       role             = local.dataeng_role
       handler          = "lambda_function.lambda_handler"
       runtime          = "python3.12"
-      source_code_hash = base64sha256(file("./modules/lambda/scripts/lambda/lambda_function.zip"))
+      source_code_hash = base64sha256(filebase64("./modules/lambda/scripts/lambda/lambda_function.zip"))
       environment {
         variables = {
           EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
@@ -145,82 +145,86 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 6. Crie um arquivo `lambda_function.zip` contendo o script `lambda_function.py`:
     ```sh
     zip ./modules/lambda/scripts/lambda/lambda_function.zip ./modules/lambda/scripts/lambda/lambda_function.py
+
     ```
 
 7. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/scripts/job/pedidos_spark_job.py`:
-  ```python
-  import os
-  import sys
-  import boto3
-  from datetime import datetime
+    ```python
+    import os
+    import sys
+    import boto3
+    from datetime import datetime
 
-  from pyspark.sql import SparkSession
-  from pyspark.sql.functions import *
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import *
 
-  print("Iniciando o script de processamento dos dados: pedidos_spark_job")
-  spark = SparkSession \
-      .builder \
-      .appName("pedidos_spark_job") \
-      .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
-      .enableHiveSupport() \
-      .getOrCreate()
+    print("Iniciando o script de processamento dos dados: pedidos_spark_job")
+    spark = SparkSession \
+        .builder \
+        .appName("pedidos_spark_job") \
+        .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
+        .enableHiveSupport() \
+        .getOrCreate()
 
-  spark.catalog.setCurrentDatabase("dataengdb")
+    spark.catalog.setCurrentDatabase("dataengdb")
 
-  print("Definindo a variavel BUCKET_NAME que vamos utilizar ao longo do codigo")
-  BUCKET_NAME = ""
-  s3_client = boto3.client('s3')
-  response = s3_client.list_buckets()
+    print("Definindo a variavel BUCKET_NAME que vamos utilizar ao longo do codigo")
+    BUCKET_NAME = ""
+    s3_client = boto3.client('s3')
+    response = s3_client.list_buckets()
 
-  for bucket in response['Buckets']:
-      if bucket['Name'].startswith('dataeng-'):
-          BUCKET_NAME = bucket['Name']
-          break
+    for bucket in response['Buckets']:
+        if bucket['Name'].startswith('dataeng-'):
+            BUCKET_NAME = bucket['Name']
+            break
 
-  print("O bucket que vamos utilizar serah: " + BUCKET_NAME)
+    print("O bucket que vamos utilizar serah: " + BUCKET_NAME)
 
-  print("Obtendo os dados de pedidos")
-  df_pedidos = spark.sql("select * from dataengdb.tb_raw_pedidos")
-  df_pedidos.show(5)
+    print("Obtendo os dados de pedidos")
+    df_pedidos = spark.sql("select * from dataengdb.tb_raw_pedidos")
+    df_pedidos.show(5)
 
-  print("Escrevendo os dados de pedidos como parquet no S3")
-  df_pedidos.write.format("parquet").mode("overwrite").save(f"s3://{BUCKET_NAME}/stage/pedidos")
+    print("Escrevendo os dados de pedidos como parquet no S3")
+    df_pedidos.write.format("parquet").mode("overwrite").save(f"s3://{BUCKET_NAME}/stage/pedidos")
 
-  print("Finalizando o script de processamento dos dados: pedidos_spark_job")
+    print("Finalizando o script de processamento dos dados: pedidos_spark_job")
 
-  ```
+    ```
 
 8. Inclua o conteúdo a seguir ao final do arquivo `./modules/lambda/main.tf`:
-  ```hcl
-  resource "aws_s3_object" "pedidos_spark_job" {
-      bucket = var.dataeng_bucket_name
-      key    = "scripts/clientes_spark_job.py"
-      source = "./modules/lambda/scripts/job/clientes_spark_job.py"
-  }
-  ```
+    ```hcl
+    resource "aws_s3_object" "pedidos_spark_job" {
+        bucket = var.dataeng_bucket_name
+        key    = "scripts/pedidos_spark_job.py"
+        source = "./modules/lambda/scripts/job/pedidos_spark_job.py"
+    }
+    ```
 
 9. Inclua o conteúdo a seguir ao final do arquivo `./main.ft`:
-  ```hcl
-  module "lambda" {
-    source  = "./modules/lambda"
+    ```hcl
+    module "lambda" {
+      source  = "./modules/lambda"
 
-    dataeng_emr_cluster_id = module.emr.dataeng_emr_cluster_id
-    dataeng_bucket_name = module.s3.dataeng-bucket
-    dataeng_bucket_arn = module.s3.dataeng-bucket-arn
-  } 
-  ```
+      dataeng_emr_cluster_id = module.emr.dataeng_emr_cluster_id
+      dataeng_bucket_name = module.s3.dataeng-bucket
+      dataeng_bucket_arn = module.s3.dataeng-bucket-arn
+    } 
+    ```
 
 10. Execute o Terraform:
     ```sh
     terraform init
+
     ```
 
     ```sh
     terraform plan
+
     ```
 
     ```sh
     terraform apply --auto-approve
+
     ```
 
 ## Parabéns
