@@ -88,12 +88,12 @@ Para instalar o Terraform, siga os passos abaixo:
       region = "us-east-1"
     }
 
-    resource "aws_s3_bucket" "dataeng-bucket" {
+    resource "aws_s3_bucket" "dataeng_bucket" {
         bucket_prefix = "dataeng-"
         force_destroy = true
 
         tags = {
-            Name        = "dataeng-bucket"
+            Name        = "dataeng_bucket"
             Environment = "Dev"
         }
     }
@@ -122,8 +122,8 @@ Para instalar o Terraform, siga os passos abaixo:
     ```
     ...
     Plan: 1 to add, 0 to change, 0 to destroy.
-    aws_s3_bucket.dataeng-bucket: Creating...
-    aws_s3_bucket.dataeng-bucket: Creation complete after 4s [id=dataeng-20240831140200859000000001]
+    aws_s3_bucket.dataeng_bucket: Creating...
+    aws_s3_bucket.dataeng_bucket: Creation complete after 4s [id=dataeng-20240831140200859000000001]
     ```
 
     Perceba que o nome do bucket é informado na saída do comando.
@@ -143,8 +143,8 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
 
 2. **Adicione** o trecho a seguir no arquivo `main.tf`:
     ```hcl
-    resource "aws_s3_object" "pombo-object" {
-        bucket = aws_s3_bucket.dataeng-bucket.id
+    resource "aws_s3_object" "pombo_object" {
+        bucket = aws_s3_bucket.dataeng_bucket.id
         key    = "pombo.txt"
         source = "./pombo.txt"
     }

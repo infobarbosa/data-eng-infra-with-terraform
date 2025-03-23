@@ -10,26 +10,26 @@ module "glue-catalog" {
   database_name = "dataeng-glue-database"
 }
 
-resource "aws_s3_bucket" "dataeng-bucket" {
+resource "aws_s3_bucket" "dataeng_bucket" {
   bucket = "dataeng-modulo-1-${data.aws_caller_identity.current.account_id}-${random_string.suffix.result}"
 
   tags = {
-    Name        = "dataeng-bucket"
+    Name        = "dataeng_bucket"
     Environment = "Dev"
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "dataeng-bucket-ownership-controls" {
-    bucket = aws_s3_bucket.dataeng-bucket.id
+resource "aws_s3_bucket_ownership_controls" "dataeng_bucket_ownership_controls" {
+    bucket = aws_s3_bucket.dataeng_bucket.id
     rule {
         object_ownership = "BucketOwnerPreferred"
     }
 }
 
-resource "aws_s3_bucket_acl" "dataeng-bucket-acl" {
-    depends_on = [aws_s3_bucket_ownership_controls.dataeng-bucket-ownership-controls]
+resource "aws_s3_bucket_acl" "dataeng_bucket_acl" {
+    depends_on = [aws_s3_bucket_ownership_controls.dataeng_bucket-ownership-controls]
 
-    bucket = aws_s3_bucket.dataeng-bucket.id
+    bucket = aws_s3_bucket.dataeng_bucket.id
     acl    = "private"
 }
 
@@ -42,26 +42,26 @@ resource "random_string" "suffix" {
 
 
 resource "aws_s3_object" "dataset_clientes" {
-    bucket = aws_s3_bucket.dataeng-bucket.id
+    bucket = aws_s3_bucket.dataeng_bucket.id
     key    = "raw/clientes/clientes.csv.gz"
     source = "./datasets-csv-clientes/clientes.csv.gz"
 }
 
 resource "aws_s3_object" "dataset_pedidos" {
-    bucket = aws_s3_bucket.dataeng-bucket.id
+    bucket = aws_s3_bucket.dataeng_bucket.id
     key    = "raw/pedidos/pedidos-2024-01-01.csv.gz"
     source = "./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz"
 }
 
-resource "aws_vpc" "dataeng-vpc" {
+resource "aws_vpc" "dataeng_vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
     Name = "dataeng-vpc"
   }
 }
 
-resource "aws_subnet" "dataeng-public-subnet" {
-  vpc_id            = aws_vpc.dataeng-vpc.id
+resource "aws_subnet" "dataeng_public_subnet" {
+  vpc_id            = aws_vpc.dataeng_vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   tags = {
@@ -69,14 +69,14 @@ resource "aws_subnet" "dataeng-public-subnet" {
   }
 }
 
-resource "aws_internet_gateway" "dataeng-igw" {
-  vpc_id = aws_vpc.dataeng-vpc.id
+resource "aws_internet_gateway" "dataeng_igw" {
+  vpc_id = aws_vpc.dataeng_vpc.id
   tags = {
     Name = "dataeng-igw"
   }
 }
 
-resource "aws_security_group" "dataeng-sg" {
+resource "aws_security_group" "dataeng_sg" {
   vpc_id = aws_vpc.dataeng-vpc.id
 
   ingress {
@@ -138,7 +138,7 @@ resource "aws_autoscaling_group" "dataeng_asg" {
   desired_capacity     = 2
   max_size             = 3
   min_size             = 1
-  vpc_zone_identifier  = [aws_subnet.dataeng-public-subnet.id]
+  vpc_zone_identifier  = [aws_subnet.dataeng_public_subnet.id]
   launch_template {
     id      = aws_launch_template.dataeng_lt.id
     version = "$Latest"

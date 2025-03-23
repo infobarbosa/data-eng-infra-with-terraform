@@ -82,12 +82,12 @@ module "vpc" {
 
 2. **Adicione** o trecho a seguir em `./modules/s3/main.tf`:
     ```hcl
-    resource "aws_s3_bucket" "dataeng-bucket" {
+    resource "aws_s3_bucket" "dataeng_bucket" {
         bucket = "dataeng-${var.dataeng_turma}-${var.dataeng_account_id}"
         force_destroy = true
 
         tags = {
-            Name        = "dataeng-bucket"
+            Name        = "dataeng_bucket"
             Environment = "Dev"
         }
     }
@@ -109,14 +109,14 @@ module "vpc" {
 
 4. **Adicione** o trecho a seguir no arquivo `./modules/s3/outputs.tf`.
     ```hcl
-    output "dataeng-bucket" {
+    output "dataeng_bucket" {
         description = "O nome do bucket S3"
-        value = aws_s3_bucket.dataeng-bucket.bucket
+        value = aws_s3_bucket.dataeng_bucket.bucket
     }
 
     output "dataeng_bucket_arn" {
         description = "O ARN do bucket S3"
-        value = aws_s3_bucket.dataeng-bucket.arn
+        value = aws_s3_bucket.dataeng_bucket.arn
     }
 
     ```
@@ -142,17 +142,17 @@ module "vpc" {
 
     ```
 
-7. **Remova** o recurso `dataeng-bucket` de `./main.tf`:
+7. **Remova** o recurso `dataeng_bucket` de `./main.tf`:
     ```hcl
-    resource "aws_s3_bucket" "dataeng-bucket" {
+    resource "aws_s3_bucket" "dataeng_bucket" {
       ...
     }
 
     ```
 
-    **Remova** também o recurso `pombo-object`:
+    **Remova** também o recurso `pombo_object`:
     ```hcl
-    resource "aws_s3_object" "pombo-object" {
+    resource "aws_s3_object" "pombo_object" {
       ...
     }
 
@@ -198,7 +198,7 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
     ```hcl
 
     resource "aws_s3_object" "dataset_clientes" {
-        bucket = aws_s3_bucket.dataeng-bucket.id
+        bucket = aws_s3_bucket.dataeng_bucket.id
         key    = "raw/clientes/clientes.csv.gz"
         source = "./datasets-csv-clientes/clientes.csv.gz"
     }
@@ -262,13 +262,13 @@ terraform destroy --auto-approve
 Para destruir seletivamente os recursos criados neste módulo, execute os seguintes comandos:
 
 1. Destruição do bucket S3:
-```sh
-terraform destroy -target=module.s3.aws_s3_bucket.dataeng-bucket
+    ```sh
+    terraform destroy -target=module.s3.aws_s3_bucket.dataeng_bucket
 
-```
+    ```
 
 2. Destruição dos objetos no bucket S3:
-```sh
-terraform destroy -target=module.s3.aws_s3_object.dataset_clientes
+    ```sh
+    terraform destroy -target=module.s3.aws_s3_object.dataset_clientes
 
-```
+    ```

@@ -43,7 +43,7 @@ O recurso `aws_vpc` é usado no Terraform para criar uma Virtual Private Cloud (
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 # 2. VPC
-resource "aws_vpc" "dataeng-vpc" {
+resource "aws_vpc" "dataeng_vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true  
@@ -63,8 +63,8 @@ Através do uso do recurso `aws_subnet`, é possível criar e gerenciar subnets 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 # 3. Subnet pública
-resource "aws_subnet" "dataeng-public-subnet" {
-  vpc_id            = aws_vpc.dataeng-vpc.id
+resource "aws_subnet" "dataeng_public_subnet" {
+  vpc_id            = aws_vpc.dataeng_vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   tags = {
@@ -82,8 +82,8 @@ O recurso `aws_internet_gateway` é usado no Terraform para criar um gateway de 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 # 4. Internet Gateway
-resource "aws_internet_gateway" "dataeng-igw" {
-  vpc_id = aws_vpc.dataeng-vpc.id
+resource "aws_internet_gateway" "dataeng_igw" {
+  vpc_id = aws_vpc.dataeng_vpc.id
   tags = {
     Name = "dataeng-igw"
   }
@@ -104,11 +104,11 @@ A tabela de roteamento é um componente essencial para a configuração de redes
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```hcl
 # 5. Tabela de rotas para a subnet pública (route table)
-resource "aws_route_table" "dataeng-public-rt" {
-  vpc_id = aws_vpc.dataeng-vpc.id
+resource "aws_route_table" "dataeng_public_rt" {
+  vpc_id = aws_vpc.dataeng_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.dataeng-igw.id
+    gateway_id = aws_internet_gateway.dataeng_igw.id
   }
   tags = {
     Name = "dataeng-public-rt"
@@ -123,11 +123,12 @@ resource "aws_route_table" "dataeng-public-rt" {
 O recurso `aws_route_table_association` permite associar uma tabela de roteamento do Amazon Web Services (AWS) a uma sub-rede específica. Essa associação determina qual tabela de roteamento será usada para direcionar o tráfego de rede para a sub-rede correspondente. Ao utilizar esse recurso, é possível configurar de forma eficiente as rotas de rede para as sub-redes em uma infraestrutura na nuvem da AWS, garantindo a conectividade correta entre os recursos.
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
-```hcl
+
+```h
 # 6. aws_route_table_association
-resource "aws_route_table_association" "dataeng-public-association" {
-  subnet_id      = aws_subnet.dataeng-public-subnet.id
-  route_table_id = aws_route_table.dataeng-public-rt.id
+resource "aws_route_table_association" "dataeng_public_association" {
+  subnet_id      = aws_subnet.dataeng_public_subnet.id
+  route_table_id = aws_route_table.dataeng_public_rt.id
 }
 
 ```
@@ -138,12 +139,12 @@ resource "aws_route_table_association" "dataeng-public-association" {
 Security Groups atuam como firewalls virtuais para controlar o tráfego de entrada e saída das instâncias.
 
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
-```hcl
+```h
 # 7. aws_security_group
-resource "aws_security_group" "dataeng-public-sg" {
+resource "aws_security_group" "dataeng_public_sg" {
   name        = "public-sg"
   description = "Security group para a subnet publica"
-  vpc_id      = aws_vpc.dataeng-vpc.id
+  vpc_id      = aws_vpc.dataeng_vpc.id
 
   # Permitir tráfego de entrada
   ingress {
@@ -187,19 +188,19 @@ resource "aws_security_group" "dataeng-public-sg" {
 # 8. Outputs Values
 # Output dos IDs dos recursos
 output "vpc_id" {
-  value = aws_vpc.dataeng-vpc.id
+  value = aws_vpc.dataeng_vpc.id
 }
 
 output "public_subnet_id" {
-  value = aws_subnet.dataeng-public-subnet.id
+  value = aws_subnet.dataeng_public_subnet.id
 }
 
 output "internet_gateway_id" {
-  value = aws_internet_gateway.dataeng-igw.id
+  value = aws_internet_gateway.dataeng_igw.id
 }
 
 output "dataeng_public_sg_id" {
-  value = aws_security_group.dataeng-public-sg.id
+  value = aws_security_group.dataeng_public_sg.id
 }
 
 ```
@@ -340,67 +341,67 @@ Se você deseja destruir seletivamente os recursos criados neste arquivo, você 
 
 **VPC**
 ```sh
-terraform plan -destroy -target="module.vpc.aws_vpc.dataeng-vpc" 
+terraform plan -destroy -target="module.vpc.aws_vpc.dataeng_vpc" 
 
 ```
 
 ```sh
-terraform destroy -target="module.vpc.aws_vpc.dataeng-vpc" --auto-approve
+terraform destroy -target="module.vpc.aws_vpc.dataeng_vpc" --auto-approve
 
 ```
 
 **Subnet pública**
 ```sh
-terraform plan -destroy -target="module.vpc.aws_subnet.dataeng-public-subnet" 
+terraform plan -destroy -target="module.vpc.aws_subnet.dataeng_public_subnet" 
 
 ```
 
 ```sh
-terraform destroy -target="module.vpc.aws_subnet.dataeng-public-subnet" --auto-approve
+terraform destroy -target="module.vpc.aws_subnet.dataeng_public_subnet" --auto-approve
 
 ```
 
 **Internet Gateway**
 ```sh
-terraform plan -destroy -target="module.vpc.aws_internet_gateway.dataeng-igw" 
+terraform plan -destroy -target="module.vpc.aws_internet_gateway.dataeng_igw" 
 
 ```
 
 ```sh
-terraform destroy -target="module.vpc.aws_internet_gateway.dataeng-igw" --auto-approve
+terraform destroy -target="module.vpc.aws_internet_gateway.dataeng_igw" --auto-approve
 
 ```
 
 **Tabela de rotas para a subnet pública**
 ```sh
-terraform plan -destroy -target="module.vpc.aws_route_table.dataeng-public-rt" 
+terraform plan -destroy -target="module.vpc.aws_route_table.dataeng_public_rt" 
 
 ```
 
 ```sh
-terraform destroy -target="module.vpc.aws_route_table.dataeng-public-rt" --auto-approve
+terraform destroy -target="module.vpc.aws_route_table.dataeng_public_rt" --auto-approve
 
 ```
 
 **Associação da tabela de rotas à subnet pública**
 ```sh
-terraform plan -destroy -target="module.vpc.aws_route_table_association.dataeng-public-association" 
+terraform plan -destroy -target="module.vpc.aws_route_table_association.dataeng_public_association" 
 
 ```
 
 ```sh
-terraform destroy -target="module.vpc.aws_route_table_association.dataeng-public-association" --auto-approve
+terraform destroy -target="module.vpc.aws_route_table_association.dataeng_public_association" --auto-approve
 
 ```
 
 **Security Group para a Subnet Pública**
 ```sh
-terraform plan -destroy -target="module.vpc.aws_security_group.dataeng-public-sg" 
+terraform plan -destroy -target="module.vpc.aws_security_group.dataeng_public_sg" 
 
 ```
 
 ```sh
-terraform destroy -target="module.vpc.aws_security_group.dataeng-public-sg" --auto-approve
+terraform destroy -target="module.vpc.aws_security_group.dataeng_public_sg" --auto-approve
 
 ```
 

@@ -75,39 +75,39 @@ resource "aws_glue_catalog_table" "example_table" {
 
 ### Laboratório
 
-#### Exercício 1: Criar e utilizar o módulo `glue-catalog`
+#### Exercício 1: Criar e utilizar o módulo `glue_catalog`
 
 Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glue Database e Glue Table
 
 **Referência**: [Glue Catalog](https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/aws-glue-data-catalog.html)
 
-1. Crie a estrutura de pastas para o módulo `glue-catalog`:
+1. Crie a estrutura de pastas para o módulo `glue_catalog`:
     ```
     ├── main.tf
     ├── modules
-    │   ├── glue-catalog
+    │   ├── glue_catalog
     │   │   ├── main.tf
     │   │   ├── outputs.tf
     │   │   └── variables.tf
     ```
 
     ```sh
-    mkdir -p ./modules/glue-catalog
-    touch ./modules/glue-catalog/main.tf
-    touch ./modules/glue-catalog/variables.tf
-    touch ./modules/glue-catalog/outputs.tf
+    mkdir -p ./modules/glue_catalog
+    touch ./modules/glue_catalog/main.tf
+    touch ./modules/glue_catalog/variables.tf
+    touch ./modules/glue_catalog/outputs.tf
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/main.tf`:
+2. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/main.tf`:
     ```hcl
-    # 2.1. dataeng-glue-database
-    resource "aws_glue_catalog_database" "dataeng-glue-database" {
+    # 2.1. dataeng_glue_database
+    resource "aws_glue_catalog_database" "dataeng_glue_database" {
       name = var.dataeng_database_name
     }
 
-    # 2.2. dataeng-glue-table-clientes
-    resource "aws_glue_catalog_table" "dataeng-glue-table-clientes" {
-      database_name = aws_glue_catalog_database.dataeng-glue-database.name
+    # 2.2. dataeng_glue_table_clientes
+    resource "aws_glue_catalog_table" "dataeng_glue_table_clientes" {
+      database_name = aws_glue_catalog_database.dataeng_glue_database.name
       name          = "tb_raw_clientes"
       table_type    = "EXTERNAL_TABLE"
       parameters = {
@@ -152,9 +152,9 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/variables.tf`:
-    ```hcl
-    # 3. ./modules/glue-catalog/variables.tf
+3. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/variables.tf`:
+    ```h
+    # 3. ./modules/glue_catalog/variables.tf
     variable "dataeng_database_name" {
       description = "O nome do database no Glue Catalog"
       type        = string
@@ -166,32 +166,34 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     }
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `./modules/glue-catalog/outputs.tf`:
+4. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/outputs.tf`:
     ```hcl
-    # 4. ./modules/glue-catalog/outputs.tf
+    # 4. ./modules/glue_catalog/outputs.tf
     output "glue_database_name" {
-      value = aws_glue_catalog_database.dataeng-glue-database.name
+      value = aws_glue_catalog_database.dataeng_glue_database.name
     }
     ```
 
 5. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
     ```hcl
-    # 5. module glue-catalog
+    # 5. module glue_catalog
     module "glue-catalog" {
-      source  = "./modules/glue-catalog"
+      source  = "./modules/glue_catalog"
 
       dataeng_database_name = "dataengdb"
-      dataeng_bucket_name   = module.s3.dataeng-bucket
+      dataeng_bucket_name   = module.s3.dataeng_bucket
     }
     ```
 
 6. Execute o Terraform no diretório raiz:
     ```sh
     terraform init
+
     ```
 
     ```sh
     terraform apply --auto-approve
+    
     ```
 
 7. Verifique no console AWS Glue se a tabela foi criada como esperado.
@@ -242,7 +244,7 @@ Os tipos das colunas:
 
 A seguir está o template:
 ```hcl
-    resource "aws_glue_catalog_table" "dataeng-glue-table-pedidos" {
+    resource "aws_glue_catalog_table" "dataeng_glue_table_pedidos" {
       database_name = <AJUSTE_AQUI>
       name          = <AJUSTE_AQUI>
       table_type    = "EXTERNAL_TABLE"
@@ -306,8 +308,8 @@ A seguir está o template:
   <summary>Clique aqui</summary>
   
   ```hcl
-        resource "aws_glue_catalog_table" "dataeng-glue-table-pedidos" {
-          database_name = aws_glue_catalog_database.dataeng-glue-database.name
+        resource "aws_glue_catalog_table" "dataeng_glue_table_pedidos" {
+          database_name = aws_glue_catalog_database.dataeng_glue_database.name
           name          = "tb_raw_pedidos"
           table_type    = "EXTERNAL_TABLE"
           parameters = {
@@ -381,14 +383,16 @@ terraform destroy --auto-approve
 
 Para destruir seletivamente os recursos criados pelo Terraform neste arquivo, você pode utilizar os seguintes comandos:
 
-1. Para destruir apenas o módulo `glue-catalog` e seus recursos associados, execute o seguinte comando:
+1. Para destruir apenas o módulo `glue_catalog` e seus recursos associados, execute o seguinte comando:
   ```sh
-  terraform destroy -target="module.glue-catalog.aws_glue_catalog_database.dataeng-glue-database" --auto-approve
+  terraform destroy -target="module.glue_catalog.aws_glue_catalog_database.dataeng_glue_database" --auto-approve
+
   ```
 
 2. Para destruir apenas a tabela `tb_raw_clientes`, execute o seguinte comando:
   ```sh
-  terraform destroy -target=module.glue-catalog.aws_glue_catalog_table.dataeng-glue-table-clientes --auto-approve
+  terraform destroy -target=module.glue_catalog.aws_glue_catalog_table.dataeng_glue_table_clientes --auto-approve
+  
   ```
 
 Certifique-se de revisar cuidadosamente os recursos que serão destruídos antes de executar esses comandos, pois eles não podem ser desfeitos.

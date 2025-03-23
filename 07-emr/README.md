@@ -94,7 +94,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     ```
 3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
-    ```hcl
+    ```h
     # 3. ./modules/emr/variables.tf
     variable "dataeng_public_subnet_id" {
       description = "Id da subnet publica"
@@ -109,7 +109,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
-    ```hcl
+    ```h
     # 4. ./modules/emr/outputs.tf
     output "dataeng_emr_cluster_id" {
       value = aws_emr_cluster.dataeng_emr.id
@@ -166,11 +166,11 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 6. Criando a tabela `tb_stage_clientes`
 
-  Adicione o trecho a seguir no arquivo `./modules/glue-catalog/main.tf`:
+  Adicione o trecho a seguir no arquivo `./modules/glue_catalog/main.tf`:
   ```hcl
-  # 6. ./modules/glue-catalog/main.tf
-  resource "aws_glue_catalog_table" "dataeng-glue-table-stage-clientes" {
-      database_name = aws_glue_catalog_database.dataeng-glue-database.name
+  # 6. ./modules/glue_catalog/main.tf
+  resource "aws_glue_catalog_table" "dataeng_glue_table_stage_clientes" {
+      database_name = aws_glue_catalog_database.dataeng_glue_database.name
       name          = "tb_stage_clientes"
       table_type    = "EXTERNAL_TABLE"
       parameters = {
@@ -253,7 +253,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     source  = "./modules/emr"
 
     dataeng_public_subnet_id = module.vpc.public_subnet_id
-    dataeng_bucket_name = module.s3.dataeng-bucket
+    dataeng_bucket_name = module.s3.dataeng_bucket
   }
 
   ```
@@ -336,14 +336,17 @@ Abaixo segue um exemplo de criação do EMR Step no cluster.
 2. Execute o Terraform:
     ```sh
     terraform init
+
     ```
 
     ```sh
     terraform plan
-    ```
 
     ```
+
+    ```sh
     terraform apply --auto-approve
+
     ```
 
 ### Desafio 2: Criação da tabela `tb_stage_pedidos` no AWS Glue Catalog.

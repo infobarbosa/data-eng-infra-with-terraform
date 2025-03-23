@@ -111,7 +111,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     ```
 
 6. Acrescente o trecho a seguir em `main.tf`:
-    ```hcl
+    ```h
     module "ec2" {
       source = "./modules/ec2"
 
@@ -127,7 +127,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
     ```
     
-    ```
+    ```sh
     terraform apply --auto-approve
     
     ```

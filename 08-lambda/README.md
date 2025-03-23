@@ -89,7 +89,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     ```
 
 3. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/outputs.tf`:
-    ```hcl
+    ```h
     output "dataeng_lambda_arn" {
       value = aws_lambda_function.dataeng_lambda.arn
     }
@@ -97,7 +97,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     ```
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/variables.tf`:
-    ```hcl
+    ```h
     variable "dataeng_emr_cluster_id" {
       description = "ID do cluster EMR"
       type        = string
@@ -112,6 +112,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       description = "ARN do bucket S3"
       type        = string
     }
+
     ```
 
 
@@ -192,12 +193,13 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     ```
 
 8. Inclua o conteúdo a seguir ao final do arquivo `./modules/lambda/main.tf`:
-    ```hcl
+    ```h
     resource "aws_s3_object" "pedidos_spark_job" {
         bucket = var.dataeng_bucket_name
         key    = "scripts/pedidos_spark_job.py"
         source = "./modules/lambda/scripts/job/pedidos_spark_job.py"
     }
+
     ```
 
 9. Inclua o conteúdo a seguir ao final do arquivo `./main.ft`:
@@ -209,6 +211,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       dataeng_bucket_name = module.s3.dataeng_bucket
       dataeng_bucket_arn = module.s3.dataeng_bucket_arn
     } 
+    
     ```
 
 10. Execute o Terraform:
