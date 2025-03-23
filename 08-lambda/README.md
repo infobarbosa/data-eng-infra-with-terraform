@@ -38,6 +38,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
     touch ./modules/lambda/outputs.tf 
     touch ./modules/lambda/scripts/lambda/lambda_function.py
     touch ./modules/lambda/scripts/job/pedidos_spark_job.py
+
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/lambda/main.tf`:
@@ -55,7 +56,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       function_name    = "dataeng_lambda"
       role             = local.dataeng_role
       handler          = "lambda_function.lambda_handler"
-      runtime          = "python3.8"
+      runtime          = "python3.12"
       source_code_hash = base64sha256(file("./modules/lambda/scripts/lambda/lambda_function.zip"))
       environment {
         variables = {
