@@ -189,6 +189,7 @@ Parabéns pela conclusão do módulo! Você aprendeu os conceitos básicos do Te
 Para evitar custos desnecessários, destrua os recursos criados:
 ```sh
 terraform destroy
+
 ```
 
 ### Destruição seletiva
