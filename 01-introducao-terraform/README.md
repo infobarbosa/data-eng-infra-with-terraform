@@ -195,9 +195,10 @@ A destruição seletiva de recursos no Terraform permite que você escolha quais
 Para realizar a destruição seletiva, você pode utilizar o comando `terraform destroy` seguido do argumento `-target` e o nome do recurso que deseja destruir. Por exemplo:
 
 ```sh
-terraform destroy -target=aws_s3_object.pombo-object
+terraform destroy -target=aws_s3_object.pombo_object
+
 ```
 
-Isso irá destruir apenas o recurso do bucket S3 chamado `pombo-object`, mantendo os demais recursos intactos.
+Isso irá destruir apenas o recurso do bucket S3 chamado `pombo_object`, mantendo os demais recursos intactos.
 
 Lembre-se de que a destruição seletiva deve ser usada com cuidado, pois pode levar a dependências não gerenciadas e a um estado inconsistente da infraestrutura. Certifique-se de entender completamente as implicações antes de executar a destruição seletiva.
