@@ -30,16 +30,18 @@ Infraestrutura como Código (IaC) é a prática de gerenciar e provisionar recur
 Para instalar o Terraform, siga os passos abaixo:
 
 1. **Baixar o Terraform**:
+
     ```sh
-    wget https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_386.zip
+    wget https://releases.hashicorp.com/terraform/1.11.2/terraform_1.11.2_linux_386.zip
 
     ```
 
 2. **Descompactar o arquivo**:
-    ```sh
-    unzip terraform_1.9.4_linux_386.zip
 
-    ```
+    ```sh
+    unzip terraform_1.11.2_linux_386.zip
+
+    ``` 
 
 3. **Mover o binário para o diretório de binários**:
     ```sh
