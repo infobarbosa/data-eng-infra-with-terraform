@@ -175,9 +175,20 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     #!/bin/bash
     apt-get update
     apt-get install -y apache2
-    echo "<h1>Welcome to the Apache server!</h1>" > /var/www/html/index.html
-    echo "<p>Server IP: \$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)</p>" >> /var/www/html/index.html
+
+    # Obtém um token válido por 6 horas (21.600 segundos)
+    TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+    # Usa o token para recuperar o endereço IP público
+    PUBLIC_IP=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)
+
+    # Cria a página inicial com o endereço IP público
+    echo "<h1>Bem vindo, Engenheiro de Dados!</h1>" > /var/www/html/index.html
+    echo "<p>Server IP: $PUBLIC_IP</p>" >> /var/www/html/index.html
+
+    # Reinicia o Apache para aplicar as mudanças
     systemctl restart apache2
+
 
     ```
 
