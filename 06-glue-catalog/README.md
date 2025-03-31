@@ -96,6 +96,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     touch ./modules/glue_catalog/main.tf
     touch ./modules/glue_catalog/variables.tf
     touch ./modules/glue_catalog/outputs.tf
+
     ```
 
 2. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/main.tf`:
@@ -164,6 +165,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
       description = "O nome do bucket no AWS S3"
       type        = string
     }
+
     ```
 
 4. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/outputs.tf`:
@@ -172,6 +174,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
     output "glue_database_name" {
       value = aws_glue_catalog_database.dataeng_glue_database.name
     }
+
     ```
 
 5. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
@@ -183,6 +186,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
       dataeng_database_name = "dataengdb"
       dataeng_bucket_name   = module.s3.dataeng_bucket
     }
+
     ```
 
 6. Execute o Terraform no diretório raiz:
