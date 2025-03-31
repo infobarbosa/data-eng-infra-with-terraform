@@ -163,10 +163,11 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     ```
 
     ```sh
-    mkdir -p modules/asg
-    touch modules/asg/main.tf
-    touch modules/asg/variables.tf
-    touch modules/asg/outputs.tf
+    mkdir -p ./modules/asg
+    touch ./modules/asg/main.tf
+    touch ./modules/asg/variables.tf
+    touch ./modules/asg/outputs.tf
+    touch ./modules/asg/userdata.sh
 
     ```
 2. Crie um arquivo `./modules/asg/userdata.sh` com o seguinte conteúdo:
