@@ -22,7 +22,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 ### Exercício 1: Configuração de parâmetros essenciais
 
-1. Crie a estrutura de pastas para o cluster EMR:
+1. **Crie** a estrutura de pastas para o cluster EMR:
     ```
     ├── main.tf
     └── modules
@@ -45,7 +45,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `./modules/emr/main.tf`:
+2. **Adicione** o seguinte conteúdo ao arquivo **`./modules/emr/main.tf`**:
     > **Atenção!** Você deve substituir algumas informações no script abaixo, `service_role` e `instance_profile`.
 
     ```hcl
@@ -93,7 +93,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     }
 
     ```
-3. Adicione o seguinte conteúdo ao arquivo `./modules/emr/variables.tf`:
+3. **Adicione** o seguinte conteúdo ao arquivo **`./modules/emr/variables.tf`**:
     ```h
     # 3. ./modules/emr/variables.tf
     variable "dataeng_public_subnet_id" {
@@ -108,7 +108,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `./modules/emr/outputs.tf`:
+4. **Adicione** o seguinte conteúdo ao arquivo **`./modules/emr/outputs.tf`**:
     ```h
     # 4. ./modules/emr/outputs.tf
     output "dataeng_emr_cluster_id" {
@@ -117,7 +117,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     ```
 
-5. Crie o script Python `clientes_spark_job.py` na pasta `/modules/emr/scripts/`:
+5. **Adicione** o seguinte conteúdo ao arquivo **`./modules/emr/scripts/clientes_spark_job.py`**:
     
     ```python
     import os
@@ -166,7 +166,8 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 6. Criando a tabela `tb_stage_clientes`
 
-  Adicione o trecho a seguir no arquivo `./modules/glue_catalog/main.tf`:
+  **Adicione** o trecho a seguir no arquivo **`./modules/glue_catalog/main.tf`**:
+  
   ```hcl
   # 6. ./modules/glue_catalog/main.tf
   resource "aws_glue_catalog_table" "dataeng_glue_table_stage_clientes" {
@@ -216,7 +217,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   
   ```
 
-7. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
+7. **Adicione** o trecho abaixo ao arquivo **`./modules/emr/main.tf`**:
   ```hcl
   # 7. ./modules/emr/main.tf
   resource "aws_s3_object" "clientes_spark_job" {
@@ -227,7 +228,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
   ```
 
-8. Adicione o trecho abaixo ao arquivo `./modules/emr/main.tf`:
+8. **Adicione** o trecho abaixo ao arquivo **`./modules/emr/main.tf`**:
   ```hcl
   # 8. ./modules/emr/main.tf
   resource "aws_s3_object" "bootstrap_actions_sh" {
@@ -238,7 +239,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
   ```
 
-9. Adicione o seguinte conteúdo ao arquivo `./modules/emr/scripts/bootstrap-actions.sh`
+9. **Adicione** o seguinte conteúdo ao arquivo **`./modules/emr/scripts/bootstrap-actions.sh`**:
   ```sh
   #!/bin/bash
 
@@ -246,7 +247,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
   sudo pip install boto3 
 
   ```
-10. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+10. **Adicione** o seguinte conteúdo ao arquivo **`./main.tf`**:
   ```hcl
   # 10. EMR
   module "emr" {
