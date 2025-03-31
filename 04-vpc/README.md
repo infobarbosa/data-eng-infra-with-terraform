@@ -141,6 +141,7 @@ Security Groups atuam como firewalls virtuais para controlar o tráfego de entra
 **Adicione** o trecho a seguir no arquivo `./modules/vpc/main.tf`:
 ```h
 # 7. aws_security_group
+# Primeiro security group
 resource "aws_security_group" "dataeng_public_sg" {
   name        = "public-sg"
   description = "Security group para a subnet publica"
@@ -177,6 +178,34 @@ resource "aws_security_group" "dataeng_public_sg" {
   }
 }
 
+# Segundo security group
+resource "aws_security_group" "dataeng_too_public_sg" {
+  name        = "too-public-sg"
+  description = "Security group para a subnet publica"
+  vpc_id      = aws_vpc.dataeng_vpc.id
+
+  # Permitir tráfego de entrada
+  ingress {
+    description      = "Allow inbound traffic"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  # Permitir todo o tráfego de saída
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "dataeng-too-public-sg"
+  }
+}
+
 ```
 
 ---
@@ -201,6 +230,10 @@ output "internet_gateway_id" {
 
 output "dataeng_public_sg_id" {
   value = aws_security_group.dataeng_public_sg.id
+}
+
+output "dataeng_too_public_sg_id" {
+  value = aws_security_group.dataeng_too_public_sg.id
 }
 
 ```
