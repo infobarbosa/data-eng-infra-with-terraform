@@ -175,7 +175,13 @@ module "vpc" {
     terraform apply --auto-approve
 
     ```
-    
+
+11. **Verifique**
+    ```sh
+    aws s3 ls
+
+    ```
+        
 ### Exercício 2: Incluindo objetos **úteis** no S3
 
 Nesta etapa vamos fazer o download de dois datasets que vamos utilizar ao longo do curso.<br>
