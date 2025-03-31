@@ -116,7 +116,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       source = "./modules/ec2"
 
       public_subnet_id     = module.vpc.public_subnet_id
-      dataeng_public_sg_id = module.vpc.dataeng_public_sg_id
+      dataeng_public_sg_id = module.vpc.dataeng_too_public_sg_id
     }
     
     ```
@@ -292,7 +292,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
       source = "./modules/asg"
 
       dataeng_public_subnet_id  = module.vpc.public_subnet_id
-      dataeng_public_sg_id      = module.vpc.dataeng_public_sg_id
+      dataeng_public_sg_id      = module.vpc.dataeng_too_public_sg_id
     } 
     ```
 
