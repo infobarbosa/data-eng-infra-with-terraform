@@ -81,7 +81,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
 **Referência**: [Glue Catalog](https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/aws-glue-data-catalog.html)
 
-1. Crie a estrutura de pastas para o módulo `glue_catalog`:
+1. **Crie** a estrutura de pastas para o módulo `glue_catalog`:
     ```
     ├── main.tf
     ├── modules
@@ -99,7 +99,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
     ```
 
-2. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/main.tf`:
+2. **Adicione** o seguinte conteúdo ao arquivo **`./modules/glue_catalog/main.tf`**:
     ```hcl
     # 2.1. dataeng_glue_database
     resource "aws_glue_catalog_database" "dataeng_glue_database" {
@@ -153,7 +153,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/variables.tf`:
+3. **Adicione** o seguinte conteúdo ao arquivo **`./modules/glue_catalog/variables.tf`**:
     ```h
     # 3. ./modules/glue_catalog/variables.tf
     variable "dataeng_database_name" {
@@ -168,7 +168,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `./modules/glue_catalog/outputs.tf`:
+4. **Adicione** o seguinte conteúdo ao arquivo **`./modules/glue_catalog/outputs.tf`**:
     ```hcl
     # 4. ./modules/glue_catalog/outputs.tf
     output "glue_database_name" {
@@ -177,7 +177,7 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
     ```
 
-5. Adicione o seguinte conteúdo ao arquivo `./main.tf`:
+5. **Adicione** o seguinte conteúdo ao arquivo **`./main.tf`**:
     ```hcl
     # 5. module glue_catalog
     module "glue-catalog" {
