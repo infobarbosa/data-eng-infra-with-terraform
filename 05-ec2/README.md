@@ -152,7 +152,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
 ### Exercício 2: Configurar Auto Scaling Group
 
-1. Crie a estrutura de pastas para o Auto Scaling Group:
+1. **Crie** a estrutura de pastas para o Auto Scaling Group:
     ```
     ├── main.tf
     ├── modules
@@ -170,7 +170,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     touch ./modules/asg/userdata.sh
 
     ```
-2. Crie um arquivo `./modules/asg/userdata.sh` com o seguinte conteúdo:
+2. **Adicione** o seguinte conteúdo ao arquivo **`./modules/asg/userdata.sh`**:
     ```sh
     #!/bin/bash
     apt-get update
@@ -181,7 +181,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
 
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `./modules/asg/main.tf`:
+3. **Adicione** o seguinte conteúdo ao arquivo **`./modules/asg/main.tf`**:
     ```hcl
     resource "aws_launch_template" "dataeng_lt" {
       name_prefix   = "dataeng-lt"
@@ -240,7 +240,7 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     }
     ```
 
-3. Adicione o seguinte conteúdo ao arquivo `./modules/asg/variables.tf`:
+3. **Adicione** o seguinte conteúdo ao arquivo **`./modules/asg/variables.tf`**:
     ```hcl
     variable "ami_id" {
         description = "ID da AMI para a instância EC2"
@@ -271,23 +271,24 @@ Auto Scaling Groups permitem que você configure a escalabilidade automática da
     }
     ```
 
-4. Adicione o seguinte conteúdo ao arquivo `./modules/asg/outputs.tf`:
+4. **Adicione** o seguinte conteúdo ao arquivo **`./modules/asg/outputs.tf`**:
     ```hcl
     output "autoscaling_group_name" {
       value = aws_autoscaling_group.dataeng_asg.name
     }
     ```
 
-5. Verifique o id da AMI utilizando o seguinte comando no terminal:
+5. **Verifique** o id da AMI utilizando o seguinte comando no terminal:
     ```sh
     aws ec2 describe-images \
       --filters "Name=architecture,Values=x86_64" "Name=creation-date,Values=2024-08-*" "Name=owner-id,Values=099720109477" "Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20240801" \
       --owners amazon \
       --query 'Images[*].[ImageId,Name,Description]' \
       --output json
+
     ```
 
-6. Adicione o seguinte conteúdo ao arquivo `main.tf`:
+6. **Adicione** o seguinte conteúdo ao arquivo **`main.tf`**:
     ```hcl
     module "asg" {
       source = "./modules/asg"
