@@ -166,56 +166,56 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
 6. Criando a tabela `tb_stage_clientes`
 
-  **Adicione** o trecho a seguir no arquivo **`./modules/glue_catalog/main.tf`**:
+    **Adicione** o trecho a seguir no arquivo **`./modules/glue_catalog/main.tf`**:
   
-  ```hcl
-  # 6. ./modules/glue_catalog/main.tf
-  resource "aws_glue_catalog_table" "dataeng_glue_table_stage_clientes" {
-      database_name = aws_glue_catalog_database.dataeng_glue_database.name
-      name          = "tb_stage_clientes"
-      table_type    = "EXTERNAL_TABLE"
-      parameters = {
-          classification = "parquet",
-          "compressionType" = "snappy",
-          "skip.header.line.count" = "0"
-      }
-      storage_descriptor {
-          location = "s3://${var.dataeng_bucket_name}/stage/clientes/"
+    ```hcl
+    # 6. ./modules/glue_catalog/main.tf
+    resource "aws_glue_catalog_table" "dataeng_glue_table_stage_clientes" {
+        database_name = aws_glue_catalog_database.dataeng_glue_database.name
+        name          = "tb_stage_clientes"
+        table_type    = "EXTERNAL_TABLE"
+        parameters = {
+            classification = "parquet",
+            "compressionType" = "snappy",
+            "skip.header.line.count" = "0"
+        }
+        storage_descriptor {
+            location = "s3://${var.dataeng_bucket_name}/stage/clientes/"
 
-          input_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
-          output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
-          compressed = true
-          number_of_buckets = -1
-          ser_de_info {
-              serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
-              parameters = {
-                  "serialization.format" = "1"
-              }
-          }
-          columns {
-              name = "id"
-              type = "int"
-          }
-          columns {
-              name = "nome"
-              type = "string"
-          }
-          columns {
-              name = "data_nasc"
-              type = "date"
-          }
-          columns {
-              name = "cpf"
-              type = "string"
-          }
-          columns {
-              name = "email"
-              type = "string"
-          }  
-      }
-  }  
-  
-  ```
+            input_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+            output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+            compressed = true
+            number_of_buckets = -1
+            ser_de_info {
+                serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+                parameters = {
+                    "serialization.format" = "1"
+                }
+            }
+            columns {
+                name = "id"
+                type = "int"
+            }
+            columns {
+                name = "nome"
+                type = "string"
+            }
+            columns {
+                name = "data_nasc"
+                type = "date"
+            }
+            columns {
+                name = "cpf"
+                type = "string"
+            }
+            columns {
+                name = "email"
+                type = "string"
+            }  
+        }
+    }  
+    
+    ```
 
 7. **Adicione** o trecho abaixo ao arquivo **`./modules/emr/main.tf`**:
   ```hcl
@@ -277,14 +277,17 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 12. Execute o Terraform:
     ```sh
     terraform init
+
     ```
 
     ```sh
     terraform plan
+
     ```
 
     ```sh
     terraform apply --auto-approve
+
     ```
 13. **Verifique**
     - No console AWS EMR verifique o status de criacao do cluster `dataeng-emr`.
