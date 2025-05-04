@@ -225,6 +225,18 @@ terraform destroy --auto-approve
 
 ```
 
+### Alerta! Uso do `terraform destroy` em ambientes de produção
+
+O comando `terraform destroy` deve ser usado com extrema cautela em ambientes de produção. Ele remove todos os recursos gerenciados pelo Terraform, o que pode causar interrupções significativas nos serviços e perda de dados. Antes de executar este comando em produção, considere as seguintes práticas:
+
+- **Backup**: Certifique-se de que todos os dados críticos estejam devidamente salvos e que backups estejam disponíveis.
+- **Revisão**: Revise cuidadosamente o plano de destruição gerado pelo comando `terraform plan -destroy`.
+- **Aprovação**: Obtenha aprovação formal de todas as partes interessadas antes de proceder.
+- **Ambiente de Teste**: Sempre teste o comando em um ambiente de desenvolvimento ou staging antes de aplicá-lo em produção.
+- **Automação**: Evite automatizar o uso de `terraform destroy` em pipelines de produção para prevenir execuções acidentais.
+
+Lembre-se de que a destruição de recursos em produção pode ter impactos irreversíveis. Avalie alternativas, como a destruição seletiva ou a desativação manual de recursos, antes de optar por este comando.
+
 ### Destruição seletiva
 
 A destruição seletiva de recursos no Terraform permite que você escolha quais recursos deseja destruir, em vez de destruir todos os recursos definidos no seu código.
