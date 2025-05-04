@@ -9,10 +9,7 @@ Lembre-se de que a gestão dos custos dos recursos criados é de responsabilidad
 ## Introdução
 A infraestrutura de rede é um componente fundamental para o sucesso de qualquer projeto de engenharia de dados. Neste tutorial, vamos explorar como provisionar uma rede na AWS usando o Terraform. Você aprenderá a criar uma VPC, subnets, internet gateway e muito mais. Além disso, vamos abordar a configuração e a associação de tabelas de roteamento. Ao final, você terá os conhecimentos necessários para criar uma infraestrutura de rede escalável e automatizada na AWS. Vamos começar! 
 
-### Conceitos
-- **VPC**: Virtual Private Cloud é uma rede virtual dedicada à sua conta AWS.
-- **Subnets**: Segmentos de uma VPC onde você pode agrupar recursos.
-- **Internet Gateway**: Permite que instâncias em uma VPC se comuniquem com a internet.
+![Rede dataeng](./vpc.png)
 
 ---
 
