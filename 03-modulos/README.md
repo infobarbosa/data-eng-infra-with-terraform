@@ -198,6 +198,25 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 
     ```
 
+    Caso queira inspecionar os arquivos, basta fazer o seguinte:
+    - Descompactar
+        ```sh
+        gzip -dc ./datasets-csv-clientes/clientes.csv.gz > clientes.csv
+
+        ```
+
+    - Cabeçalho
+        ```sh
+        head ./clientes.csv
+
+        ```
+
+    - Número de linhas
+        ```sh
+        wc -l ./clientes.csv
+
+        ```
+
 2. **Edite** o arquivo `./modules/s3/main.tf`:
 
     Adicione o trecho a seguir ao final do arquivo:
