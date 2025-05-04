@@ -9,7 +9,7 @@ O objetivo deste curso é introduzir o Terraform como uma ferramenta essencial p
 ## Ambiente de laboratório
 Este curso foi desenvolvido para execução principalmente em ambiente **Linux**.<br>
 Caso você não tenha um à disposição então recomendo utilizar o AWS Cloud9.<br>
-As instruções de criação estão [aqui](99-Cloud9-Environment).
+As instruções de criação estão [aqui](https://github.com/infobarbosa/data-engineering-cloud9).
 
 ## O que vamos construir
 ![infra-emr](img2.png)
