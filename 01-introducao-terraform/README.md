@@ -182,13 +182,46 @@ Para criação e gestão de objetos no S3, utilizamos `aws_s3_object`.
     
     ```
 
-## Parabéns
-Parabéns pela conclusão do módulo! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
+---
+
+### Exercício 4: Excluindo o recurso `pombo.txt`
+
+Nesse exercício, vamos ver a gestão de estado do Terraform.<br>
+Ao excluir um recurso
+
+
+1. **Remova** o trecho a seguir no arquivo `main.tf`:
+    ```h
+    resource "aws_s3_object" "pombo_object" {
+        bucket = aws_s3_bucket.pombo_bucket.id
+        key    = "pombo.txt"
+        source = "./pombo.txt"
+    }
+
+    ```
+
+2. **Aplique o plano**:
+    ```sh
+    terraform apply --auto-approve
+    
+    ```
+
+3. **Verifique**
+    Abra o console AWS S3 e verifique se o arquivo foi excluído corretamente.<br>
+
+    Você também pode utilizar o seguinte comando para checar:
+    ```sh
+    aws s3 ls s3://<O_NOME_DO_SEU_BUCKET_AQUI>/
+    
+    ```
+
+---
 
 ## Destruição dos recursos
-Para evitar custos desnecessários, destrua os recursos criados:
+O comando `terraform destroy` tem por objetivo destruir todos os recursos gerenciados pelo Terraform que estão definidos no arquivo de configuração atual. Ele remove os recursos provisionados da infraestrutura, garantindo que não haja custos adicionais associados a eles.
+
 ```sh
-terraform destroy
+terraform destroy --auto-approve
 
 ```
 
@@ -198,16 +231,22 @@ A destruição seletiva de recursos no Terraform permite que você escolha quais
 
 Para realizar a destruição seletiva, você pode utilizar o comando `terraform destroy` seguido do argumento `-target` e o nome do recurso que deseja destruir. Por exemplo:
 
-```sh
-terraform destroy -target=aws_s3_object.pombo_object
+1. Destruir apenas o recurso `pombo_object`, mantendo os demais recursos intactos:
+    ```sh
+    terraform destroy -target=aws_s3_object.pombo_object
 
-```
+    ```
 
-```sh
-terraform destroy -target=aws_s3_object.pombo_bucket
+2. Destruir o bucket S3 `pombo_bucket`:
+    ```sh
+    terraform destroy -target=aws_s3_object.pombo_bucket
 
-```
+    ```
 
-Isso irá destruir apenas o recurso do bucket S3 chamado `pombo_object`, mantendo os demais recursos intactos.
 
 Lembre-se de que a destruição seletiva deve ser usada com cuidado, pois pode levar a dependências não gerenciadas e a um estado inconsistente da infraestrutura. Certifique-se de entender completamente as implicações antes de executar a destruição seletiva.
+
+
+## Parabéns
+Parabéns pela conclusão do módulo! Você aprendeu os conceitos básicos do Terraform e como configurá-lo para trabalhar com a AWS.
+
