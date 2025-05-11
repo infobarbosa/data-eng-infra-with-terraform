@@ -221,8 +221,34 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
 
       ```
 
-8. Faça uma consulta na tabela via **AWS Athena**
+8. Faça consultas na tabela via **AWS Athena**
 
+    
+    - Exporte a variável de ambiente `DATAENG_BUCKET`
+    ```sh
+    export DATAENG_BUCKET=$(aws s3 ls | awk '{print $3}' | grep '^dataeng-' | head -n 1)
+
+    ``` 
+
+    - Verifique se a variável foi criada corretamente:
+    ```sh
+    echo $DATAENG_BUCKET
+    
+    ```
+
+    - **Crie** a pasta `output-athena`, vamos precisar dela em instantes
+    ```sh
+    aws s3api put-object --bucket ${DATAENG_BUCKET} --key output-athena/
+
+    ```
+
+    - **Verifique** se a pasta foi criada corretamente com o comando a seguir:
+    ```sh
+    aws s3 ls "s3://${DATAENG_BUCKET}/"
+
+    ```    
+
+    - **Acesse** o AWS Athena e execute a consulta a seguir
     ```sql
     SELECT COUNT(1) qtt FROM dataengdb.tb_raw_clientes;
 
