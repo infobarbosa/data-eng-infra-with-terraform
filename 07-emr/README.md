@@ -123,41 +123,74 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     import os
     import sys
     import boto3
+    import logging
     from datetime import datetime
-
     from pyspark.sql import SparkSession
-    from pyspark.sql.functions import *
 
-    print("Iniciando o script de processamento dos dados: clientes_spark_job")
-    spark = SparkSession \
-        .builder \
-        .appName("clientes_spark_job") \
-        .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
-        .enableHiveSupport() \
-        .getOrCreate()
+    # Configuração de logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+    logger = logging.getLogger("clientes_spark_job")
 
-    spark.catalog.setCurrentDatabase("dataengdb")
+    def main():
+        logger.info("Iniciando o script de processamento dos dados: clientes_spark_job")
 
-    print("Definindo a variavel BUCKET_NAME que vamos utilizar ao longo do codigo")
-    BUCKET_NAME = ""
-    s3_client = boto3.client('s3')
-    response = s3_client.list_buckets()
+        # Inicialização da SparkSession
+        spark = SparkSession \
+            .builder \
+            .appName("clientes_spark_job") \
+            .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
+            .enableHiveSupport() \
+            .getOrCreate()
 
-    for bucket in response['Buckets']:
-        if bucket['Name'].startswith('dataeng-'):
-            BUCKET_NAME = bucket['Name']
-            break
+        spark.catalog.setCurrentDatabase("dataengdb")
 
-    print("O bucket que vamos utilizar serah: " + BUCKET_NAME)
+        # Determinando bucket S3
+        logger.info("Buscando bucket S3 com prefixo 'dataeng-'")
+        BUCKET_NAME = ""
+        s3_client = boto3.client('s3')
+        try:
+            response = s3_client.list_buckets()
+            for bucket in response['Buckets']:
+                if bucket['Name'].startswith('dataeng-'):
+                    BUCKET_NAME = bucket['Name']
+                    break
+            if not BUCKET_NAME:
+                logger.error("Nenhum bucket com prefixo 'dataeng-' encontrado.")
+                sys.exit(1)
+            logger.info(f"Bucket selecionado: {BUCKET_NAME}")
+        except Exception as e:
+            logger.exception("Erro ao listar buckets S3")
+            sys.exit(1)
 
-    print("Obtendo os dados de clientes")
-    df_clientes = spark.sql("select * from dataengdb.tb_raw_clientes")
-    df_clientes.show(5)
+        # Carregando dados de clientes
+        logger.info("Lendo dados da tabela 'tb_raw_clientes'")
+        try:
+            df_clientes = spark.sql("SELECT * FROM dataengdb.tb_raw_clientes")
+            logger.info(f"Total de registros lidos: {df_clientes.count()}")
+        except Exception as e:
+            logger.exception("Erro ao ler dados da tabela 'tb_raw_clientes'")
+            sys.exit(1)
 
-    print("Escrevendo os dados de clientes como parquet no S3")
-    df_clientes.write.format("parquet").mode("overwrite").save(f"s3://{BUCKET_NAME}/stage/clientes")
+        # Gravando os dados no S3 em formato Parquet
+        output_path = f"s3://{BUCKET_NAME}/stage/clientes"
+        logger.info(f"Gravando dados no path: {output_path}")
+        try:
+            df_clientes.write.format("parquet").mode("overwrite").save(output_path)
+            logger.info("Dados gravados com sucesso.")
+        except Exception as e:
+            logger.exception("Erro ao gravar dados no S3")
+            sys.exit(1)
 
-    print("Finalizando o script de processamento dos dados: clientes_spark_job")
+        logger.info("Finalizando o script de processamento dos dados: clientes_spark_job")
+
+    if __name__ == "__main__":
+        main()
 
 
     ```
