@@ -84,6 +84,10 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
         filter_suffix       = ".csv.gz"
 
       }
+
+      depends_on = [
+        aws_lambda_permission.dataeng_s3_invoke
+      ]
     }
 
     ```
