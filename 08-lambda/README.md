@@ -60,7 +60,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
       source_code_hash = base64sha256(filebase64("./modules/lambda/scripts/lambda/lambda_function.zip"))
       environment {
         variables = {
-          EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
+          DATAENG_EMR_CLUSTER_ID = var.dataeng_emr_cluster_id
           DATAENG_BUCKET_NAME = var.dataeng_bucket_name
         }
       }
