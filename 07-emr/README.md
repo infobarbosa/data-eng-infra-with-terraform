@@ -147,7 +147,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         spark.catalog.setCurrentDatabase("dataengdb")
 
         # Determinando bucket S3
-        logger.info("Buscando bucket S3 com prefixo 'dataeng-'")
+        logger.info("Definindo o bucket S3.")
         BUCKET_NAME = ""
         try:
 
@@ -156,7 +156,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
                 sys.exit(1)
 
             BUCKET_NAME = sys.argv[1]
-            logger.info(f"O bucket que vamos utilizar será: {BUCKET_NAME}")
+            logger.info(f"Bucket S3: {BUCKET_NAME}")
 
         except Exception as e:
             logger.exception("Erro ao listar buckets S3")
