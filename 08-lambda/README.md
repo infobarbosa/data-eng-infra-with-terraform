@@ -149,7 +149,7 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
 6. Crie um arquivo `lambda_function.zip` contendo o script `lambda_function.py`:
     ```sh
-    zip ./modules/lambda/scripts/lambda/lambda_function.zip ./modules/lambda/scripts/lambda/lambda_function.py
+    zip -j ./modules/lambda/scripts/lambda/lambda_function.zip ./modules/lambda/scripts/lambda/lambda_function.py
 
     ```
 
