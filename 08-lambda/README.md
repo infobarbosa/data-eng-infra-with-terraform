@@ -234,6 +234,30 @@ A AWS Lambda é um serviço de computação que permite executar código sem pro
 
     ```
 
+11. **Upload** de um arquivo de pedidos
+
+    - Exporte a variável de ambiente `DATAENG_BUCKET`
+    ```sh
+    export DATAENG_BUCKET=$(aws s3 ls | awk '{print $3}' | grep '^dataeng-' | head -n 1)
+
+    ``` 
+
+    - Verifique se a variável foi criada corretamente:
+    ```sh
+    echo $DATAENG_BUCKET
+    
+    ```
+
+    - O upload:
+    ```sh
+    aws s3 cp datasets-csv-pedidos/pedidos-2024-01-02.csv.gz s3://${DATAENG_BUCKET}/raw/pedidos/
+
+    ```
+
+12. **Verifique** 
+  - Abra o console AWS Lambda e verifique o status de execução da Lambda que criamos.
+  - Abra o console AWS EMR e verifique a criação de um novo step no nosso cluster.
+
 ## Parabéns
 Você concluiu o módulo! Agora você sabe como criar uma função Lambda que é ativada por um trigger do S3 e aciona um step no cluster EMR.
 
