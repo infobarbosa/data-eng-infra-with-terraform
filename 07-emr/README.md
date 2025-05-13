@@ -84,7 +84,11 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         action_on_failure = "CONTINUE"
         hadoop_jar_step {
           jar = "command-runner.jar"
-          args = ["spark-submit", "s3://${var.dataeng_bucket_name}/scripts/clientes_spark_job.py"]
+          args = [
+            "spark-submit", 
+            "s3://${var.dataeng_bucket_name}/scripts/clientes_spark_job.py",
+            "${var.dataeng_bucket_name}"
+          ]
         }
       }
       tags = {
