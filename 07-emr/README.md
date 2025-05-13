@@ -122,7 +122,6 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     ```python
     import os
     import sys
-    import boto3
     import logging
     from datetime import datetime
     from pyspark.sql import SparkSession
@@ -146,17 +145,15 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
         # Determinando bucket S3
         logger.info("Buscando bucket S3 com prefixo 'dataeng-'")
         BUCKET_NAME = ""
-        s3_client = boto3.client('s3')
         try:
-            response = s3_client.list_buckets()
-            for bucket in response['Buckets']:
-                if bucket['Name'].startswith('dataeng-'):
-                    BUCKET_NAME = bucket['Name']
-                    break
-            if not BUCKET_NAME:
-                logger.error("Nenhum bucket com prefixo 'dataeng-' encontrado.")
+
+            if len(sys.argv) < 2:
+                logger.info("Uso: spark-submit clientes_spark_job.py <BUCKET_NAME>")
                 sys.exit(1)
-            logger.info(f"Bucket selecionado: {BUCKET_NAME}")
+
+            BUCKET_NAME = sys.argv[1]
+            logger.info(f"O bucket que vamos utilizar será: {BUCKET_NAME}")
+
         except Exception as e:
             logger.exception("Erro ao listar buckets S3")
             sys.exit(1)
