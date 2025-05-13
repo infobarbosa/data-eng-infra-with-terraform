@@ -127,18 +127,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     from datetime import datetime
     from pyspark.sql import SparkSession
 
-    # Configuração de logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-        ]
-    )
-    logger = logging.getLogger("clientes_spark_job")
-
     def main():
-        logger.info("Iniciando o script de processamento dos dados: clientes_spark_job")
 
         # Inicialização da SparkSession
         spark = SparkSession \
@@ -147,6 +136,10 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
             .config("hive.metastore.client.factory.class", "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory") \
             .enableHiveSupport() \
             .getOrCreate()
+
+        log4jLogger = spark._jvm.org.apache.log4j
+        logger = log4jLogger.LogManager.getLogger("clientes_spark_job")
+        logger.info("Iniciando processamento [clientes_spark_job]")
 
         spark.catalog.setCurrentDatabase("dataengdb")
 
@@ -191,7 +184,6 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
     if __name__ == "__main__":
         main()
-
 
     ```
 
