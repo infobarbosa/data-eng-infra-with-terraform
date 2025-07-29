@@ -189,7 +189,7 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 
 1. **Faça o clone** dos repositórios a seguir:<br>
     ```sh
-    git clone https://github.com/infobarbosa/datasets-csv-clientes
+    git clone https://github.com/infobarbosa/dataset-json-clientes
 
     ```
 
@@ -201,19 +201,19 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
     Caso queira inspecionar os arquivos, basta fazer o seguinte:
     - Descompactar
         ```sh
-        gzip -dc ./datasets-csv-clientes/clientes.csv.gz > clientes.csv
+        gzip -dc ./dataset-json-clientes/data/clientes.json.gz > clientes.json
 
         ```
 
     - Cabeçalho
         ```sh
-        head ./clientes.csv
+        head ./clientes.json
 
         ```
 
     - Número de linhas
         ```sh
-        wc -l ./clientes.csv
+        wc -l ./clientes.json
 
         ```
 
@@ -224,8 +224,8 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 
     resource "aws_s3_object" "dataset_clientes" {
         bucket = aws_s3_bucket.dataeng_bucket.id
-        key    = "raw/clientes/clientes.csv.gz"
-        source = "./datasets-csv-clientes/clientes.csv.gz"
+        key    = "raw/clientes/clientes.json.gz"
+        source = "./datasets-json-clientes/clientes.json.gz"
     }
 
     ```
@@ -267,8 +267,8 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
 
 ---
 
-### Exercício 3 - Upload do objeto `pedidos-2024-01-01.csv.gz`
-Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `./modules/s3/main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/pedidos-2024-01-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
+### Exercício 3 - Upload do objeto `pedidos-2024-01.csv.gz`
+Agora é com você! Utilizando o conhecimento dos exercícios anteriores, altere o arquivo `./modules/s3/main.tf` para fazer o upload do arquivo `./datasets-csv-pedidos/data/pedidos/pedidos-2024-01.csv.gz` para a pasta `raw/pedidos/` no bucket que criamos.
 
 ---
 
