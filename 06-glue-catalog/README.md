@@ -291,7 +291,7 @@ A seguir está o template:
         location = <AJUSTE_AQUI>
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
-        compressed = false
+        compressed = true
         number_of_buckets = -1
         ser_de_info {
           serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
@@ -355,7 +355,7 @@ A seguir está o template:
             location = "s3://${var.dataeng_bucket_name}/raw/pedidos/"
             input_format = "org.apache.hadoop.mapred.TextInputFormat"
             output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
-            compressed = false
+            compressed = true
             number_of_buckets = -1
             ser_de_info {
               serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
