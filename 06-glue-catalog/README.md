@@ -112,25 +112,25 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
       name          = "tb_raw_clientes"
       table_type    = "EXTERNAL_TABLE"
       parameters = {
-        classification = "csv",
-        "compressionType" = "gzip",
-        "skip.header.line.count" = "1"
+        classification = "json",
+        "compressionType" = "gzip"
       }
       storage_descriptor {
         location = "s3://${var.dataeng_bucket_name}/raw/clientes/"
         input_format = "org.apache.hadoop.mapred.TextInputFormat"
         output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
-        compressed = false
+        compressed = true
         number_of_buckets = -1
         ser_de_info {
-          serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+          serialization_library = "org.openx.data.jsonserde.JsonSerDe"
           parameters = {
-            "field.delim" = ";"
+            "json.schemas.ignore.malformed" = "true",
+            "paths" = "id,nome,data_nasc,cpf,email,interesses"
           }
         }
         columns {
             name = "id"
-            type = "int"
+            type = "bigint"
         }
         columns {
             name = "nome"
@@ -147,6 +147,10 @@ Neste exercício vamos criar dois recursos importantes para o nosso projeto: Glu
         columns {
             name = "email"
             type = "string"
+        }  
+        columns {
+            name = "interesses"
+            type = "array<string>"
         }  
       }
     }
