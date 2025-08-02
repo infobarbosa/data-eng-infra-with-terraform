@@ -1,4 +1,4 @@
-# Módulo 6: Glue Catalog
+# Glue Catalog
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
