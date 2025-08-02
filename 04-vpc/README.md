@@ -1,4 +1,4 @@
-# Módulo 4: Provisionamento de rede na AWS
+# AWS VPC
 Author: Prof. Barbosa<br>
 Contact: infobarbosa@gmail.com<br>
 Github: [infobarbosa](https://github.com/infobarbosa)
