@@ -1,4 +1,4 @@
-# Módulo 7: Criação do Cluster AWS EMR
+# AWS EMR
 
 Author: Prof. Barbosa  
 Contact: infobarbosa@gmail.com  
