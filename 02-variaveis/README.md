@@ -273,27 +273,34 @@ O Terraform Outputs é uma funcionalidade do Terraform que permite definir e exp
 **Uso**:<br>
 Os outputs são definidos no arquivo de configuração do Terraform usando a sintaxe "output". Cada output é composto por um nome e um valor, que pode ser uma expressão ou uma referência a um recurso existente. Os outputs podem ser referenciados em outros módulos ou recursos usando a sintaxe: <br>
 
-  * `"${module.<nome_do_modulo>.<nome_do_output>}"`
- 
-  Exemplo:
-  ```
-  output "instance_ip" {
-    value = aws_instance.dataeng-exemplo.public_ip
-  }
-  ```
- 
-  Neste exemplo, estamos definindo um output chamado "instance_ip" que retorna o endereço IP público de uma instância EC2 criada usando o provedor AWS. Esse valor pode ser utilizado em outros módulos ou recursos do Terraform.
+* `"${module.<nome_do_modulo>.<nome_do_output>}"`
 
-  ### Arquivo `outputs.tf`
+Exemplo:
+```
+output "instance_ip" {
+  value = aws_instance.dataeng-exemplo.public_ip
+}
+```
 
-  O arquivo `outputs.tf` é utilizado no Terraform para definir os valores de saída (outputs) que serão exibidos após a execução dos comandos `terraform apply` ou `terraform plan`. Esses valores podem ser úteis para compartilhar informações importantes sobre os recursos provisionados, como endereços IP, IDs de recursos ou qualquer outro dado relevante. Além disso, os outputs podem ser consumidos por outros módulos do Terraform, permitindo a reutilização e integração entre diferentes partes da configuração. Um exemplo simples de um arquivo `outputs.tf` seria:
+Neste exemplo, estamos definindo um output chamado "instance_ip" que retorna o endereço IP público de uma instância EC2 criada usando o provedor AWS. Esse valor pode ser utilizado em outros módulos ou recursos do Terraform.
 
-  ```hcl
-  output "instance_ip" {
-    description = "Endereço IP público da instância"
-    value       = aws_instance.example.public_ip
-  }
-  ```
+### Arquivo `outputs.tf`
+
+O arquivo `outputs.tf` é utilizado no Terraform para definir os valores de saída (outputs) que serão exibidos após a execução dos comandos `terraform apply` ou `terraform plan`. Esses valores podem ser úteis para compartilhar informações importantes sobre os recursos provisionados, como endereços IP, IDs de recursos ou qualquer outro dado relevante. Além disso, os outputs podem ser consumidos por outros módulos do Terraform, permitindo a reutilização e integração entre diferentes partes da configuração. Um exemplo simples de um arquivo `outputs.tf` seria:
+
+```hcl
+output pombo_bucket_arn {
+  value = aws_s3_bucket.pombo_bucket.arn
+}
+```
+
+```hcl
+output "instance_ip" {
+  description = "Endereço IP público da instância"
+  value       = aws_instance.example.public_ip
+}
+```
+
 
   Neste exemplo, o output `instance_ip` exibe o endereço IP público de uma instância EC2 criada, facilitando o acesso a essa informação após a execução do Terraform.
 
