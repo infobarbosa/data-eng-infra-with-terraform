@@ -275,6 +275,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
   echo "`date -Is` - Instalando boto3"
   sudo pip install boto3 
+  echo "`date -Is` - boto3 instalado com sucesso"
 
   ```
 10. **Adicione** o seguinte conteúdo ao arquivo **`./main.tf`**:
