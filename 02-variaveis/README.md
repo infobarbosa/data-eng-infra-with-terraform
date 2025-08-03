@@ -43,77 +43,35 @@ resource "aws_instance" "example" {
 
 Neste exemplo, a variável Local `resource_name` é definida como a concatenação das variáveis `environment` e `project`. Em seguida, ela é utilizada como valor para a tag `Name` do recurso `aws_instance`. Isso permite que o nome do recurso seja automaticamente gerado com base nas variáveis definidas.
 
+---
+
 ### Arquivo `variables.tf`
 
 O arquivo `variables.tf` é usado no Terraform para definir as variáveis que serão utilizadas na configuração do ambiente. Nele, você pode especificar o tipo de cada variável, sua descrição e um valor padrão, caso necessário.
 
-Aqui está um exemplo completo de um arquivo `variables.tf` com cada tipo de variável:
+Exemplo:
 
 ```hcl
-# Variável do tipo string
 variable "region" {
   description = "A região AWS onde os recursos serão criados"
   type        = string
   default     = "us-east-1"
 }
 
-# Variável do tipo number
 variable "instance_count" {
   description = "Número de instâncias a serem criadas"
   type        = number
   default     = 2
 }
 
-# Variável do tipo boolean
-variable "enable_logging" {
-  description = "Habilitar ou desabilitar logging"
-  type        = bool
-  default     = true
-}
-
-# Variável do tipo list
-variable "availability_zones" {
-  description = "Lista de zonas de disponibilidade"
-  type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"]
-}
-
-# Variável do tipo map
-variable "tags" {
-  description = "Tags para os recursos"
-  type        = map(string)
-  default     = {
-    Environment = "dev"
-    Project     = "dataeng"
-  }
-}
-
-# Variável do tipo object
-variable "instance_config" {
-  description = "Configuração da instância"
-  type = object({
-    instance_type = string
-    ami_id        = string
-  })
-  default = {
-    instance_type = "t2.micro"
-    ami_id        = "ami-0c55b159cbfafe1f0"
-  }
-}
-
-# Variável do tipo tuple
-variable "subnet_ids" {
-  description = "Lista de IDs de sub-rede"
-  type        = tuple([string, string, string])
-  default     = ["subnet-12345678", "subnet-23456789", "subnet-34567890"]
-}
+...
 ```
 
-Neste exemplo, cada variável é definida com seu tipo, descrição e valor padrão. Essas variáveis podem ser utilizadas em outros arquivos de configuração do Terraform para parametrizar a criação dos recursos de acordo com suas necessidades.
+---
 
 ### Arquivo `variables.tfvars`
 
-O arquivo `variables.tfvars` é usado no Terraform para definir os valores das variáveis em um formato de arquivo separado. Isso permite que você defina os valores das variáveis de forma mais organizada e fácil de gerenciar.
+O arquivo `variables.tfvars` é usado no Terraform para **definir os valores** das variáveis em um formato de arquivo separado. Isso permite que você defina os valores das variáveis de forma mais organizada e fácil de gerenciar.
 
 Exemplo de um arquivo `variables.tfvars`:
 
@@ -124,7 +82,7 @@ enable_logging = false
 availability_zones = ["us-west-2a", "us-west-2b", "us-west-2c"]
 tags = {
   Environment = "prod"
-  Project = "myproject"
+  Project = "dataeng-project"
 }
 instance_config = {
   instance_type = "t3.medium"
@@ -143,21 +101,27 @@ Isso permitirá que o Terraform leia as variáveis definidas no arquivo `variabl
 
 Certifique-se de que o arquivo `variables.tfvars` esteja no mesmo diretório do seu arquivo de configuração do Terraform (geralmente chamado de `main.tf`).
 
+---
 
-### Exemplos de Tipos de Variáveis no Terraform
+### Tipos de variáveis
 
-No Terraform, as variáveis podem ser de diferentes tipos. Aqui estão alguns exemplos:
-
-#### String
+#### `string`
 ```hcl
 variable "region" {
   description = "A região AWS onde os recursos serão criados"
   type        = string
   default     = "us-east-1"
 }
+
 ```
 
-#### Number
+Como acessar:
+```hcl
+var.region
+
+```
+
+#### `number`
 ```hcl
 variable "instance_count" {
   description = "Número de instâncias a serem criadas"
@@ -166,7 +130,12 @@ variable "instance_count" {
 }
 ```
 
-#### Boolean
+Como acessar:
+```hcl
+var.instance_count
+```
+
+#### `bool`
 ```hcl
 variable "enable_logging" {
   description = "Habilitar ou desabilitar logging"
@@ -175,7 +144,12 @@ variable "enable_logging" {
 }
 ```
 
-#### List
+Como acessar:
+```hcl
+var.enable_logging
+```
+
+#### `list`
 ```hcl
 variable "availability_zones" {
   description = "Lista de zonas de disponibilidade"
@@ -184,7 +158,12 @@ variable "availability_zones" {
 }
 ```
 
-#### Map
+Como acessar:
+```hcl
+var.availability_zones
+```
+
+#### `map`
 ```hcl
 variable "tags" {
   description = "Tags para os recursos"
@@ -196,7 +175,12 @@ variable "tags" {
 }
 ```
 
-#### Object
+Como acessar
+```hcl
+var.tags
+```
+
+#### `object`
 ```hcl
 variable "instance_config" {
   description = "Configuração da instância"
@@ -211,7 +195,12 @@ variable "instance_config" {
 }
 ```
 
-#### Tuple
+Como acessar:
+```hcl
+var.instance_config
+```
+
+#### `tuple`
 ```hcl
 variable "subnet_ids" {
   description = "Lista de IDs de sub-rede"
@@ -219,6 +208,20 @@ variable "subnet_ids" {
   default     = ["subnet-12345678", "subnet-23456789", "subnet-34567890"]
 }
 ```
+
+Como acessar:
+```hcl
+var.subnet_ids
+```
+
+Se quiser apenas um valor:
+```hcl
+var.subnet_ids[0]
+```
+
+Neste exemplo, cada variável é definida com seu tipo, descrição e valor padrão. Essas variáveis podem ser utilizadas em outros arquivos de configuração do Terraform para parametrizar a criação dos recursos de acordo com suas necessidades.
+
+---
 
 ## Outputs Values
 O Terraform Outputs é uma funcionalidade do Terraform que permite definir e expor valores calculados ou informações relevantes sobre a infraestrutura provisionada. Esses valores podem ser utilizados por outros módulos ou recursos do Terraform, ou podem ser exibidos para o usuário final como informações úteis.
@@ -257,6 +260,6 @@ Parabéns pela conclusão do módulo! Você aprendeu a utilizar as variáveis e 
 Para evitar custos desnecessários, destrua os recursos criados: <br>
 
 ```sh
-terraform destroy
+terraform destroy --auto-approve
 ```
 
