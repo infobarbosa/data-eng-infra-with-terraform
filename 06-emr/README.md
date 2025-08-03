@@ -289,22 +289,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
   ```
 
-11. [OPCIONAL] Retire os trechos abaixo do arquivo `./main.tf`:
-
-    Caso você tenha feito o módulo **05-ec2** Para os propósitos deste laboratório esses recursos não serão mais necessários.
-    ```
-    module "ec2" {
-      ...
-    }
-    ```
-
-    ```
-    module "asg" {
-      ...
-    }
-    ```
-
-12. Execute o Terraform:
+11. Execute o Terraform:
     ```sh
     terraform init
 
@@ -319,7 +304,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
     terraform apply --auto-approve
 
     ```
-13. **Verifique**
+12. **Verifique**
     - No console AWS EMR verifique o status de criacao do cluster `dataeng-emr`.
     - Via terminal:
 
@@ -349,7 +334,7 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
 
       ``` 
 
-14. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
+13. Valide que a criação da tabela ocorreu com sucesso via console AWS Glue e AWS Athena.
 
 ### Desafio 1: Criação e execução de EMR Steps de pedidos
 Utilizando os conhecimentos adquiridos anterioremente, crie o job `pedidos_spark_job`.
