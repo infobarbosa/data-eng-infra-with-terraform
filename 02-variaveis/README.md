@@ -182,22 +182,66 @@ var.tags
 
 #### `object`
 ```hcl
-variable "instance_config" {
-  description = "Configuração da instância"
+# terraform.tf
+
+variable "dataeng_bucket_config" {
+  description = "Configurações completas para o bucket S3."
   type = object({
-    instance_type = string
-    ami_id        = string
+    name    = string
+    tags    = map(string)
+    versioning_enabled = bool
   })
+  
   default = {
-    instance_type = "t2.micro"
-    ami_id        = "ami-0c55b159cbfafe1f0"
+    name    = "pombo-bucket"
+    tags    = {}
+    versioning_enabled = false
   }
 }
 ```
 
-Como acessar:
+Como atribuir valores:
 ```hcl
-var.instance_config
+# terraform.tfvars
+
+# Sobrescreve o valor padrão definido em variables.tf
+dataeng_bucket_config = {
+  name    = "dataeng-bucket"
+  tags = {
+    Ambiente   = "prod"
+    Projeto    = "dataeng"
+    Gerenciado = "Terraform"
+  }
+  versionamento_de_bucket_ativado = true
+}
+```
+
+Como utilizar:
+```hcl
+# main.tf
+
+provider "aws" {
+  region = "us-east-1"
+  # Configure suas credenciais aqui ou via variáveis de ambiente
+}
+
+resource "aws_s3_bucket" "main" {
+  # Acessando o atributo 'name' do objeto
+  bucket = var.dataeng_bucket_config.name
+
+  # Acessando o atributo 'tags' (um mapa) do objeto
+  tags = var.dataeng_bucket_config.tags
+}
+
+resource "aws_s3_bucket_versioning" "main" {
+  # O recurso de versionamento precisa do ID do bucket
+  bucket = aws_s3_bucket.main.id
+
+  versioning_configuration {
+    # Usando um operador ternário para converter o booleano em "Enabled" ou "Disabled"
+    status = var.dataeng_bucket_config.versionamento_de_bucket_ativado ? "Enabled" : "Disabled"
+  }
+}
 ```
 
 #### `tuple`
