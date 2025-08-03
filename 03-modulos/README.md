@@ -225,7 +225,7 @@ Uma vez baixados, vamos criar os objetos no nosso bucket S3 utilizando o recurso
     resource "aws_s3_object" "dataset_clientes" {
         bucket = aws_s3_bucket.dataeng_bucket.id
         key    = "raw/clientes/clientes.json.gz"
-        source = "./datasets-json-clientes/clientes.json.gz"
+        source = "./dataset-json-clientes/data/clientes.json.gz"
     }
 
     ```
