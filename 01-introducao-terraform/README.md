@@ -13,7 +13,9 @@ Infraestrutura como Código (IaC) é a prática de gerenciar e provisionar recur
 
 ## Por que **engenheiros de dados** precisam entender de IaC?
 
-<img src="data-engineer-conflict.png" alt="Engenheiro de dados em conflito" width="300"/>
+<div style="text-align: center;">
+  <img src="data-engineer-conflict.png" alt="Engenheiro de dados em conflito" width="300"/>
+</div>
 
 Tradicionalmente, o provisionamento de infraestrutura era mesmo uma atribuição exclusiva de **engenheiros de infraestrutura, SREs ou DevOps**. Mas a realidade da engenharia de dados **moderna e cloud-native** transformou esse cenário.
 
