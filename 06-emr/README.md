@@ -238,6 +238,10 @@ Steps são tarefas que você pode adicionar ao seu cluster EMR para serem execut
                 name = "email"
                 type = "string"
             }  
+            columns {
+                name = "interesses"
+                type = "array<string>"
+            }  
         }
     }  
     
